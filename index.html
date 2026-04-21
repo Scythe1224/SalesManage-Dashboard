@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IntelliData — Client Onboarding Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Nunito',sans-serif;background:#f0f4f8;color:#2d3748}
+
+/* ─── SIDEBAR ─────────────────────────────────────────── */
+.app{display:flex;height:100vh;overflow:hidden}
+
+.sidebar{
+  width:58px;background:#1a202c;display:flex;flex-direction:column;
+  align-items:center;padding:12px 0;gap:4px;flex-shrink:0;
+  box-shadow:3px 0 10px rgba(0,0,0,0.3);
+}
+.sidebar .logo-box{
+  width:38px;height:38px;background:linear-gradient(135deg,#1e40af,#22c55e);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;font-size:18px;box-shadow:0 2px 8px rgba(34,197,94,0.4);
+}
+.sidebar .nav-icon{
+  width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;cursor:pointer;color:#718096;font-size:16px;
+  transition:all 0.2s;
+}
+.sidebar .nav-icon:hover,.sidebar .nav-icon.active{background:#2d3748;color:#fff}
+.sidebar .nav-icon.active{color:#3b82f6}
+
+/* ─── MAIN PANEL ──────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ─── TOPBAR ──────────────────────────────────────────── */
+.topbar{
+  background:#fff;border-bottom:1px solid #e2e8f0;
+  display:flex;align-items:center;padding:0 20px;height:56px;
+  gap:12px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-brand .brand-icon{
+  width:36px;height:36px;background:linear-gradient(135deg,#1e3a8a,#22c55e);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.topbar-brand .brand-text{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:17px;color:#1e3a8a;letter-spacing:1px}
+.topbar-brand .brand-text span{color:#22c55e}
+.topbar-brand .brand-sub{font-size:10px;color:#94a3b8;letter-spacing:0.5px}
+.topbar-divider{width:1px;height:32px;background:#e2e8f0;margin:0 4px}
+
+/* product tabs */
+.prod-tabs{display:flex;gap:2px;background:#f1f5f9;border-radius:8px;padding:3px}
+.prod-tab{
+  padding:5px 16px;border-radius:6px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;
+  color:#64748b;background:transparent;transition:all 0.2s;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+}
+.prod-tab.active{background:#fff;color:#1e3a8a;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.prod-tab.tab-net.active{color:#166534}
+.prod-tab.tab-cnms.active{color:#1e40af}
+.tab-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.live-chip{
+  display:flex;align-items:center;gap:5px;padding:4px 10px;
+  background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;
+  font-size:11px;font-weight:700;color:#16a34a;
+}
+.live-dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.topbar-icon-btn{
+  width:32px;height:32px;border-radius:8px;border:1px solid #e2e8f0;
+  background:#fff;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;color:#64748b;font-size:14px;transition:all 0.2s;
+}
+.topbar-icon-btn:hover{background:#f1f5f9;color:#1e3a8a}
+.date-badge{font-size:11px;color:#94a3b8;font-weight:600}
+
+/* ─── NAV TABS (below topbar) ───────────────────────────── */
+.nav-tabs-row{
+  background:#fff;border-bottom:2px solid #e2e8f0;
+  display:flex;align-items:center;padding:0 20px;
+  flex-shrink:0;gap:2px;
+}
+.nav-tab{
+  padding:12px 18px;border:none;background:transparent;
+  font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;
+  color:#94a3b8;cursor:pointer;border-bottom:3px solid transparent;
+  margin-bottom:-2px;transition:all 0.2s;display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+}
+.nav-tab:hover{color:#1e3a8a;background:#f8fafc}
+.nav-tab.active{color:#1e40af;border-bottom-color:#1e40af}
+.nav-tab svg{width:13px;height:13px;flex-shrink:0}
+
+/* ─── BODY ────────────────────────────────────────────── */
+.body-area{flex:1;overflow-y:auto;padding:18px 20px;background:#f0f4f8}
+.body-area::-webkit-scrollbar{width:6px}
+.body-area::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+
+/* ─── KPI CARDS ROW ──────────────────────────────────── */
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+
+.kpi-card{
+  border-radius:10px;padding:0;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;
+}
+.kpi-icon{
+  width:72px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-size:26px;
+}
+.kpi-body{flex:1;padding:12px 14px;background:#fff}
+.kpi-title{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px}
+.kpi-number{font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;line-height:1;margin-bottom:4px}
+.kpi-sub{display:flex;gap:16px;font-size:11px;color:#64748b;font-weight:600}
+
+/* colors */
+.kpi-blocked .kpi-icon{background:#be185d}
+.kpi-blocked .kpi-title{color:#be185d}
+.kpi-blocked .kpi-number{color:#be185d}
+
+.kpi-active .kpi-icon{background:#15803d}
+.kpi-active .kpi-title{color:#15803d}
+.kpi-active .kpi-number{color:#15803d}
+
+.kpi-deploy .kpi-icon{background:#b45309}
+.kpi-deploy .kpi-title{color:#b45309}
+.kpi-deploy .kpi-number{color:#b45309}
+
+/* date range strip */
+.kpi-date-strip{
+  background:#be185d;color:#fff;font-size:10px;font-weight:700;
+  display:flex;align-items:center;gap:6px;padding:4px 14px;
+}
+.kpi-date-strip span{opacity:0.7}
+
+/* ─── SECOND ROW: stats + revenue ─────────────────────── */
+.info-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px}
+.info-card{
+  background:#fff;border-radius:10px;padding:16px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid #3b82f6;
+}
+.info-card.net-border{border-top-color:#22c55e}
+.info-card.cnms-border{border-top-color:#3b82f6}
+.info-card.rev-border{border-top-color:#8b5cf6}
+.info-card-title{font-size:10px;font-weight:800;letter-spacing:1px;color:#94a3b8;text-transform:uppercase;margin-bottom:10px}
+.info-big{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#1e293b}
+.info-big span{font-size:13px;font-weight:600;margin-left:4px}
+.info-sub-row{display:flex;justify-content:space-between;font-size:11px;color:#64748b;font-weight:600;margin-top:6px}
+
+/* ─── CHARTS ROW ─────────────────────────────────────── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.chart-card{
+  background:#fff;border-radius:10px;padding:16px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.07);
+}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.chart-title{font-size:13px;font-weight:800;color:#1e293b}
+.chart-legend{display:flex;gap:12px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#64748b;font-weight:600}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+
+/* bar chart */
+.bar-chart-area{height:160px;display:flex;align-items:flex-end;gap:8px;padding-bottom:24px;position:relative;border-bottom:2px solid #e2e8f0}
+.bar-chart-area::before{
+  content:'';position:absolute;left:0;right:0;
+  top:0;bottom:24px;
+  background:repeating-linear-gradient(180deg,transparent,transparent calc(25% - 1px),#f1f5f9 calc(25% - 1px),#f1f5f9 25%);
+}
+.bar-group{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;position:relative;z-index:1}
+.bar-stack{display:flex;flex-direction:column;align-items:center;width:100%;max-width:40px}
+.bar-segment{width:100%;transition:height 0.6s ease;border-radius:2px 2px 0 0;position:relative}
+.bar-segment:not(:last-child){border-radius:0}
+.bar-label-top{font-size:10px;font-weight:800;color:#1e293b;margin-bottom:2px}
+.bar-x-label{font-size:10px;font-weight:700;color:#94a3b8;margin-top:5px}
+
+/* donut */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.donut-svg{width:130px;height:130px}
+.donut-center{text-align:center}
+.donut-center .big{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#1e293b;display:block}
+.donut-center .small{font-size:10px;color:#94a3b8;font-weight:600}
+.donut-legend-list{width:100%;display:flex;flex-direction:column;gap:6px}
+.dl-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#64748b;font-weight:600}
+.dl-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.dl-count{margin-left:auto;font-weight:800;color:#1e293b}
+
+/* ─── CLIENT TABLE ────────────────────────────────────── */
+.table-card{
+  background:#fff;border-radius:10px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;
+}
+.table-toolbar{
+  display:flex;align-items:center;padding:14px 16px;gap:10px;
+  border-bottom:1px solid #f1f5f9;
+}
+.table-toolbar-title{font-size:13px;font-weight:800;color:#1e293b;flex:1}
+.search-box{
+  display:flex;align-items:center;gap:6px;background:#f8fafc;
+  border:1px solid #e2e8f0;border-radius:6px;padding:5px 10px;
+}
+.search-box input{border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:160px;font-family:'Nunito',sans-serif}
+.search-box svg{width:13px;height:13px;color:#94a3b8;flex-shrink:0}
+.filter-pill{
+  padding:4px 10px;border-radius:20px;border:1px solid #e2e8f0;
+  background:#fff;font-size:11px;font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;color:#64748b;transition:all 0.15s;
+}
+.filter-pill.active,.filter-pill:hover{background:#1e40af;color:#fff;border-color:#1e40af}
+.sort-sel{
+  border:1px solid #e2e8f0;background:#f8fafc;border-radius:6px;
+  padding:5px 8px;font-size:12px;color:#1e293b;outline:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+
+table{width:100%;border-collapse:collapse}
+thead tr{background:#f8fafc}
+th{
+  padding:10px 14px;text-align:left;font-size:11px;font-weight:800;
+  color:#64748b;letter-spacing:0.5px;text-transform:uppercase;
+  border-bottom:2px solid #e2e8f0;white-space:nowrap;
+}
+tbody tr{border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.15s}
+tbody tr:hover{background:#f8fafc}
+td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
+.td-opid{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#1e293b;letter-spacing:0.5px}
+.td-bill{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700}
+.td-net .td-bill{color:#15803d}
+.td-cnms .td-bill{color:#1d4ed8}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap}
+.badge-active{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.badge-deploy{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}
+.badge-blocked{background:#fce7f3;color:#be185d;border:1px solid #f9a8d4}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+.prod-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800;letter-spacing:0.3px}
+.prod-tag-net{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.prod-tag-cnms{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+
+.plan-tag{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800}
+.plan-std{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
+.plan-pro{background:#faf5ff;color:#7c3aed;border:1px solid #ddd6fe}
+
+.sheet-tag{padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+
+.empty-row td{text-align:center;padding:40px;color:#94a3b8;font-size:13px;font-weight:600}
+
+/* ─── MODAL ──────────────────────────────────────────── */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(15,23,42,0.55);
+  backdrop-filter:blur(4px);z-index:1000;
+  opacity:0;pointer-events:none;transition:opacity 0.2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-backdrop.open{opacity:1;pointer-events:all}
+.modal{
+  background:#fff;border-radius:14px;width:90%;max-width:540px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  transform:scale(0.95);transition:transform 0.2s;overflow:hidden;
+}
+.modal-backdrop.open .modal{transform:scale(1)}
+.modal-header{
+  padding:16px 20px;display:flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#1e3a8a,#1d4ed8);color:#fff;
+}
+.modal-header.net{background:linear-gradient(135deg,#14532d,#15803d)}
+.modal-opid{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;letter-spacing:1px}
+.modal-close{
+  margin-left:auto;width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,0.15);border:none;color:#fff;
+  cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{background:rgba(255,255,255,0.3)}
+.modal-body{padding:18px 20px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.modal-field{background:#f8fafc;border-radius:7px;padding:9px 12px;border:1px solid #e2e8f0}
+.mf-label{font-size:9px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.mf-val{font-size:13px;font-weight:700;color:#1e293b}
+.billing-table{width:100%;border-top:2px solid #e2e8f0}
+.billing-table tr{border-bottom:1px solid #f1f5f9}
+.billing-table td{padding:8px 10px;font-size:12px;color:#475569;font-weight:600}
+.billing-table td:last-child{text-align:right;font-weight:700;color:#1e293b}
+.billing-table .total-row td{font-size:14px;font-weight:800;color:#1d4ed8;background:#eff6ff}
+.billing-table .contract-row td{font-size:11px;color:#7c3aed;background:#faf5ff}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="logo-box">📊</div>
+    <div class="nav-icon active" title="Dashboard">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    </div>
+    <div class="nav-icon" title="Clients">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </div>
+    <div class="nav-icon" title="Billing">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div>
+    <div class="nav-icon" title="Reports">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    </div>
+    <div class="nav-icon" title="Settings" style="margin-top:auto">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 36 36">
+            <rect x="2" y="18" width="7" height="14" rx="1" fill="#22c55e"/>
+            <rect x="11" y="10" width="7" height="22" rx="1" fill="#93c5fd"/>
+            <rect x="20" y="4" width="7" height="28" rx="1" fill="#22c55e" opacity="0.7"/>
+            <polyline points="4,15 13,8 22,2 30,8" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <polygon points="28,4 34,8 30,12 24,8" fill="#22c55e"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-text">INTELLI<span>DATA</span></div>
+          <div class="brand-sub">Intelligence | Insights | Innovation</div>
+        </div>
+      </div>
+      <div class="topbar-divider"></div>
+      <div class="prod-tabs">
+        <button class="prod-tab active" data-tab="all" onclick="switchTab('all',this)">
+          <span class="tab-dot" style="background:#1e40af"></span>All Clients
+        </button>
+        <button class="prod-tab tab-net" data-tab="netmanazer" onclick="switchTab('netmanazer',this)">
+          <span class="tab-dot" style="background:#22c55e"></span>NetManazer
+        </button>
+        <button class="prod-tab tab-cnms" data-tab="cnms" onclick="switchTab('cnms',this)">
+          <span class="tab-dot" style="background:#3b82f6"></span>CNMS Onnet
+        </button>
+      </div>
+      <div class="topbar-right">
+        <div class="live-chip"><div class="live-dot"></div>LIVE</div>
+        <div class="date-badge" id="liveDateBadge"></div>
+        <button class="topbar-icon-btn" title="Refresh" onclick="renderAll()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+        <button class="topbar-icon-btn" title="Notifications">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- NAV TABS -->
+    <div class="nav-tabs-row">
+      <button class="nav-tab active">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Operator Details
+      </button>
+      <button class="nav-tab">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Revenue Collection
+      </button>
+      <button class="nav-tab">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Deployment Details
+      </button>
+      <button class="nav-tab">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Monthly Billing Details
+      </button>
+      <button class="nav-tab">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Monthly Connection Ledger
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="body-area">
+
+      <!-- KPI CARDS -->
+      <div class="kpi-row">
+
+        <!-- Blocked -->
+        <div class="kpi-card kpi-blocked">
+          <div class="kpi-icon" style="flex-direction:column;gap:4px">
+            <svg width="28" height="28" fill="#fff" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-title">Blocked / Inactive Clients</div>
+            <div class="kpi-number" id="kpi-blocked">1</div>
+            <div class="kpi-sub">
+              <span>CNMS: <b id="k-bl-cnms">1</b></span>
+              <span>NetManazer: <b id="k-bl-net">0</b></span>
+            </div>
+            <div class="kpi-date-strip" style="margin:6px -14px -12px;background:#be185d">
+              <span>From:</span> <b id="kpi-from-date">—</b>
+              <span style="margin-left:8px">To:</span> <b id="kpi-to-date">—</b>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active -->
+        <div class="kpi-card kpi-active">
+          <div class="kpi-icon">
+            <svg width="32" height="32" fill="#fff" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-title">Active Clients</div>
+            <div class="kpi-number" id="kpi-active">11</div>
+            <div class="kpi-sub">
+              <span>CNMS: <b id="k-ac-cnms">11</b></span>
+              <span>NetManazer: <b id="k-ac-net">0</b></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deploying -->
+        <div class="kpi-card kpi-deploy">
+          <div class="kpi-icon">
+            <svg width="30" height="30" fill="#fff" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-title">Under Deployment</div>
+            <div class="kpi-number" id="kpi-deploy">3</div>
+            <div class="kpi-sub">
+              <span>CNMS: <b id="k-dp-cnms">1</b></span>
+              <span>NetManazer: <b id="k-dp-net">2</b></span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /kpi-row -->
+
+      <!-- INFO ROW -->
+      <div class="info-row">
+        <div class="info-card net-border">
+          <div class="info-card-title">NetManazer Clients</div>
+          <div class="info-big" id="info-net-total">2 <span style="color:#94a3b8">clients</span></div>
+          <div class="info-sub-row">
+            <span>Under Deployment: <b style="color:#b45309">2</b></span>
+            <span>Active: <b style="color:#15803d">0</b></span>
+          </div>
+        </div>
+        <div class="info-card cnms-border">
+          <div class="info-card-title">CNMS Onnet Clients</div>
+          <div class="info-big" id="info-cnms-total">12 <span style="color:#94a3b8">clients</span></div>
+          <div class="info-sub-row">
+            <span>Active: <b style="color:#15803d" id="cnms-active-count">11</b></span>
+            <span>Blocked: <b style="color:#be185d">1</b></span>
+          </div>
+        </div>
+        <div class="info-card rev-border">
+          <div class="info-card-title">Monthly Revenue (Active)</div>
+          <div class="info-big">₹<span id="info-rev" style="color:#7c3aed">—</span></div>
+          <div class="info-sub-row">
+            <span>GST Incl.</span>
+            <span>Plan: Std + Pro</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+        <!-- Bar Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Onboarding Timeline — Client Count by Month</div>
+            <div class="chart-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#1d4ed8"></div>CNMS Onnet</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>NetManazer</div>
+            </div>
+          </div>
+          <div class="bar-chart-area" id="barChart"></div>
+          <div style="display:flex;gap:8px;margin-top:4px" id="barXLabels"></div>
+        </div>
+
+        <!-- Donut -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Product Split</div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 130 130" id="donutSvg"></svg>
+            <div class="donut-legend-list" id="donutLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENT TABLE -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="table-toolbar-title">📋 All Client Records</div>
+          <div class="search-box">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" placeholder="Search OPID, product, plan…" oninput="renderTable()"/>
+          </div>
+          <button class="filter-pill active" onclick="setPill('all',this)">All</button>
+          <button class="filter-pill" onclick="setPill('Active',this)">Active</button>
+          <button class="filter-pill" onclick="setPill('Under-Deployment',this)">Deploying</button>
+          <button class="filter-pill" onclick="setPill('Blocked',this)">Blocked</button>
+          <select class="sort-sel" onchange="currentSort=this.value;renderTable()">
+            <option value="opid">Sort: OPID</option>
+            <option value="date">Sort: Date</option>
+            <option value="bill">Sort: Bill ↓</option>
+          </select>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>OPID</th>
+                <th>Product</th>
+                <th>Plan</th>
+                <th>Status</th>
+                <th>Onboarding Date</th>
+                <th>Billing Effective</th>
+                <th>Rate</th>
+                <th>Period</th>
+                <th>Free SMS/WA</th>
+                <th>Monthly Bill</th>
+                <th>Sheet</th>
+              </tr>
+            </thead>
+            <tbody id="clientTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /body-area -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()" id="modalBox">
+    <div class="modal-header" id="modalHeader">
+      <div>
+        <div class="modal-opid" id="modalOpid"></div>
+        <div style="display:flex;gap:6px;margin-top:4px" id="modalTags"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+const CLIENTS = [
+  {opid:"CDNPL",status:"Blocked",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2025-12-01",billingEffective:"2025-12-01",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"GENTR",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2025-12-12",billingEffective:"2025-12-24",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"VENU",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2025-12-30",billingEffective:"2026-01-09",rate:2.0,minBilling:500,period:6,salesDeal:"1×500×6+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"MCAN",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2025-12-31",billingEffective:"2026-01-01",rate:2.0,minBilling:500,period:12,salesDeal:"1×500×12+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"SCABN",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-01-29",billingEffective:"2026-02-02",rate:1.5,minBilling:500,period:12,salesDeal:"1×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"KDIN",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2026-02-17",billingEffective:"2026-02-23",rate:1.5,minBilling:500,period:12,salesDeal:"1×500×12+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"GUJFI",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-02-19",billingEffective:"2026-02-24",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"HITCAB",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-03-13",billingEffective:"2026-03-17",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"YASHIKA",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-04-02",billingEffective:"2026-04-03",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"NCN",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-12",rate:1.0,minBilling:1000,period:6,salesDeal:"1×1000×6+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"Harsh",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-04",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"BCT",status:"Under-Deployment",product:"CNMS Onnet",plan:"Pro",sheet:"ReActivation",onboardingDate:"2026-04-20",billingEffective:null,rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:null,baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"SPEEDNET",status:"Under-Deployment",product:"NetManazer",plan:"Standard",sheet:"NetManazer",onboardingDate:"2026-03-26",billingEffective:null,rate:6,minBilling:250,period:6,salesDeal:"6×250×6+Tax",freeSMS:null,baseAmount:1500,tax:270,monthlyBill:1770},
+  {opid:"CITYNET",status:"Under-Deployment",product:"NetManazer",plan:"Standard",sheet:"NetManazer",onboardingDate:"2026-04-09",billingEffective:null,rate:4,minBilling:500,period:6,salesDeal:"4×500×6+Tax",freeSMS:null,baseAmount:2000,tax:360,monthlyBill:2360}
+];
+
+// ── STATE ─────────────────────────────────────────────────
+let currentTab    = 'all';
+let currentStatus = 'all';
+let currentSort   = 'opid';
+
+// ── DATE ──────────────────────────────────────────────────
+function updateDate(){
+  const now = new Date();
+  const fmt = d => d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('liveDateBadge').textContent = fmt(now);
+  const tenDaysAgo = new Date(now); tenDaysAgo.setDate(now.getDate()-10);
+  const tenDaysLater = new Date(now); tenDaysLater.setDate(now.getDate()+10);
+  document.getElementById('kpi-from-date').textContent = fmt(tenDaysAgo);
+  document.getElementById('kpi-to-date').textContent   = fmt(tenDaysLater);
+}
+updateDate();
+
+// ── TAB ───────────────────────────────────────────────────
+function switchTab(tab, el){
+  currentTab = tab;
+  document.querySelectorAll('.prod-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+// ── PILLS ─────────────────────────────────────────────────
+function setPill(status, el){
+  currentStatus = status;
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+
+// ── FILTERED DATA ─────────────────────────────────────────
+function getBase(){
+  if(currentTab==='netmanazer') return CLIENTS.filter(c=>c.product==='NetManazer');
+  if(currentTab==='cnms')       return CLIENTS.filter(c=>c.product==='CNMS Onnet');
+  return CLIENTS;
+}
+
+function getFiltered(){
+  let d = getBase();
+  if(currentStatus!=='all') d = d.filter(c=>c.status===currentStatus);
+  const q = document.getElementById('searchInput')?.value.toLowerCase()||'';
+  if(q) d = d.filter(c=>
+    c.opid.toLowerCase().includes(q)||
+    c.product.toLowerCase().includes(q)||
+    c.plan.toLowerCase().includes(q)||
+    c.status.toLowerCase().includes(q)
+  );
+  d.sort((a,b)=>{
+    if(currentSort==='date') return new Date(a.onboardingDate)-new Date(b.onboardingDate);
+    if(currentSort==='bill') return b.monthlyBill-a.monthlyBill;
+    return a.opid.localeCompare(b.opid);
+  });
+  return d;
+}
+
+// ── KPI ───────────────────────────────────────────────────
+function updateKPI(){
+  const base = getBase();
+  const active  = base.filter(c=>c.status==='Active');
+  const deploy  = base.filter(c=>c.status==='Under-Deployment');
+  const blocked = base.filter(c=>c.status==='Blocked');
+
+  document.getElementById('kpi-active').textContent  = active.length;
+  document.getElementById('kpi-deploy').textContent  = deploy.length;
+  document.getElementById('kpi-blocked').textContent = blocked.length;
+
+  document.getElementById('k-ac-cnms').textContent = active.filter(c=>c.product==='CNMS Onnet').length;
+  document.getElementById('k-ac-net').textContent  = active.filter(c=>c.product==='NetManazer').length;
+  document.getElementById('k-dp-cnms').textContent = deploy.filter(c=>c.product==='CNMS Onnet').length;
+  document.getElementById('k-dp-net').textContent  = deploy.filter(c=>c.product==='NetManazer').length;
+  document.getElementById('k-bl-cnms').textContent = blocked.filter(c=>c.product==='CNMS Onnet').length;
+  document.getElementById('k-bl-net').textContent  = blocked.filter(c=>c.product==='NetManazer').length;
+
+  const rev = active.reduce((s,c)=>s+c.monthlyBill,0);
+  document.getElementById('info-rev').textContent = rev.toLocaleString('en-IN');
+
+  const allCNMS = CLIENTS.filter(c=>c.product==='CNMS Onnet');
+  const allNet  = CLIENTS.filter(c=>c.product==='NetManazer');
+  document.getElementById('info-net-total').innerHTML  = allNet.length+' <span style="color:#94a3b8">clients</span>';
+  document.getElementById('info-cnms-total').innerHTML = allCNMS.length+' <span style="color:#94a3b8">clients</span>';
+  document.getElementById('cnms-active-count').textContent = allCNMS.filter(c=>c.status==='Active').length;
+}
+
+// ── BAR CHART ─────────────────────────────────────────────
+function renderBarChart(){
+  const base = getBase();
+  const months={};
+  base.forEach(c=>{
+    const d=new Date(c.onboardingDate);
+    const key=d.toLocaleDateString('en-IN',{month:'short',year:'2-digit'});
+    if(!months[key]) months[key]={cnms:0,net:0};
+    if(c.product==='CNMS Onnet') months[key].cnms++;
+    else months[key].net++;
+  });
+  const keys=Object.keys(months);
+  const maxVal = Math.max(...keys.map(k=>months[k].cnms+months[k].net),1);
+
+  const chart=document.getElementById('barChart');
+  const xLabels=document.getElementById('barXLabels');
+  chart.innerHTML=''; xLabels.innerHTML='';
+
+  keys.forEach(key=>{
+    const {cnms,net}=months[key];
+    const total=cnms+net;
+    const totalH = Math.round((total/maxVal)*120);
+    const cnmsH  = total>0?Math.round((cnms/total)*totalH):0;
+    const netH   = totalH-cnmsH;
+
+    const grp=document.createElement('div');
+    grp.className='bar-group';
+    grp.style.flex='1';
+
+    if(total>0){
+      const lbl=document.createElement('div');
+      lbl.className='bar-label-top';
+      lbl.textContent=total;
+      grp.appendChild(lbl);
+    }
+
+    const stack=document.createElement('div');
+    stack.className='bar-stack';
+    stack.style.height=totalH+'px';
+    stack.style.justifyContent='flex-end';
+    stack.style.display='flex';
+    stack.style.flexDirection='column';
+    stack.style.width='80%';
+    stack.style.maxWidth='44px';
+
+    if(netH>0){
+      const s=document.createElement('div');
+      s.style.cssText=`height:${netH}px;background:#22c55e;border-radius:3px 3px 0 0;width:100%`;
+      stack.appendChild(s);
+    }
+    if(cnmsH>0){
+      const s=document.createElement('div');
+      s.style.cssText=`height:${cnmsH}px;background:#1d4ed8;width:100%;${netH===0?'border-radius:3px 3px 0 0':''}`;
+      stack.appendChild(s);
+    }
+    if(total===0){
+      const s=document.createElement('div');
+      s.style.cssText='height:4px;background:#e2e8f0;width:100%;border-radius:2px';
+      stack.appendChild(s);
+    }
+
+    grp.appendChild(stack);
+    chart.appendChild(grp);
+
+    const xl=document.createElement('div');
+    xl.style.cssText='flex:1;text-align:center;font-size:10px;font-weight:700;color:#94a3b8';
+    xl.textContent=key;
+    xLabels.appendChild(xl);
+  });
+}
+
+// ── DONUT ─────────────────────────────────────────────────
+function renderDonut(){
+  const base = getBase();
+  const netCount  = base.filter(c=>c.product==='NetManazer').length;
+  const cnmsCount = base.filter(c=>c.product==='CNMS Onnet').length;
+  const total     = base.length||1;
+  const stdCount  = base.filter(c=>c.plan==='Standard').length;
+  const proCount  = base.filter(c=>c.plan==='Pro').length;
+
+  const slices=[
+    {label:'CNMS Onnet',  val:cnmsCount, color:'#1d4ed8'},
+    {label:'NetManazer',  val:netCount,  color:'#22c55e'},
+    {label:'Standard Plan',val:stdCount, color:'#f59e0b'},
+    {label:'Pro Plan',    val:proCount,  color:'#7c3aed'},
+  ].filter(s=>s.val>0);
+
+  const cx=65,cy=65,r=50,inner=32;
+  let angle=-Math.PI/2;
+  let paths='';
+  const allVals=slices.slice(0,2); // only product split for donut
+
+  const donutSlices=[
+    {label:'CNMS Onnet',val:cnmsCount,color:'#1d4ed8'},
+    {label:'NetManazer',val:netCount, color:'#22c55e'},
+  ].filter(s=>s.val>0);
+
+  donutSlices.forEach(s=>{
+    const a=(s.val/total)*2*Math.PI;
+    const x1=cx+r*Math.cos(angle), y1=cy+r*Math.sin(angle);
+    const x2=cx+r*Math.cos(angle+a), y2=cy+r*Math.sin(angle+a);
+    const xi1=cx+inner*Math.cos(angle), yi1=cy+inner*Math.sin(angle);
+    const xi2=cx+inner*Math.cos(angle+a), yi2=cy+inner*Math.sin(angle+a);
+    const large=a>Math.PI?1:0;
+    paths+=`<path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${xi2},${yi2} A${inner},${inner} 0 ${large},0 ${xi1},${yi1} Z" fill="${s.color}" stroke="#fff" stroke-width="2"/>`;
+    angle+=a;
+  });
+
+  paths+=`<text x="65" y="61" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="20" font-weight="700" fill="#1e293b">${total}</text>`;
+  paths+=`<text x="65" y="75" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" fill="#94a3b8" font-weight="600">CLIENTS</text>`;
+
+  document.getElementById('donutSvg').innerHTML=paths;
+
+  // legend
+  const allLegend=[
+    {label:'CNMS Onnet',val:cnmsCount,color:'#1d4ed8'},
+    {label:'NetManazer',val:netCount, color:'#22c55e'},
+    {label:'Standard',  val:stdCount, color:'#f59e0b'},
+    {label:'Pro Plan',  val:proCount, color:'#7c3aed'},
+  ];
+  document.getElementById('donutLegend').innerHTML=allLegend.map(s=>`
+    <div class="dl-item">
+      <div class="dl-swatch" style="background:${s.color}"></div>
+      <span>${s.label}</span>
+      <span class="dl-count">${s.val}</span>
+    </div>`).join('');
+}
+
+// ── TABLE ─────────────────────────────────────────────────
+function fmtDate(d){
+  if(!d) return '<span style="color:#94a3b8;font-style:italic">Pending</span>';
+  return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+}
+function statusBadge(s){
+  if(s==='Active')           return '<span class="badge badge-active"><span class="badge-dot"></span>Active</span>';
+  if(s==='Under-Deployment') return '<span class="badge badge-deploy"><span class="badge-dot"></span>Deploying</span>';
+  if(s==='Blocked')          return '<span class="badge badge-blocked"><span class="badge-dot"></span>Blocked</span>';
+  return `<span class="badge">${s}</span>`;
+}
+
+function renderTable(){
+  const filtered = getFiltered();
+  const tbody = document.getElementById('clientTableBody');
+  if(filtered.length===0){
+    tbody.innerHTML='<tr class="empty-row"><td colspan="11">No clients match the current filter</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map(c=>{
+    const isNet=c.product==='NetManazer';
+    return `<tr class="${isNet?'td-net':'td-cnms'}" onclick="openModal('${c.opid}')">
+      <td>
+        <div class="td-opid">${c.opid}</div>
+        ${c.sheet==='ReActivation'?'<span class="sheet-tag">Re-Activation</span>':''}
+      </td>
+      <td>${isNet
+        ?'<span class="prod-tag prod-tag-net">⚡ NetManazer</span>'
+        :'<span class="prod-tag prod-tag-cnms">📡 CNMS Onnet</span>'}</td>
+      <td><span class="plan-tag ${c.plan==='Pro'?'plan-pro':'plan-std'}">${c.plan}</span></td>
+      <td>${statusBadge(c.status)}</td>
+      <td style="font-size:12px;font-weight:600">${fmtDate(c.onboardingDate)}</td>
+      <td style="font-size:12px;font-weight:600">${fmtDate(c.billingEffective)}</td>
+      <td style="font-weight:700">₹${c.rate}</td>
+      <td style="font-weight:700">${c.period}M</td>
+      <td style="font-size:11px">${c.freeSMS||'—'}</td>
+      <td class="td-bill">₹${c.monthlyBill.toLocaleString('en-IN')}</td>
+      <td><span class="sheet-tag" style="${c.sheet==='NetManazer'?'background:#f0fdf4;color:#15803d;border-color:#bbf7d0':''}">${c.sheet}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── MODAL ─────────────────────────────────────────────────
+function openModal(opid){
+  const c=CLIENTS.find(x=>x.opid===opid); if(!c) return;
+  const isNet=c.product==='NetManazer';
+  document.getElementById('modalHeader').className='modal-header'+(isNet?' net':'');
+  document.getElementById('modalOpid').textContent=c.opid;
+  document.getElementById('modalTags').innerHTML=
+    (isNet?'<span class="prod-tag prod-tag-net" style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3)">⚡ NetManazer</span>'
+          :'<span class="prod-tag prod-tag-cnms" style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3)">📡 CNMS Onnet</span>')+
+    statusBadge(c.status).replace('badge-active','badge-active').replace('style="','style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3);');
+
+  document.getElementById('modalBody').innerHTML=`
+    <div class="modal-grid">
+      <div class="modal-field"><div class="mf-label">Plan</div><div class="mf-val"><span class="plan-tag ${c.plan==='Pro'?'plan-pro':'plan-std'}">${c.plan}</span></div></div>
+      <div class="modal-field"><div class="mf-label">Source Sheet</div><div class="mf-val">${c.sheet}</div></div>
+      <div class="modal-field"><div class="mf-label">Onboarding Date</div><div class="mf-val">${fmtDate(c.onboardingDate)}</div></div>
+      <div class="modal-field"><div class="mf-label">Billing Effective</div><div class="mf-val">${fmtDate(c.billingEffective)}</div></div>
+      <div class="modal-field"><div class="mf-label">Rate (₹/SMS)</div><div class="mf-val">₹${c.rate}</div></div>
+      <div class="modal-field"><div class="mf-label">Min. Billing</div><div class="mf-val">${c.minBilling.toLocaleString('en-IN')} msgs</div></div>
+      <div class="modal-field"><div class="mf-label">Period</div><div class="mf-val">${c.period} Months</div></div>
+      <div class="modal-field"><div class="mf-label">Free SMS / WA</div><div class="mf-val">${c.freeSMS||'—'}</div></div>
+      <div class="modal-field" style="grid-column:1/-1"><div class="mf-label">Sales Deal Formula</div><div class="mf-val">${c.salesDeal}</div></div>
+    </div>
+    <table class="billing-table">
+      <tr><td>Base Amount</td><td>₹${c.baseAmount.toLocaleString('en-IN')}</td></tr>
+      <tr><td>GST / Tax (18%)</td><td>₹${c.tax.toLocaleString('en-IN')}</td></tr>
+      <tr class="total-row"><td>Monthly Bill</td><td>₹${c.monthlyBill.toLocaleString('en-IN')}</td></tr>
+      <tr class="contract-row"><td>Contract Value (${c.period} months)</td><td>₹${(c.monthlyBill*c.period).toLocaleString('en-IN')}</td></tr>
+    </table>`;
+
+  document.getElementById('modalBackdrop').classList.add('open');
+}
+function closeModal(){ document.getElementById('modalBackdrop').classList.remove('open'); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+// ── RENDER ALL ────────────────────────────────────────────
+function renderAll(){
+  updateKPI();
+  renderBarChart();
+  renderDonut();
+  renderTable();
+}
+
+renderAll();
+</script>
+</body>
+</html>
