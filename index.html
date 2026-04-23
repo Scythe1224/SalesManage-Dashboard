@@ -149,10 +149,10 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:#f0f4f8;color:#
 .chart-legend{display:flex;gap:12px}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#64748b;font-weight:600}
 .legend-dot{width:10px;height:10px;border-radius:50%}
-.bar-chart-area{height:160px;display:flex;align-items:flex-end;gap:8px;padding-bottom:24px;position:relative;border-bottom:2px solid #e2e8f0}
+.bar-chart-area{height:180px;display:flex;align-items:flex-end;justify-content:space-around;gap:18px;padding:8px 8px 24px;position:relative;border-bottom:2px solid #e2e8f0}
 .bar-chart-area::before{content:'';position:absolute;left:0;right:0;top:0;bottom:24px;background:repeating-linear-gradient(180deg,transparent,transparent calc(25% - 1px),#f1f5f9 calc(25% - 1px),#f1f5f9 25%)}
-.bar-group{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;position:relative;z-index:1}
-.bar-label-top{font-size:10px;font-weight:800;color:#1e293b;margin-bottom:2px}
+.bar-group{display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;position:relative;z-index:1;min-width:120px}
+.bar-label-top{font-size:10px;font-weight:800;color:#64748b;margin-bottom:0;letter-spacing:0.2px}
 .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
 .donut-svg{width:130px;height:130px}
 .dl-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#64748b;font-weight:600}
@@ -193,7 +193,8 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .td-opid{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#1e293b;letter-spacing:0.5px}
 .td-bill{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700}
 .td-net .td-bill{color:#15803d}
-.td-cnms .td-bill{color:#1d4ed8}
+
+.td-iptv .td-bill{color:#7c3aed}
 .empty-row td{text-align:center;padding:40px;color:#94a3b8;font-size:13px;font-weight:600}
 
 /* BADGES */
@@ -217,7 +218,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .sheet-tag{padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
 
 /* ── CLIENTS PAGE ─────────────────────────────────────── */
-.clients-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.clients-header{display:flex;align-items:center;justify-content:flex-start;margin-bottom:18px}
 .clients-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#1e293b}
 .clients-subtitle{font-size:12px;color:#94a3b8;margin-top:2px}
 
@@ -380,10 +381,16 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   box-shadow:0 2px 6px rgba(220,38,38,0.25);
 }
 .btn-delete-client:hover{transform:translateY(-1px)}
-.chart-stack{width:100%;max-width:64px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;height:132px}
-.chart-bar{width:100%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:10px;font-weight:800;padding-top:4px;min-height:4px}
-.chart-bar.active{background:#15803d}
-.chart-bar.deploy{background:#f59e0b}
+.chart-stack{width:100%;max-width:74px;display:flex;flex-direction:column;justify-content:flex-end;gap:0;height:140px;border-radius:12px 12px 0 0;overflow:hidden}
+.chart-col{display:flex;flex-direction:column;align-items:center;gap:8px}
+.chart-values{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.chart-value-pill{min-width:28px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800;line-height:1.4;text-align:center}
+.chart-value-pill.active{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.chart-value-pill.deploy{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.chart-bar{width:100%;display:block;min-height:0}
+.chart-bar.active{background:#86efac}
+.chart-bar.deploy{background:#fcd34d}
+.chart-bar.empty{min-height:4px}
 .td-iptv .td-bill{color:#7c3aed}
 
 /* ── STATUS CHANGE MODAL ──────────────────────────────── */
@@ -489,7 +496,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
         All Clients
         <span class="flyout-arrow">›</span>
       </div>
-      <div class="flyout-item" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'));openAddModal()">
+      <div class="flyout-item" onclick="openAddClientFromSidebar()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add New Client
         <span class="flyout-arrow">›</span>
@@ -661,8 +668,8 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
         <div class="chart-header">
           <div class="chart-title">Product-wise Active vs Under-Deployment Clients</div>
           <div class="chart-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#15803d"></div>Active</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Under-Deployment</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#86efac"></div>Active</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fcd34d"></div>Under-Deployment</div>
           </div>
         </div>
         <div class="bar-chart-area" id="barChart"></div>
@@ -688,10 +695,6 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
         <div class="clients-title">Client Management</div>
         <div class="clients-subtitle" id="clientsSubtitle">All clients across NetManazer, CNMS Onnet &amp; IPTV</div>
       </div>
-      <button class="btn-add-client" onclick="openAddModal()">
-        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add New Client
-      </button>
     </div>
 
     <div class="table-card">
@@ -934,7 +937,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
             <option value="Standard">Standard</option>
             <option value="Pro">Pro</option>
           </select>
-          <span class="form-hint">Only applicable for CNMS Onnet</span>
+          <span class="form-hint" id="productTypeHint">Only applicable for CNMS Onnet</span>
         </div>
         <div class="form-group">
           <label class="form-label">Status *</label>
@@ -962,11 +965,11 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Min. Billing (msgs) *</label>
+          <label class="form-label">Min. Billing (Connection/Subscribers) *</label>
           <input class="form-input" id="f-minbill" type="number" placeholder="e.g. 500" oninput="updateFormCalc()"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Period (months) *</label>
+          <label class="form-label">Period *</label>
           <select class="form-select" id="f-period" onchange="updateFormCalc()">
             <option value="1">Monthly</option>
             <option value="3">3 Months</option>
@@ -1279,11 +1282,18 @@ function getBase(){
   return getFilteredClientsByTab(currentTab);
 }
 function getProductStatusChartData(){
-  return [
-    {key:'NetManazer',active:CLIENTS.filter(c=>c.product==='NetManazer'&&c.status==='Active').length,deploy:CLIENTS.filter(c=>c.product==='NetManazer'&&c.status==='Under-Deployment').length},
-    {key:'CNMS',active:CLIENTS.filter(c=>c.product==='CNMS Onnet'&&c.status==='Active').length,deploy:CLIENTS.filter(c=>c.product==='CNMS Onnet'&&c.status==='Under-Deployment').length},
-    {key:'IPTV',active:CLIENTS.filter(c=>c.product==='IPTV'&&c.status==='Active').length,deploy:CLIENTS.filter(c=>c.product==='IPTV'&&c.status==='Under-Deployment').length}
-  ];
+  const scoped = getBase();
+  const rows = [
+    { key:'NetManazer', product:'NetManazer' },
+    { key:'CNMS', product:'CNMS Onnet' },
+    { key:'IPTV', product:'IPTV' }
+  ].map(item=>({
+    key:item.key,
+    product:item.product,
+    active:scoped.filter(c=>c.product===item.product && c.status==='Active').length,
+    deploy:scoped.filter(c=>c.product===item.product && c.status==='Under-Deployment').length
+  }));
+  return currentTab==='all' ? rows : rows.filter(r=>r.product===getBase()[0]?.product || (currentTab==='netmanazer' && r.product==='NetManazer') || (currentTab==='cnms' && r.product==='CNMS Onnet') || (currentTab==='iptv' && r.product==='IPTV'));
 }
 function calcBilling(rate,minBilling,period){
   const base = Math.round((rate*minBilling) * 100) / 100;
@@ -1329,6 +1339,14 @@ function switchTab(tab,el){
   renderAll();
   if(document.getElementById('page-clients').classList.contains('active-page')) renderClientsTable();
   if(document.getElementById('page-billing').classList.contains('active-page')) renderBillingPage();
+}
+
+function openAddClientFromSidebar(){
+  closeClientsFlyout();
+  showPage('clients', document.getElementById('clientsNavIcon'));
+  window.setTimeout(()=>{
+    openAddModal();
+  }, 60);
 }
 
 // ── SIDEBAR FLYOUT ─────────────────────────────────────
@@ -1393,8 +1411,15 @@ function updateKPI(){
 function renderBarChart(){
   const chart=document.getElementById('barChart');
   const xl=document.getElementById('barXLabels');
-  const rows=getProductStatusChartData();
-  const maxVal=Math.max(...rows.flatMap(r=>[r.active,r.deploy]),1);
+  const allRows=getProductStatusChartData();
+  const rows=currentTab==='all'
+    ? allRows
+    : allRows.filter(row=>
+        (currentTab==='netmanazer' && row.key==='NetManazer') ||
+        (currentTab==='cnms' && row.key==='CNMS') ||
+        (currentTab==='iptv' && row.key==='IPTV')
+      );
+  const maxTotal=Math.max(...rows.map(r=>r.active+r.deploy),1);
 
   chart.innerHTML='';
   xl.innerHTML='';
@@ -1402,19 +1427,26 @@ function renderBarChart(){
   rows.forEach(row=>{
     const grp=document.createElement('div');
     grp.className='bar-group';
-    const maxHeight=120;
-    const activeHeight=row.active ? Math.max((row.active/maxVal)*maxHeight,10) : 4;
-    const deployHeight=row.deploy ? Math.max((row.deploy/maxVal)*maxHeight,10) : 4;
+
+    const total=row.active+row.deploy;
+    const totalHeight = total ? Math.max((total/maxTotal)*126, 38) : 8;
+    const activeHeight = row.active ? Math.max((row.active/Math.max(total,1))*totalHeight, 18) : 0;
+    const deployHeight = row.deploy ? Math.max((row.deploy/Math.max(total,1))*totalHeight, 18) : 0;
+
     grp.innerHTML=`
-      <div class="bar-label-top">${row.active} / ${row.deploy}</div>
-      <div class="chart-stack">
-        <div class="chart-bar active" style="height:${activeHeight}px">${row.active}</div>
-        <div class="chart-bar deploy" style="height:${deployHeight}px">${row.deploy}</div>
-      </div>`;
+      <div class="chart-values">
+        <span class="chart-value-pill active">${row.active}</span>
+        <span class="chart-value-pill deploy">${row.deploy}</span>
+      </div>
+      <div class="chart-stack" title="${row.key} — Active: ${row.active}, Under-Deployment: ${row.deploy}">
+        ${row.deploy ? `<div class="chart-bar deploy" style="height:${deployHeight}px"></div>` : '<div class="chart-bar deploy empty"></div>'}
+        ${row.active ? `<div class="chart-bar active" style="height:${activeHeight}px"></div>` : '<div class="chart-bar active empty"></div>'}
+      </div>
+    `;
     chart.appendChild(grp);
 
     const x=document.createElement('div');
-    x.style.cssText='flex:1;text-align:center;font-size:10px;font-weight:700;color:#94a3b8';
+    x.style.cssText=`flex:${currentTab==='all'?'1':'0 0 120px'};text-align:center;font-size:11px;font-weight:800;color:#64748b`;
     x.textContent=row.key;
     xl.appendChild(x);
   });
@@ -1604,6 +1636,8 @@ function closeDetailModal(){document.getElementById('detailBackdrop').classList.
 
 // ── ADD CLIENT MODAL ───────────────────────────────────
 function openAddModal(){
+  const backdrop=document.getElementById('addBackdrop');
+  if(!backdrop) return;
   document.getElementById('githubCopySection').style.display='none';
   const today=new Date().toISOString().split('T')[0];
   document.getElementById('f-ondate').value=today;
@@ -1619,9 +1653,9 @@ function openAddModal(){
   document.getElementById('f-period').value='6';
   onProductChange();
   updateFormCalc();
-  document.getElementById('addClientBackdrop').classList.add('open');
+  backdrop.classList.add('open');
 }
-function closeAddModal(){document.getElementById('addClientBackdrop').classList.remove('open')}
+function closeAddModal(){document.getElementById('addBackdrop').classList.remove('open')}
 function onProductChange(){
   const prod=document.getElementById('f-product').value;
   const planGroup=document.getElementById('planGroup');
@@ -1634,21 +1668,21 @@ function onProductChange(){
     plan.innerHTML='<option value="ISP">ISP</option>';
     planGroup.style.opacity='0.65';
     planGroup.style.pointerEvents='none';
-    hint.textContent='Fixed as ISP for NetManazer';
+    if(hint) hint.textContent='Fixed as ISP for NetManazer';
     sheetSel.value='NetManazer';
   } else if(prod==='IPTV'){
     plan.value='IPTV';
     plan.innerHTML='<option value="IPTV">IPTV</option>';
     planGroup.style.opacity='0.65';
     planGroup.style.pointerEvents='none';
-    hint.textContent='Fixed as IPTV for IPTV product';
+    if(hint) hint.textContent='Fixed as IPTV for IPTV product';
     if(sheetSel.value==='NetManazer') sheetSel.value='NEW';
   } else {
     plan.innerHTML='<option value="Standard">Standard</option><option value="Pro">Pro</option>';
     plan.value='Standard';
     planGroup.style.opacity='1';
     planGroup.style.pointerEvents='auto';
-    hint.textContent='Selectable for CNMS Onnet only';
+    if(hint) hint.textContent='Selectable for CNMS Onnet only';
     if(sheetSel.value==='NetManazer') sheetSel.value='NEW';
   }
   updateFormCalc();
@@ -1842,7 +1876,7 @@ function openEditDealForm(opid){
   document.getElementById('ed-freesms').value=c.freeSMS||'';
   document.getElementById('ed-rate-cur').textContent='Current: ₹'+c.rate;
   document.getElementById('ed-min-cur').textContent='Current: '+c.minBilling;
-  const planField=document.getElementById('editPlanField');
+  const planField=document.getElementById('editProductTypeField');
   const planSelect=document.getElementById('ed-plan');
   if(c.product==='NetManazer'){
     planSelect.innerHTML='<option value="ISP">ISP</option>';
