@@ -544,6 +544,7 @@ function saveNewClient(){
   renderAll();
   renderClientsTable();
   renderBillingPage();
+  closeAddModal();
   showToast('✅ Client added successfully');
 }
 function copyGithubCode(){
