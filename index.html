@@ -69,6 +69,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:#f0f4f8;color:#
 .prod-tab.active{background:#fff;color:#1e3a8a;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
 .prod-tab.tab-net.active{color:#166534}
 .prod-tab.tab-cnms.active{color:#1e40af}
+.prod-tab.tab-iptv.active{color:#7c3aed}
 .tab-dot{width:7px;height:7px;border-radius:50%}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .live-chip{
@@ -130,9 +131,11 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:#f0f4f8;color:#
 
 /* ── INFO ROW ─────────────────────────────────────────── */
 .info-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px}
+.info-row.info-row-4{grid-template-columns:repeat(4,1fr)}
 .info-card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid #3b82f6}
 .info-card.net-border{border-top-color:#22c55e}
 .info-card.cnms-border{border-top-color:#3b82f6}
+.info-card.iptv-border{border-top-color:#8b5cf6}
 .info-card.rev-border{border-top-color:#8b5cf6}
 .info-card-title{font-size:10px;font-weight:800;letter-spacing:1px;color:#94a3b8;text-transform:uppercase;margin-bottom:10px}
 .info-big{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#1e293b}
@@ -202,6 +205,12 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .prod-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800;letter-spacing:0.3px}
 .prod-tag-net{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
 .prod-tag-cnms{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.prod-tag-iptv{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
+.product-type-tag{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800}
+.product-type-std{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
+.product-type-pro{background:#faf5ff;color:#7c3aed;border:1px solid #ddd6fe}
+.product-type-fixed{background:#ecfeff;color:#0f766e;border:1px solid #a5f3fc}
+.product-type-iptv{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
 .plan-tag{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800}
 .plan-std{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
 .plan-pro{background:#faf5ff;color:#7c3aed;border:1px solid #ddd6fe}
@@ -345,7 +354,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   transition:opacity 0.18s,transform 0.18s;
   box-shadow:4px 4px 20px rgba(0,0,0,0.5);
 }
-.nav-flyout-wrap:hover .nav-flyout{opacity:1;pointer-events:all;transform:translateX(0)}
+.nav-flyout-wrap.open .nav-flyout{opacity:1;pointer-events:all;transform:translateX(0)}
 .flyout-header{
   padding:10px 14px 6px;font-size:9px;font-weight:800;
   letter-spacing:1.5px;text-transform:uppercase;color:#4a5568;border-bottom:1px solid #2d3748;
@@ -358,6 +367,24 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .flyout-item:hover{background:#2d3748;color:#fff}
 .flyout-item svg{width:13px;height:13px;flex-shrink:0}
 .flyout-arrow{margin-left:auto;font-size:10px;color:#4a5568}
+.action-btn-delete{
+  padding:5px 10px;border:none;border-radius:6px;background:#fef2f2;color:#dc2626;
+  font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;
+  border:1px solid #fecaca;transition:all 0.18s;
+}
+.action-btn-delete:hover{background:#fee2e2;border-color:#fca5a5}
+.detail-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+.btn-delete-client{
+  padding:8px 18px;border:none;border-radius:7px;background:linear-gradient(135deg,#dc2626,#ef4444);
+  color:#fff;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;
+  box-shadow:0 2px 6px rgba(220,38,38,0.25);
+}
+.btn-delete-client:hover{transform:translateY(-1px)}
+.chart-stack{width:100%;max-width:64px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;height:132px}
+.chart-bar{width:100%;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:10px;font-weight:800;padding-top:4px;min-height:4px}
+.chart-bar.active{background:#15803d}
+.chart-bar.deploy{background:#f59e0b}
+.td-iptv .td-bill{color:#7c3aed}
 
 /* ── STATUS CHANGE MODAL ──────────────────────────────── */
 .status-modal{
@@ -450,28 +477,29 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   </div>
 
   <!-- CLIENTS ICON — flyout submenu -->
-  <div class="nav-flyout-wrap">
-    <div class="nav-icon" id="clientsNavIcon" title="">
+  <div class="nav-flyout-wrap" id="clientsFlyoutWrap">
+    <button class="nav-icon" id="clientsNavIcon" type="button" aria-haspopup="true" aria-expanded="false" onclick="toggleClientsFlyout(event)">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    </div>
-    <div class="nav-flyout">
+      <span class="nav-tooltip">Clients</span>
+    </button>
+    <div class="nav-flyout" id="clientsFlyoutMenu">
       <div class="flyout-header">Clients</div>
-      <div class="flyout-item" onclick="showPage('clients', document.getElementById('clientsNavIcon'))">
+      <div class="flyout-item" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'))">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         All Clients
         <span class="flyout-arrow">›</span>
       </div>
-      <div class="flyout-item" onclick="showPage('clients', document.getElementById('clientsNavIcon'));openAddModal()">
+      <div class="flyout-item" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'));openAddModal()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add New Client
         <span class="flyout-arrow">›</span>
       </div>
-      <div class="flyout-item" onclick="showPage('clients', document.getElementById('clientsNavIcon'));openStatusManagerModal()">
+      <div class="flyout-item" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'));openStatusManagerModal()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Update Status
         <span class="flyout-arrow">›</span>
       </div>
-      <div class="flyout-item" onclick="showPage('clients', document.getElementById('clientsNavIcon'));openEditDealBrowser()">
+      <div class="flyout-item" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'));openEditDealBrowser()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Client Deal
         <span class="flyout-arrow">›</span>
@@ -521,6 +549,9 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
       </button>
       <button class="prod-tab tab-cnms" data-tab="cnms" onclick="switchTab('cnms',this)">
         <span class="tab-dot" style="background:#3b82f6"></span>CNMS Onnet
+      </button>
+      <button class="prod-tab tab-iptv" data-tab="iptv" onclick="switchTab('iptv',this)">
+        <span class="tab-dot" style="background:#8b5cf6"></span>IPTV
       </button>
     </div>
     <div class="topbar-right">
@@ -601,21 +632,26 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
     </div>
 
     <!-- INFO ROW -->
-    <div class="info-row">
+    <div class="info-row info-row-4">
       <div class="info-card net-border">
         <div class="info-card-title">NetManazer Clients</div>
-        <div class="info-big" id="inf-net">2 <span style="color:#94a3b8;font-size:14px">clients</span></div>
-        <div class="info-sub-row"><span>Deploying: <b style="color:#b45309" id="inf-net-dep">2</b></span><span>Active: <b style="color:#15803d" id="inf-net-act">0</b></span></div>
+        <div class="info-big" id="inf-net">0 <span style="color:#94a3b8;font-size:14px">clients</span></div>
+        <div class="info-sub-row"><span>Deploying: <b style="color:#b45309" id="inf-net-dep">0</b></span><span>Active: <b style="color:#15803d" id="inf-net-act">0</b></span></div>
       </div>
       <div class="info-card cnms-border">
         <div class="info-card-title">CNMS Onnet Clients</div>
-        <div class="info-big" id="inf-cnms">12 <span style="color:#94a3b8;font-size:14px">clients</span></div>
-        <div class="info-sub-row"><span>Active: <b style="color:#15803d" id="inf-cnms-act">11</b></span><span>Blocked: <b style="color:#be185d" id="inf-cnms-bl">1</b></span></div>
+        <div class="info-big" id="inf-cnms">0 <span style="color:#94a3b8;font-size:14px">clients</span></div>
+        <div class="info-sub-row"><span>Active: <b style="color:#15803d" id="inf-cnms-act">0</b></span><span>Blocked: <b style="color:#be185d" id="inf-cnms-bl">0</b></span></div>
+      </div>
+      <div class="info-card iptv-border">
+        <div class="info-card-title">IPTV Clients</div>
+        <div class="info-big" id="inf-iptv">0 <span style="color:#94a3b8;font-size:14px">clients</span></div>
+        <div class="info-sub-row"><span>Deploying: <b style="color:#b45309" id="inf-iptv-dep">0</b></span><span>Active: <b style="color:#15803d" id="inf-iptv-act">0</b></span></div>
       </div>
       <div class="info-card rev-border">
         <div class="info-card-title">Monthly Revenue (Active)</div>
         <div class="info-big">₹<span id="inf-rev" style="color:#7c3aed">—</span></div>
-        <div class="info-sub-row"><span>GST Incl.</span><span>Std + Pro Plans</span></div>
+        <div class="info-sub-row"><span>GST Incl.</span><span>All Product Types</span></div>
       </div>
     </div>
 
@@ -623,17 +659,17 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
     <div class="charts-row">
       <div class="chart-card">
         <div class="chart-header">
-          <div class="chart-title">Onboarding Timeline — Clients per Month</div>
+          <div class="chart-title">Product-wise Active vs Under-Deployment Clients</div>
           <div class="chart-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#1d4ed8"></div>CNMS Onnet</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>NetManazer</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#15803d"></div>Active</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Under-Deployment</div>
           </div>
         </div>
         <div class="bar-chart-area" id="barChart"></div>
         <div style="display:flex;gap:8px;margin-top:4px" id="barXLabels"></div>
       </div>
       <div class="chart-card">
-        <div class="chart-header"><div class="chart-title">Product &amp; Plan Split</div></div>
+        <div class="chart-header"><div class="chart-title">Product &amp; Product Type Split</div></div>
         <div class="donut-wrap">
           <svg class="donut-svg" viewBox="0 0 130 130" id="donutSvg"></svg>
           <div class="donut-legend-list" id="donutLegend"></div>
@@ -650,7 +686,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
     <div class="clients-header">
       <div>
         <div class="clients-title">Client Management</div>
-        <div class="clients-subtitle" id="clientsSubtitle">All 14 clients across NetManazer &amp; CNMS Onnet</div>
+        <div class="clients-subtitle" id="clientsSubtitle">All clients across NetManazer, CNMS Onnet &amp; IPTV</div>
       </div>
       <button class="btn-add-client" onclick="openAddModal()">
         <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -663,7 +699,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
         <div class="table-toolbar-title">📋 All Client Records</div>
         <div class="search-box">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="clientSearch" placeholder="Search OPID, product, plan…" oninput="renderClientsTable()"/>
+          <input type="text" id="clientSearch" placeholder="Search OPID, product, product type…" oninput="renderClientsTable()"/>
         </div>
         <button class="filter-pill active" onclick="setCPill('all',this)">All</button>
         <button class="filter-pill" onclick="setCPill('Active',this)">Active</button>
@@ -679,10 +715,10 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
         <table>
           <thead>
             <tr>
-              <th>OPID</th><th>Product</th><th>Plan</th><th>Status</th>
+              <th>OPID</th><th>Product</th><th>Product Type</th><th>Status</th>
               <th>Onboarding Date</th><th>Billing Effective</th>
               <th>Rate</th><th>Period</th><th>Free SMS/WA</th>
-              <th>Monthly Bill</th><th>Sheet</th>
+              <th>Monthly Bill</th><th>Sheet</th><th>Action</th>
             </tr>
           </thead>
           <tbody id="clientsTableBody"></tbody>
@@ -764,7 +800,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
             <div class="code-block">
               <span class="cmt">// Paste this inside the CLIENTS array in index.html</span><br>
               {<span class="kw">opid</span>:<span class="str">"NEWCLIENT"</span>, <span class="kw">status</span>:<span class="str">"Active"</span>,<br>
-              &nbsp;<span class="kw">product</span>:<span class="str">"CNMS Onnet"</span>, <span class="kw">plan</span>:<span class="str">"Standard"</span>,<br>
+              &nbsp;<span class="kw">product</span>:<span class="str">"CNMS Onnet"</span>, <span class="kw">productType</span>:<span class="str">"Standard"</span>,<br>
               &nbsp;<span class="kw">sheet</span>:<span class="str">"NEW"</span>, <span class="kw">onboardingDate</span>:<span class="str">"2026-04-22"</span>,<br>
               &nbsp;<span class="kw">rate</span>:1.5, <span class="kw">monthlyBill</span>:885, ...},
             </div>
@@ -826,7 +862,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
         {<br>
         &nbsp;&nbsp;<span class="kw">opid</span>: <span class="str">"ABCDE"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// Client ID (required)</span><br>
         &nbsp;&nbsp;<span class="kw">status</span>: <span class="str">"Active"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// "Active" | "Under-Deployment" | "Blocked"</span><br>
-        &nbsp;&nbsp;<span class="kw">product</span>: <span class="str">"CNMS Onnet"</span>,&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// "CNMS Onnet" | "NetManazer"</span><br>
+        &nbsp;&nbsp;<span class="kw">product</span>: <span class="str">"CNMS Onnet"</span>,&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// "CNMS Onnet" | "NetManazer" | "IPTV"</span><br>
         &nbsp;&nbsp;<span class="kw">plan</span>: <span class="str">"Standard"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// "Standard" | "Pro"</span><br>
         &nbsp;&nbsp;<span class="kw">sheet</span>: <span class="str">"NEW"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// "NEW" | "ReActivation" | "NetManazer"</span><br>
         &nbsp;&nbsp;<span class="kw">onboardingDate</span>: <span class="str">"2026-04-22"</span>, <span class="cmt">// YYYY-MM-DD format</span><br>
@@ -887,12 +923,13 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
           <select class="form-select" id="f-product" onchange="onProductChange()">
             <option value="CNMS Onnet">CNMS Onnet</option>
             <option value="NetManazer">NetManazer</option>
+            <option value="IPTV">IPTV</option>
           </select>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group" id="planGroup">
-          <label class="form-label">Plan *</label>
+          <label class="form-label">Product Type *</label>
           <select class="form-select" id="f-plan">
             <option value="Standard">Standard</option>
             <option value="Pro">Pro</option>
@@ -915,6 +952,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
             <option value="NEW">NEW</option>
             <option value="ReActivation">ReActivation</option>
             <option value="NetManazer">NetManazer</option>
+            <option value="IPTV">IPTV</option>
           </select>
         </div>
         <div class="form-group">
@@ -930,6 +968,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
         <div class="form-group">
           <label class="form-label">Period (months) *</label>
           <select class="form-select" id="f-period" onchange="updateFormCalc()">
+            <option value="1">Monthly</option>
             <option value="3">3 Months</option>
             <option value="6" selected>6 Months</option>
             <option value="12">12 Months</option>
@@ -1107,13 +1146,14 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
           <div class="edit-current" id="ed-rate-cur"></div>
         </div>
         <div class="edit-field">
-          <div class="edit-label">Min. Billing</div>
+          <div class="edit-label">Min. Billing (Connection/Subscribers)</div>
           <input type="number" class="edit-input" id="ed-min" oninput="liveEditPreview()"/>
           <div class="edit-current" id="ed-min-cur"></div>
         </div>
         <div class="edit-field">
-          <div class="edit-label">Period (months)</div>
+          <div class="edit-label">Period</div>
           <select class="edit-input" id="ed-period" onchange="liveEditPreview()">
+            <option value="1">Monthly</option>
             <option value="3">3 Months</option>
             <option value="6">6 Months</option>
             <option value="12">12 Months</option>
@@ -1123,10 +1163,10 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
     </div>
 
     <div class="edit-section">
-      <div class="edit-section-title">Plan &amp; Status</div>
+      <div class="edit-section-title">Product Type &amp; Status</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="edit-field" id="editPlanField">
-          <div class="edit-label">Plan</div>
+        <div class="edit-field" id="editProductTypeField">
+          <div class="edit-label">Product Type</div>
           <select class="edit-input" id="ed-plan">
             <option value="Standard">Standard</option>
             <option value="Pro">Pro</option>
@@ -1153,30 +1193,109 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   </div>
 </div>
 
+
 <script>
 // ══════════════════════════════════════════════════════
 //  DATA
 // ══════════════════════════════════════════════════════
 let CLIENTS = [
-  {opid:"CDNPL",status:"Blocked",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2025-12-01",billingEffective:"2025-12-01",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"GENTR",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2025-12-12",billingEffective:"2025-12-24",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"VENU",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2025-12-30",billingEffective:"2026-01-09",rate:2.0,minBilling:500,period:6,salesDeal:"1×500×6+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"MCAN",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2025-12-31",billingEffective:"2026-01-01",rate:2.0,minBilling:500,period:12,salesDeal:"1×500×12+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"SCABN",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-01-29",billingEffective:"2026-02-02",rate:1.5,minBilling:500,period:12,salesDeal:"1×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"KDIN",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"NEW",onboardingDate:"2026-02-17",billingEffective:"2026-02-23",rate:1.5,minBilling:500,period:12,salesDeal:"1×500×12+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"GUJFI",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-02-19",billingEffective:"2026-02-24",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"HITCAB",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-03-13",billingEffective:"2026-03-17",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"YASHIKA",status:"Active",product:"CNMS Onnet",plan:"Pro",sheet:"NEW",onboardingDate:"2026-04-02",billingEffective:"2026-04-03",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"NCN",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-12",rate:1.0,minBilling:1000,period:6,salesDeal:"1×1000×6+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"Harsh",status:"Active",product:"CNMS Onnet",plan:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-04",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"BCT",status:"Under-Deployment",product:"CNMS Onnet",plan:"Pro",sheet:"ReActivation",onboardingDate:"2026-04-20",billingEffective:null,rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:null,baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"SPEEDNET",status:"Under-Deployment",product:"NetManazer",plan:"Standard",sheet:"NetManazer",onboardingDate:"2026-03-26",billingEffective:null,rate:6,minBilling:250,period:6,salesDeal:"6×250×6+Tax",freeSMS:null,baseAmount:1500,tax:270,monthlyBill:1770},
-  {opid:"CITYNET",status:"Under-Deployment",product:"NetManazer",plan:"Standard",sheet:"NetManazer",onboardingDate:"2026-04-09",billingEffective:null,rate:4,minBilling:500,period:6,salesDeal:"4×500×6+Tax",freeSMS:null,baseAmount:2000,tax:360,monthlyBill:2360}
+  {opid:"CDNPL",status:"Blocked",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-01",billingEffective:"2025-12-01",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"GENTR",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-12",billingEffective:"2025-12-24",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"VENU",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2025-12-30",billingEffective:"2026-01-09",rate:2.0,minBilling:500,period:6,salesDeal:"2×500×6+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"MCAN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-31",billingEffective:"2026-01-01",rate:2.0,minBilling:500,period:12,salesDeal:"2×500×12+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"SCABN",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-01-29",billingEffective:"2026-02-02",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"KDIN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2026-02-17",billingEffective:"2026-02-23",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"GUJFI",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-02-19",billingEffective:"2026-02-24",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"HITCAB",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-03-13",billingEffective:"2026-03-17",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"YASHIKA",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-04-02",billingEffective:"2026-04-03",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"NCN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-12",rate:1.0,minBilling:1000,period:6,salesDeal:"1×1000×6+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"Harsh",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-04",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"BCT",status:"Under-Deployment",product:"CNMS Onnet",productType:"Pro",sheet:"ReActivation",onboardingDate:"2026-04-20",billingEffective:null,rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:null,baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"SPEEDNET",status:"Under-Deployment",product:"NetManazer",productType:"ISP",sheet:"NetManazer",onboardingDate:"2026-03-26",billingEffective:null,rate:6,minBilling:250,period:6,salesDeal:"6×250×6+Tax",freeSMS:null,baseAmount:1500,tax:270,monthlyBill:1770},
+  {opid:"CITYNET",status:"Under-Deployment",product:"NetManazer",productType:"ISP",sheet:"NetManazer",onboardingDate:"2026-04-09",billingEffective:null,rate:4,minBilling:500,period:6,salesDeal:"4×500×6+Tax",freeSMS:null,baseAmount:2000,tax:360,monthlyBill:2360},
+  {opid:"IPTV01",status:"Active",product:"IPTV",productType:"IPTV",sheet:"NEW",onboardingDate:"2026-04-05",billingEffective:"2026-04-08",rate:3,minBilling:400,period:1,salesDeal:"3×400×1+Tax",freeSMS:null,baseAmount:1200,tax:216,monthlyBill:1416},
+  {opid:"IPTV02",status:"Under-Deployment",product:"IPTV",productType:"IPTV",sheet:"NEW",onboardingDate:"2026-04-18",billingEffective:null,rate:2.5,minBilling:350,period:3,salesDeal:"2.5×350×3+Tax",freeSMS:null,baseAmount:875,tax:158,monthlyBill:1033}
 ];
+
+const PRODUCT_META = {
+  'NetManazer': { tab:'netmanazer', badgeClass:'prod-tag-net', label:'⚡ NetManazer' },
+  'CNMS Onnet': { tab:'cnms', badgeClass:'prod-tag-cnms', label:'📡 CNMS Onnet' },
+  'IPTV': { tab:'iptv', badgeClass:'prod-tag-iptv', label:'📺 IPTV' }
+};
 
 // ── STATE ──────────────────────────────────────────────
 let currentTab='all', clientStatusFilter='all', clientSort='opid';
 let lastAddedClient=null;
+let statusChangeTarget=null;
+let selectedNewStatus=null;
+let editDealTarget=null;
+
+// ── HELPERS ────────────────────────────────────────────
+function normalizeClient(client){
+  if(!client.productType && client.plan) client.productType = client.plan;
+  if(client.product === 'NetManazer') client.productType = 'ISP';
+  if(client.product === 'IPTV') client.productType = 'IPTV';
+  return client;
+}
+CLIENTS = CLIENTS.map(normalizeClient);
+
+function fmtDate(v){
+  if(!v) return '—';
+  const d=new Date(v);
+  if(Number.isNaN(d.getTime())) return v;
+  return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+}
+function statusBadge(status){
+  const cls=status==='Active'?'badge-active':status==='Blocked'?'badge-blocked':'badge-deploy';
+  return `<span class="badge ${cls}"><span class="badge-dot"></span>${status}</span>`;
+}
+function getProductTypeDisplay(client){
+  if(client.product==='NetManazer') return 'ISP';
+  if(client.product==='IPTV') return 'IPTV';
+  return client.productType || 'Standard';
+}
+function getProductTypeClass(client){
+  const val=getProductTypeDisplay(client);
+  if(val==='Standard') return 'product-type-std';
+  if(val==='Pro') return 'product-type-pro';
+  if(val==='IPTV') return 'product-type-iptv';
+  return 'product-type-fixed';
+}
+function formatPeriod(period){
+  period = Number(period || 0);
+  return period === 1 ? 'Monthly' : `${period} Months`;
+}
+function getProductBadge(client){
+  const meta = PRODUCT_META[client.product] || PRODUCT_META['CNMS Onnet'];
+  return `<span class="prod-tag ${meta.badgeClass}">${meta.label}</span>`;
+}
+function getFilteredClientsByTab(tab=currentTab){
+  if(tab==='netmanazer') return CLIENTS.filter(c=>c.product==='NetManazer');
+  if(tab==='cnms') return CLIENTS.filter(c=>c.product==='CNMS Onnet');
+  if(tab==='iptv') return CLIENTS.filter(c=>c.product==='IPTV');
+  return [...CLIENTS];
+}
+function getBase(){
+  return getFilteredClientsByTab(currentTab);
+}
+function getProductStatusChartData(){
+  return [
+    {key:'NetManazer',active:CLIENTS.filter(c=>c.product==='NetManazer'&&c.status==='Active').length,deploy:CLIENTS.filter(c=>c.product==='NetManazer'&&c.status==='Under-Deployment').length},
+    {key:'CNMS',active:CLIENTS.filter(c=>c.product==='CNMS Onnet'&&c.status==='Active').length,deploy:CLIENTS.filter(c=>c.product==='CNMS Onnet'&&c.status==='Under-Deployment').length},
+    {key:'IPTV',active:CLIENTS.filter(c=>c.product==='IPTV'&&c.status==='Active').length,deploy:CLIENTS.filter(c=>c.product==='IPTV'&&c.status==='Under-Deployment').length}
+  ];
+}
+function calcBilling(rate,minBilling,period){
+  const base = Math.round((rate*minBilling) * 100) / 100;
+  const tax = Math.round(base * 0.18);
+  const monthlyBill = Math.round(base + tax);
+  return {
+    base,
+    tax,
+    monthlyBill,
+    salesDeal:`${rate}×${minBilling}×${period}+Tax`
+  };
+}
 
 // ── DATE ───────────────────────────────────────────────
 function updateDate(){
@@ -1203,19 +1322,35 @@ function showSubTab(el){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
 }
-
-// ── PRODUCT TAB ────────────────────────────────────────
 function switchTab(tab,el){
   currentTab=tab;
   document.querySelectorAll('.prod-tab').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
+  if(el) el.classList.add('active');
   renderAll();
+  if(document.getElementById('page-clients').classList.contains('active-page')) renderClientsTable();
+  if(document.getElementById('page-billing').classList.contains('active-page')) renderBillingPage();
 }
-function getBase(){
-  if(currentTab==='netmanazer') return CLIENTS.filter(c=>c.product==='NetManazer');
-  if(currentTab==='cnms') return CLIENTS.filter(c=>c.product==='CNMS Onnet');
-  return CLIENTS;
+
+// ── SIDEBAR FLYOUT ─────────────────────────────────────
+function toggleClientsFlyout(event){
+  event.stopPropagation();
+  const wrap = document.getElementById('clientsFlyoutWrap');
+  const btn = document.getElementById('clientsNavIcon');
+  const isOpen = wrap.classList.toggle('open');
+  btn.setAttribute('aria-expanded', String(isOpen));
 }
+function closeClientsFlyout(){
+  const wrap = document.getElementById('clientsFlyoutWrap');
+  const btn = document.getElementById('clientsNavIcon');
+  if(wrap){
+    wrap.classList.remove('open');
+    if(btn) btn.setAttribute('aria-expanded', 'false');
+  }
+}
+document.addEventListener('click',e=>{
+  const wrap=document.getElementById('clientsFlyoutWrap');
+  if(wrap && !wrap.contains(e.target)) closeClientsFlyout();
+});
 
 // ── KPI ────────────────────────────────────────────────
 function updateKPI(){
@@ -1223,61 +1358,65 @@ function updateKPI(){
   const act=base.filter(c=>c.status==='Active');
   const dep=base.filter(c=>c.status==='Under-Deployment');
   const blk=base.filter(c=>c.status==='Blocked');
+
   document.getElementById('kpi-active').textContent=act.length;
   document.getElementById('kpi-deploy').textContent=dep.length;
   document.getElementById('kpi-blocked').textContent=blk.length;
+
   document.getElementById('k-ac-cnms').textContent=act.filter(c=>c.product==='CNMS Onnet').length;
   document.getElementById('k-ac-net').textContent=act.filter(c=>c.product==='NetManazer').length;
   document.getElementById('k-dp-cnms').textContent=dep.filter(c=>c.product==='CNMS Onnet').length;
   document.getElementById('k-dp-net').textContent=dep.filter(c=>c.product==='NetManazer').length;
   document.getElementById('k-bl-cnms').textContent=blk.filter(c=>c.product==='CNMS Onnet').length;
   document.getElementById('k-bl-net').textContent=blk.filter(c=>c.product==='NetManazer').length;
+
   const rev=act.reduce((s,c)=>s+c.monthlyBill,0);
   document.getElementById('inf-rev').textContent=rev.toLocaleString('en-IN');
+
   const allNet=CLIENTS.filter(c=>c.product==='NetManazer');
   const allCNMS=CLIENTS.filter(c=>c.product==='CNMS Onnet');
-  document.getElementById('inf-net').innerHTML=allNet.length+' <span style="color:#94a3b8;font-size:14px">clients</span>';
-  document.getElementById('inf-cnms').innerHTML=allCNMS.length+' <span style="color:#94a3b8;font-size:14px">clients</span>';
+  const allIPTV=CLIENTS.filter(c=>c.product==='IPTV');
+
+  document.getElementById('inf-net').innerHTML=`${allNet.length} <span style="color:#94a3b8;font-size:14px">clients</span>`;
+  document.getElementById('inf-cnms').innerHTML=`${allCNMS.length} <span style="color:#94a3b8;font-size:14px">clients</span>`;
+  document.getElementById('inf-iptv').innerHTML=`${allIPTV.length} <span style="color:#94a3b8;font-size:14px">clients</span>`;
+
   document.getElementById('inf-net-dep').textContent=allNet.filter(c=>c.status==='Under-Deployment').length;
   document.getElementById('inf-net-act').textContent=allNet.filter(c=>c.status==='Active').length;
   document.getElementById('inf-cnms-act').textContent=allCNMS.filter(c=>c.status==='Active').length;
   document.getElementById('inf-cnms-bl').textContent=allCNMS.filter(c=>c.status==='Blocked').length;
+  document.getElementById('inf-iptv-dep').textContent=allIPTV.filter(c=>c.status==='Under-Deployment').length;
+  document.getElementById('inf-iptv-act').textContent=allIPTV.filter(c=>c.status==='Active').length;
 }
 
 // ── BAR CHART ──────────────────────────────────────────
 function renderBarChart(){
-  const base=getBase();
-  const months={};
-  base.forEach(c=>{
-    const d=new Date(c.onboardingDate);
-    const key=d.toLocaleDateString('en-IN',{month:'short',year:'2-digit'});
-    if(!months[key]) months[key]={cnms:0,net:0};
-    if(c.product==='CNMS Onnet') months[key].cnms++;
-    else months[key].net++;
-  });
-  const keys=Object.keys(months);
-  const maxVal=Math.max(...keys.map(k=>months[k].cnms+months[k].net),1);
   const chart=document.getElementById('barChart');
   const xl=document.getElementById('barXLabels');
-  chart.innerHTML=''; xl.innerHTML='';
-  keys.forEach(key=>{
-    const {cnms,net}=months[key];
-    const total=cnms+net;
-    const th=Math.round((total/maxVal)*120);
-    const ch=total>0?Math.round((cnms/total)*th):0;
-    const nh=th-ch;
+  const rows=getProductStatusChartData();
+  const maxVal=Math.max(...rows.flatMap(r=>[r.active,r.deploy]),1);
+
+  chart.innerHTML='';
+  xl.innerHTML='';
+
+  rows.forEach(row=>{
     const grp=document.createElement('div');
-    grp.className='bar-group'; grp.style.flex='1';
-    if(total>0){const l=document.createElement('div');l.className='bar-label-top';l.textContent=total;grp.appendChild(l);}
-    const stk=document.createElement('div');
-    stk.style.cssText='display:flex;flex-direction:column;align-items:center;width:80%;max-width:44px;justify-content:flex-end;height:'+th+'px';
-    if(nh>0){const s=document.createElement('div');s.style.cssText='height:'+nh+'px;background:#22c55e;border-radius:3px 3px 0 0;width:100%';stk.appendChild(s);}
-    if(ch>0){const s=document.createElement('div');s.style.cssText='height:'+ch+'px;background:#1d4ed8;width:100%;'+(nh===0?'border-radius:3px 3px 0 0':'');stk.appendChild(s);}
-    if(total===0){const s=document.createElement('div');s.style.cssText='height:4px;background:#e2e8f0;width:100%;border-radius:2px';stk.appendChild(s);}
-    grp.appendChild(stk); chart.appendChild(grp);
+    grp.className='bar-group';
+    const maxHeight=120;
+    const activeHeight=row.active ? Math.max((row.active/maxVal)*maxHeight,10) : 4;
+    const deployHeight=row.deploy ? Math.max((row.deploy/maxVal)*maxHeight,10) : 4;
+    grp.innerHTML=`
+      <div class="bar-label-top">${row.active} / ${row.deploy}</div>
+      <div class="chart-stack">
+        <div class="chart-bar active" style="height:${activeHeight}px">${row.active}</div>
+        <div class="chart-bar deploy" style="height:${deployHeight}px">${row.deploy}</div>
+      </div>`;
+    chart.appendChild(grp);
+
     const x=document.createElement('div');
     x.style.cssText='flex:1;text-align:center;font-size:10px;font-weight:700;color:#94a3b8';
-    x.textContent=key; xl.appendChild(x);
+    x.textContent=row.key;
+    xl.appendChild(x);
   });
 }
 
@@ -1286,10 +1425,14 @@ function renderDonut(){
   const base=getBase();
   const net=base.filter(c=>c.product==='NetManazer').length;
   const cnms=base.filter(c=>c.product==='CNMS Onnet').length;
-  const std=base.filter(c=>c.plan==='Standard').length;
-  const pro=base.filter(c=>c.plan==='Pro').length;
+  const iptv=base.filter(c=>c.product==='IPTV').length;
   const total=base.length||1;
-  const slices=[{val:cnms,color:'#1d4ed8'},{val:net,color:'#22c55e'}].filter(s=>s.val>0);
+  const slices=[
+    {label:'CNMS Onnet',val:cnms,color:'#1d4ed8'},
+    {label:'NetManazer',val:net,color:'#22c55e'},
+    {label:'IPTV',val:iptv,color:'#8b5cf6'}
+  ].filter(s=>s.val>0);
+
   const cx=65,cy=65,r=50,inner=32;
   let angle=-Math.PI/2;
   let paths='';
@@ -1306,14 +1449,9 @@ function renderDonut(){
   paths+=`<text x="65" y="61" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="20" font-weight="700" fill="#1e293b">${base.length}</text>`;
   paths+=`<text x="65" y="75" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" fill="#94a3b8" font-weight="600">CLIENTS</text>`;
   document.getElementById('donutSvg').innerHTML=paths;
-  const leg=[
-    {label:'CNMS Onnet',val:cnms,color:'#1d4ed8'},
-    {label:'NetManazer',val:net,color:'#22c55e'},
-    {label:'Standard Plan',val:std,color:'#f59e0b'},
-    {label:'Pro Plan',val:pro,color:'#7c3aed'},
-  ];
-  document.getElementById('donutLegend').innerHTML=leg.map(s=>`
-    <div class="dl-item"><div class="dl-swatch" style="background:${s.color}"></div><span>${s.label}</span><span class="dl-count">${s.val}</span></div>`).join('');
+  document.getElementById('donutLegend').innerHTML=slices.map(s=>`
+    <div class="dl-item"><div class="dl-swatch" style="background:${s.color}"></div><span>${s.label}</span><span class="dl-count">${s.val}</span></div>
+  `).join('');
 }
 
 // ── CLIENTS PAGE TABLE ─────────────────────────────────
@@ -1323,14 +1461,18 @@ function setCPill(status,el){
   el.classList.add('active');
   renderClientsTable();
 }
-
 function getFilteredClients(){
-  let d=[...CLIENTS];
-  if(currentTab==='netmanazer') d=d.filter(c=>c.product==='NetManazer');
-  if(currentTab==='cnms') d=d.filter(c=>c.product==='CNMS Onnet');
+  let d=getFilteredClientsByTab();
   if(clientStatusFilter!=='all') d=d.filter(c=>c.status===clientStatusFilter);
   const q=(document.getElementById('clientSearch')?.value||'').toLowerCase();
-  if(q) d=d.filter(c=>c.opid.toLowerCase().includes(q)||c.product.toLowerCase().includes(q)||c.plan.toLowerCase().includes(q)||c.status.toLowerCase().includes(q));
+  if(q){
+    d=d.filter(c=>
+      c.opid.toLowerCase().includes(q) ||
+      c.product.toLowerCase().includes(q) ||
+      getProductTypeDisplay(c).toLowerCase().includes(q) ||
+      c.status.toLowerCase().includes(q)
+    );
+  }
   d.sort((a,b)=>{
     if(clientSort==='date') return new Date(a.onboardingDate)-new Date(b.onboardingDate);
     if(clientSort==='bill') return b.monthlyBill-a.monthlyBill;
@@ -1338,97 +1480,86 @@ function getFilteredClients(){
   });
   return d;
 }
-
-function fmtDate(d){
-  if(!d) return '<span class="na-text">Pending</span>';
-  return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-}
-function statusBadge(s){
-  if(s==='Active') return '<span class="badge badge-active"><span class="badge-dot"></span>Active</span>';
-  if(s==='Under-Deployment') return '<span class="badge badge-deploy"><span class="badge-dot"></span>Deploying</span>';
-  if(s==='Blocked') return '<span class="badge badge-blocked"><span class="badge-dot"></span>Blocked</span>';
-  return `<span class="badge">${s}</span>`;
-}
-
 function renderClientsTable(){
   const data=getFilteredClients();
+  const mapLabel = {all:'all clients', netmanazer:'NetManazer clients', cnms:'CNMS Onnet clients', iptv:'IPTV clients'};
   document.getElementById('clientsSubtitle').textContent=
-    `Showing ${data.length} of ${CLIENTS.length} clients`;
+    currentTab==='all' ? `Showing ${data.length} of ${CLIENTS.length} clients` : `Showing ${data.length} ${mapLabel[currentTab] || 'clients'}`;
   const tbody=document.getElementById('clientsTableBody');
-  if(data.length===0){
-    tbody.innerHTML='<tr class="empty-row"><td colspan="11">No clients match the current filter</td></tr>';
+  if(!data.length){
+    tbody.innerHTML='<tr class="empty-row"><td colspan="12">No clients match the current filter</td></tr>';
     return;
   }
   tbody.innerHTML=data.map(c=>{
-    const isNet=c.product==='NetManazer';
-    return `<tr class="${isNet?'td-net':'td-cnms'}" onclick="openDetailModal('${c.opid}')">
+    const rowClass = c.product==='NetManazer'?'td-net':c.product==='IPTV'?'td-iptv':'td-cnms';
+    return `<tr class="${rowClass}" onclick="openDetailModal('${c.opid}')">
       <td><div class="td-opid">${c.opid}</div>${c.sheet==='ReActivation'?'<span class="sheet-tag">Re-Activation</span>':''}</td>
-      <td>${isNet?'<span class="prod-tag prod-tag-net">⚡ NetManazer</span>':'<span class="prod-tag prod-tag-cnms">📡 CNMS Onnet</span>'}</td>
-      <td><span class="plan-tag ${c.plan==='Pro'?'plan-pro':'plan-std'}">${c.plan}</span></td>
+      <td>${getProductBadge(c)}</td>
+      <td><span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span></td>
       <td>${statusBadge(c.status)}</td>
       <td style="font-size:12px;font-weight:600">${fmtDate(c.onboardingDate)}</td>
       <td style="font-size:12px;font-weight:600">${fmtDate(c.billingEffective)}</td>
       <td style="font-weight:700">₹${c.rate}</td>
-      <td style="font-weight:700">${c.period}M</td>
+      <td style="font-weight:700">${formatPeriod(c.period)}</td>
       <td style="font-size:11px">${c.freeSMS||'—'}</td>
       <td class="td-bill">₹${c.monthlyBill.toLocaleString('en-IN')}</td>
       <td><span class="sheet-tag" style="${c.sheet==='NetManazer'?'background:#f0fdf4;color:#15803d;border-color:#bbf7d0':''}">${c.sheet}</span></td>
+      <td><button class="action-btn-delete" onclick="event.stopPropagation();deleteClient('${c.opid}')">Delete</button></td>
     </tr>`;
   }).join('');
 }
 
 // ── BILLING PAGE ───────────────────────────────────────
 function renderBillingPage(){
-  const active=CLIENTS.filter(c=>c.status==='Active');
+  const base=getBase();
+  const active=base.filter(c=>c.status==='Active').sort((a,b)=>b.monthlyBill-a.monthlyBill);
   const total=active.reduce((s,c)=>s+c.monthlyBill,0);
-  const rows=active.sort((a,b)=>b.monthlyBill-a.monthlyBill).map(c=>`
-    <tr style="border-bottom:1px solid #f1f5f9">
-      <td style="padding:10px 14px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700">${c.opid}</td>
-      <td style="padding:10px 14px;font-size:12px">${c.product==='NetManazer'?'<span class="prod-tag prod-tag-net">⚡ NetManazer</span>':'<span class="prod-tag prod-tag-cnms">📡 CNMS Onnet</span>'}</td>
-      <td style="padding:10px 14px;font-size:12px"><span class="plan-tag ${c.plan==='Pro'?'plan-pro':'plan-std'}">${c.plan}</span></td>
-      <td style="padding:10px 14px;font-size:12px;color:#64748b">₹${c.baseAmount.toLocaleString('en-IN')}</td>
-      <td style="padding:10px 14px;font-size:12px;color:#64748b">₹${c.tax.toLocaleString('en-IN')}</td>
-      <td style="padding:10px 14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#1d4ed8">₹${c.monthlyBill.toLocaleString('en-IN')}</td>
-    </tr>`).join('');
   document.getElementById('billingContent').innerHTML=`
-    <table style="width:100%;border-collapse:collapse">
-      <thead><tr style="background:#f8fafc">
-        <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;border-bottom:2px solid #e2e8f0">OPID</th>
-        <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;border-bottom:2px solid #e2e8f0">Product</th>
-        <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;border-bottom:2px solid #e2e8f0">Plan</th>
-        <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;border-bottom:2px solid #e2e8f0">Base</th>
-        <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;border-bottom:2px solid #e2e8f0">GST</th>
-        <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;border-bottom:2px solid #e2e8f0">Monthly Bill</th>
-      </thead>
-      <tbody>${rows}</tbody>
-      <tfoot><tr style="background:#eff6ff">
-        <td colspan="5" style="padding:12px 14px;font-size:13px;font-weight:800;color:#1d4ed8">Total Monthly Revenue</td>
-        <td style="padding:12px 14px;font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#1d4ed8">₹${total.toLocaleString('en-IN')}</td>
-      </tr></tfoot>
-    </table>`;
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px">
+      <div class="info-card cnms-border"><div class="info-card-title">Active Clients</div><div class="info-big">${active.length}</div></div>
+      <div class="info-card rev-border"><div class="info-card-title">Monthly Revenue</div><div class="info-big">₹${total.toLocaleString('en-IN')}</div></div>
+      <div class="info-card net-border"><div class="info-card-title">Current Filter</div><div class="info-big" style="font-size:22px">${currentTab==='all'?'All Products':currentTab.toUpperCase()}</div></div>
+    </div>
+    <div class="table-card">
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr><th>OPID</th><th>Product</th><th>Product Type</th><th>Monthly Bill</th><th>Billing Effective</th></tr>
+          </thead>
+          <tbody>
+            ${active.length ? active.map(c=>`<tr>
+              <td><div class="td-opid">${c.opid}</div></td>
+              <td>${getProductBadge(c)}</td>
+              <td><span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span></td>
+              <td class="td-bill">₹${c.monthlyBill.toLocaleString('en-IN')}</td>
+              <td>${fmtDate(c.billingEffective)}</td>
+            </tr>`).join('') : '<tr class="empty-row"><td colspan="5">No active billing records available</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
 }
 
-// ── CLIENT DETAIL MODAL ────────────────────────────────
+// ── DETAIL MODAL ───────────────────────────────────────
 function openDetailModal(opid){
-  const c=CLIENTS.find(x=>x.opid===opid); if(!c) return;
+  const c=CLIENTS.find(x=>x.opid===opid);
+  if(!c) return;
   const isNet=c.product==='NetManazer';
   document.getElementById('detailHdr').className='modal-hdr'+(isNet?' net':'');
   document.getElementById('detailOpid').textContent=c.opid;
   document.getElementById('detailTags').innerHTML=
-    (isNet?'<span class="prod-tag" style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3)">⚡ NetManazer</span>'
-          :'<span class="prod-tag" style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3)">📡 CNMS Onnet</span>')+
-    `<span class="badge ${c.status==='Active'?'badge-active':c.status==='Blocked'?'badge-blocked':'badge-deploy'}" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3)"><span class="badge-dot" style="background:#fff"></span>${c.status}</span>`;
-
+    getProductBadge(c).replace('prod-tag','prod-tag').replace('>', ' style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3)">') +
+    statusBadge(c.status).replace('class="badge ','class="badge ').replace('>', ' style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3)">');
   document.getElementById('detailBody').innerHTML=`
     <div class="modal-section-title">Client Details</div>
     <div class="modal-grid">
-      <div class="mfield"><div class="mf-label">Plan</div><div class="mf-val"><span class="plan-tag ${c.plan==='Pro'?'plan-pro':'plan-std'}">${c.plan}</span></div></div>
+      <div class="mfield"><div class="mf-label">Product Type</div><div class="mf-val"><span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span></div></div>
       <div class="mfield"><div class="mf-label">Sheet</div><div class="mf-val">${c.sheet}</div></div>
       <div class="mfield"><div class="mf-label">Onboarding Date</div><div class="mf-val">${fmtDate(c.onboardingDate)}</div></div>
       <div class="mfield"><div class="mf-label">Billing Effective</div><div class="mf-val">${fmtDate(c.billingEffective)}</div></div>
-      <div class="mfield"><div class="mf-label">Rate (₹/SMS)</div><div class="mf-val">₹${c.rate}</div></div>
-      <div class="mfield"><div class="mf-label">Min. Billing</div><div class="mf-val">${c.minBilling.toLocaleString('en-IN')} msgs</div></div>
-      <div class="mfield"><div class="mf-label">Period</div><div class="mf-val">${c.period} Months</div></div>
+      <div class="mfield"><div class="mf-label">Rate</div><div class="mf-val">₹${c.rate}</div></div>
+      <div class="mfield"><div class="mf-label">Min. Billing (Connection/Subscribers)</div><div class="mf-val">${c.minBilling.toLocaleString('en-IN')}</div></div>
+      <div class="mfield"><div class="mf-label">Period</div><div class="mf-val">${formatPeriod(c.period)}</div></div>
       <div class="mfield"><div class="mf-label">Free SMS / WA</div><div class="mf-val">${c.freeSMS||'—'}</div></div>
     </div>
 
@@ -1441,11 +1572,11 @@ function openDetailModal(opid){
     <div class="sales-deal-expand" id="salesDealExpand">
       <div class="sales-formula">${c.salesDeal}</div>
       <div class="sales-breakdown">
-        <b>Rate:</b> ₹${c.rate} per SMS<br>
-        <b>Min. Messages:</b> ${c.minBilling.toLocaleString('en-IN')}<br>
-        <b>Period:</b> ${c.period} months<br>
-        <b>Base Calculation:</b> ₹${c.rate} × ${c.minBilling} msgs = ₹${(c.rate*c.minBilling).toLocaleString('en-IN')} base<br>
-        <b>GST (18%):</b> ₹${c.tax}<br>
+        <b>Rate:</b> ₹${c.rate}<br>
+        <b>Min. Billing (Connection/Subscribers):</b> ${c.minBilling.toLocaleString('en-IN')}<br>
+        <b>Period:</b> ${formatPeriod(c.period)}<br>
+        <b>Base Calculation:</b> ₹${c.baseAmount.toLocaleString('en-IN')}<br>
+        <b>GST (18%):</b> ₹${c.tax.toLocaleString('en-IN')}<br>
         <b>Monthly Bill:</b> ₹${c.monthlyBill.toLocaleString('en-IN')}
       </div>
     </div>
@@ -1455,27 +1586,25 @@ function openDetailModal(opid){
       <tr><td>Base Amount</td><td>₹${c.baseAmount.toLocaleString('en-IN')}</td></tr>
       <tr><td>GST / Tax (18%)</td><td>₹${c.tax.toLocaleString('en-IN')}</td></tr>
       <tr class="total-row"><td>Monthly Bill</td><td>₹${c.monthlyBill.toLocaleString('en-IN')}</td></tr>
-      <tr class="contract-row"><td>Contract Value (${c.period} months)</td><td>₹${(c.monthlyBill*c.period).toLocaleString('en-IN')}</td></tr>
-    </table>`;
+      <tr class="contract-row"><td>Contract Value (${formatPeriod(c.period)})</td><td>₹${(c.monthlyBill*c.period).toLocaleString('en-IN')}</td></tr>
+    </table>
 
+    <div class="detail-actions">
+      <button class="btn-delete-client" onclick="deleteClient('${c.opid}', true)">Delete Client</button>
+    </div>`;
   document.getElementById('detailBackdrop').classList.add('open');
 }
-
 function toggleSalesDeal(btn){
-  const el=document.getElementById('salesDealExpand');
+  const exp=document.getElementById('salesDealExpand');
   const txt=document.getElementById('sdToggleText');
-  el.classList.toggle('open');
-  txt.textContent=el.classList.contains('open')?'▲ Hide':'▼ Show';
+  const isOpen=exp.classList.toggle('open');
+  txt.textContent=isOpen?'▲ Hide':'▼ Show';
 }
-
-function closeDetailModal(){
-  document.getElementById('detailBackdrop').classList.remove('open');
-}
+function closeDetailModal(){document.getElementById('detailBackdrop').classList.remove('open')}
 
 // ── ADD CLIENT MODAL ───────────────────────────────────
 function openAddModal(){
   document.getElementById('githubCopySection').style.display='none';
-  // set today's date
   const today=new Date().toISOString().split('T')[0];
   document.getElementById('f-ondate').value=today;
   document.getElementById('f-billdate').value='';
@@ -1484,160 +1613,164 @@ function openAddModal(){
   document.getElementById('f-minbill').value='';
   document.getElementById('f-freesms').value='';
   document.getElementById('f-product').value='CNMS Onnet';
+  document.getElementById('f-plan').value='Standard';
+  document.getElementById('f-status').value='Under-Deployment';
+  document.getElementById('f-sheet').value='NEW';
+  document.getElementById('f-period').value='6';
   onProductChange();
   updateFormCalc();
-  document.getElementById('addBackdrop').classList.add('open');
+  document.getElementById('addClientBackdrop').classList.add('open');
 }
-function closeAddModal(){
-  document.getElementById('addBackdrop').classList.remove('open');
-}
+function closeAddModal(){document.getElementById('addClientBackdrop').classList.remove('open')}
+function onProductChange(){
+  const prod=document.getElementById('f-product').value;
+  const planGroup=document.getElementById('planGroup');
+  const plan=document.getElementById('f-plan');
+  const hint=document.getElementById('productTypeHint');
+  const sheetSel=document.getElementById('f-sheet');
 
+  if(prod==='NetManazer'){
+    plan.value='ISP';
+    plan.innerHTML='<option value="ISP">ISP</option>';
+    planGroup.style.opacity='0.65';
+    planGroup.style.pointerEvents='none';
+    hint.textContent='Fixed as ISP for NetManazer';
+    sheetSel.value='NetManazer';
+  } else if(prod==='IPTV'){
+    plan.value='IPTV';
+    plan.innerHTML='<option value="IPTV">IPTV</option>';
+    planGroup.style.opacity='0.65';
+    planGroup.style.pointerEvents='none';
+    hint.textContent='Fixed as IPTV for IPTV product';
+    if(sheetSel.value==='NetManazer') sheetSel.value='NEW';
+  } else {
+    plan.innerHTML='<option value="Standard">Standard</option><option value="Pro">Pro</option>';
+    plan.value='Standard';
+    planGroup.style.opacity='1';
+    planGroup.style.pointerEvents='auto';
+    hint.textContent='Selectable for CNMS Onnet only';
+    if(sheetSel.value==='NetManazer') sheetSel.value='NEW';
+  }
+  updateFormCalc();
+}
 function updateFormCalc(){
   const rate=parseFloat(document.getElementById('f-rate')?.value)||0;
-  const min=parseInt(document.getElementById('f-minbill')?.value)||0;
-  if(rate>0 && min>0){
-    const base=rate*min;
-    const tax=Math.round(base*0.18);
-    const bill=base+tax;
-    const period=parseInt(document.getElementById('f-period')?.value)||6;
-    const product=document.getElementById('f-product')?.value||'CNMS Onnet';
+  const minBilling=parseInt(document.getElementById('f-minbill')?.value)||0;
+  const period=parseInt(document.getElementById('f-period')?.value)||1;
+  if(rate>0 && minBilling>0){
+    const {base,tax,monthlyBill,salesDeal}=calcBilling(rate,minBilling,period);
     document.getElementById('fp-base').textContent=base.toLocaleString('en-IN');
     document.getElementById('fp-tax').textContent=tax.toLocaleString('en-IN');
-    document.getElementById('fp-bill').textContent=bill.toLocaleString('en-IN');
-    document.getElementById('fp-deal').textContent=`${rate}×${min}×${period}+Tax`;
+    document.getElementById('fp-deal').textContent=salesDeal;
+    document.getElementById('fp-bill').textContent=monthlyBill.toLocaleString('en-IN');
   } else {
     document.getElementById('fp-base').textContent='—';
     document.getElementById('fp-tax').textContent='—';
-    document.getElementById('fp-bill').textContent='—';
     document.getElementById('fp-deal').textContent='—';
+    document.getElementById('fp-bill').textContent='—';
   }
 }
-
 function saveNewClient(){
   const opid=document.getElementById('f-opid').value.trim().toUpperCase();
   const product=document.getElementById('f-product').value;
-  const plan=product==='NetManazer'?'Standard':document.getElementById('f-plan').value;
+  const productType=product==='NetManazer'?'ISP':product==='IPTV'?'IPTV':document.getElementById('f-plan').value;
   const status=document.getElementById('f-status').value;
   const sheet=document.getElementById('f-sheet').value;
+  const onboardingDate=document.getElementById('f-ondate').value;
+  const billingEffective=document.getElementById('f-billdate').value || null;
   const rate=parseFloat(document.getElementById('f-rate').value);
   const minBilling=parseInt(document.getElementById('f-minbill').value);
   const period=parseInt(document.getElementById('f-period').value);
-  const onboardingDate=document.getElementById('f-ondate').value;
-  const billingEffective=document.getElementById('f-billdate').value||null;
-  const freeSMS=document.getElementById('f-freesms').value.trim()||null;
+  const freeSMS=document.getElementById('f-freesms').value.trim() || null;
 
-  // Validation
-  if(!opid){alert('Please enter an OPID');return;}
-  if(CLIENTS.find(c=>c.opid===opid)){alert('OPID already exists!');return;}
-  if(!rate||!minBilling){alert('Please enter Rate and Min. Billing');return;}
-  if(!onboardingDate){alert('Please enter Onboarding Date');return;}
+  if(!opid || !product || !status || !sheet || !onboardingDate || !rate || !minBilling || !period){
+    alert('Please fill all required fields.');
+    return;
+  }
+  if(CLIENTS.some(c=>c.opid===opid)){
+    alert('This OPID already exists.');
+    return;
+  }
 
-  const base=rate*minBilling;
-  const tax=Math.round(base*0.18);
-  const monthlyBill=base+tax;
-  const salesDeal=`${rate}×${minBilling}×${period}+Tax`;
+  const {base,tax,monthlyBill,salesDeal}=calcBilling(rate,minBilling,period);
+  const client = normalizeClient({
+    opid,status,product,productType,sheet,onboardingDate,billingEffective,
+    rate,minBilling,period,salesDeal,freeSMS,baseAmount:base,tax,monthlyBill
+  });
+  CLIENTS.push(client);
+  lastAddedClient=client;
 
-  const newClient={
-    opid,status,product,plan,sheet,onboardingDate,
-    billingEffective,rate,minBilling,period,salesDeal,freeSMS,
-    baseAmount:base,tax,monthlyBill
-  };
-
-  CLIENTS.push(newClient);
-  lastAddedClient=newClient;
-
-  // Show GitHub copy section
-  const code=`  {opid:"${opid}",status:"${status}",product:"${product}",plan:"${plan}",sheet:"${sheet}",\n   onboardingDate:"${onboardingDate}",billingEffective:${billingEffective?'"'+billingEffective+'"':'null'},\n   rate:${rate},minBilling:${minBilling},period:${period},salesDeal:"${salesDeal}",\n   freeSMS:${freeSMS?'"'+freeSMS+'"':'null'},baseAmount:${base},tax:${tax},monthlyBill:${monthlyBill}},`;
+  const code=`  {opid:"${client.opid}",status:"${client.status}",product:"${client.product}",productType:"${client.productType}",sheet:"${client.sheet}",
+   onboardingDate:"${client.onboardingDate}",billingEffective:${client.billingEffective?'"'+client.billingEffective+'"':'null'},
+   rate:${client.rate},minBilling:${client.minBilling},period:${client.period},salesDeal:"${client.salesDeal}",
+   freeSMS:${client.freeSMS?'"'+client.freeSMS+'"':'null'},baseAmount:${client.baseAmount},tax:${client.tax},monthlyBill:${client.monthlyBill}},`;
   document.getElementById('githubCopyCode').textContent=code;
   document.getElementById('githubCopySection').style.display='block';
 
   renderAll();
   renderClientsTable();
-  showToast('✅ '+opid+' added to dashboard!');
+  renderBillingPage();
+  showToast('✅ Client added successfully');
 }
-
 function copyGithubCode(){
   const code=document.getElementById('githubCopyCode').textContent;
-  navigator.clipboard.writeText(code).then(()=>{
-    showToast('📋 Copied to clipboard! Now paste it in GitHub.');
-  }).catch(()=>{
-    // fallback
-    const ta=document.createElement('textarea');
-    ta.value=code; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast('📋 Copied! Paste in GitHub index.html');
-  });
+  navigator.clipboard.writeText(code).then(()=>showToast('📋 Data block copied'));
+}
+
+// ── DELETE CLIENT ──────────────────────────────────────
+function deleteClient(opid, closeDetail=false){
+  const client=CLIENTS.find(c=>c.opid===opid);
+  if(!client) return;
+  const ok=confirm(`Delete client ${opid}? This will remove the record from the current session.`);
+  if(!ok) return;
+  CLIENTS = CLIENTS.filter(c=>c.opid!==opid);
+  if(closeDetail) closeDetailModal();
+  renderAll();
+  renderClientsTable();
+  renderBillingPage();
+  showToast(`✅ ${opid} deleted successfully`);
 }
 
 // ── TOAST ──────────────────────────────────────────────
+let toastTimer=null;
 function showToast(msg){
-  const t=document.getElementById('toast');
+  const toast=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-// ══════════════════════════════════════════════════════
-//  PRODUCT CHANGE — hide Plan for NetManazer
-// ══════════════════════════════════════════════════════
-function onProductChange(){
-  const prod=document.getElementById('f-product').value;
-  const planGroup=document.getElementById('planGroup');
-  const sheetSel=document.getElementById('f-sheet');
-  if(prod==='NetManazer'){
-    planGroup.style.opacity='0.35';
-    planGroup.style.pointerEvents='none';
-    document.getElementById('f-plan').value='Standard';
-    // auto-set sheet to NetManazer
-    sheetSel.value='NetManazer';
-  } else {
-    planGroup.style.opacity='1';
-    planGroup.style.pointerEvents='auto';
-    if(sheetSel.value==='NetManazer') sheetSel.value='NEW';
-  }
-  updateFormCalc();
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toast.classList.remove('show'),2600);
 }
 
 // ══════════════════════════════════════════════════════
 //  STATUS MANAGER BROWSER
 // ══════════════════════════════════════════════════════
-let statusChangeTarget=null;
-let selectedNewStatus=null;
-
 function openStatusManagerModal(){
   document.getElementById('statusBrowserSearch').value='';
   renderStatusBrowserList();
   document.getElementById('statusBrowserBackdrop').classList.add('open');
 }
 function closeStatusBrowser(){document.getElementById('statusBrowserBackdrop').classList.remove('open')}
-
 function renderStatusBrowserList(){
   const q=(document.getElementById('statusBrowserSearch').value||'').toLowerCase();
   const list=document.getElementById('statusBrowserList');
   let data=[...CLIENTS];
-  if(q) data=data.filter(c=>c.opid.toLowerCase().includes(q)||c.status.toLowerCase().includes(q));
+  if(q) data=data.filter(c=>c.opid.toLowerCase().includes(q)||c.status.toLowerCase().includes(q)||c.product.toLowerCase().includes(q));
   data.sort((a,b)=>a.opid.localeCompare(b.opid));
-  list.innerHTML=data.map(c=>{
-    const isNet=c.product==='NetManazer';
-    const badgeClass=c.status==='Active'?'badge-active':c.status==='Blocked'?'badge-blocked':'badge-deploy';
-    return `<div onclick="openStatusChange('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#f8fafc';this.style.borderColor='#3b82f6'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0'">
+  list.innerHTML=data.map(c=>`
+    <div onclick="openStatusChange('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#f8fafc';this.style.borderColor='#3b82f6'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0'">
       <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#1e293b;min-width:80px">${c.opid}</div>
-      <span class="prod-tag ${isNet?'prod-tag-net':'prod-tag-cnms'}" style="font-size:9px">${isNet?'⚡':'📡'} ${c.product}</span>
-      <span class="badge ${badgeClass}" style="font-size:9px"><span class="badge-dot"></span>${c.status}</span>
+      ${getProductBadge(c)}
+      ${statusBadge(c.status)}
       <span style="margin-left:auto;font-size:11px;color:#94a3b8;font-weight:600">Change ›</span>
-    </div>`;
-  }).join('');
+    </div>
+  `).join('');
 }
-
 function openStatusChange(opid){
   statusChangeTarget=opid;
   selectedNewStatus=null;
   const c=CLIENTS.find(x=>x.opid===opid);
   document.getElementById('scOpid').textContent=opid;
-  const badgeClass=c.status==='Active'?'badge-active':c.status==='Blocked'?'badge-blocked':'badge-deploy';
-  document.getElementById('scCurrentStatus').innerHTML=`<span class="badge ${badgeClass}" style="font-size:10px"><span class="badge-dot"></span>${c.status}</span>`;
-  // reset options
+  document.getElementById('scCurrentStatus').innerHTML=statusBadge(c.status);
   document.querySelectorAll('.status-option').forEach(o=>o.classList.remove('sel'));
   document.querySelectorAll('.status-option input').forEach(i=>i.checked=false);
   document.getElementById('activationRow').classList.remove('show');
@@ -1645,7 +1778,6 @@ function openStatusChange(opid){
   closeStatusBrowser();
   document.getElementById('statusChangeBackdrop').classList.add('open');
 }
-
 function selectStatus(val,el){
   document.querySelectorAll('.status-option').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
@@ -1654,13 +1786,9 @@ function selectStatus(val,el){
   const row=document.getElementById('activationRow');
   if(val==='Active'){
     row.classList.add('show');
-    // pre-fill today
     document.getElementById('activationDate').value=new Date().toISOString().split('T')[0];
-  } else {
-    row.classList.remove('show');
-  }
+  } else row.classList.remove('show');
 }
-
 function applyStatusChange(){
   if(!selectedNewStatus){alert('Please select a new status');return;}
   const c=CLIENTS.find(x=>x.opid===statusChangeTarget);
@@ -1681,83 +1809,78 @@ function closeStatusChange(){document.getElementById('statusChangeBackdrop').cla
 // ══════════════════════════════════════════════════════
 //  EDIT DEAL BROWSER
 // ══════════════════════════════════════════════════════
-let editDealTarget=null;
-
 function openEditDealBrowser(){
   document.getElementById('editDealSearch').value='';
   renderEditDealList();
   document.getElementById('editDealBrowserBackdrop').classList.add('open');
 }
 function closeEditDealBrowser(){document.getElementById('editDealBrowserBackdrop').classList.remove('open')}
-
 function renderEditDealList(){
   const q=(document.getElementById('editDealSearch').value||'').toLowerCase();
   const list=document.getElementById('editDealBrowserList');
   let data=[...CLIENTS];
   if(q) data=data.filter(c=>c.opid.toLowerCase().includes(q)||c.product.toLowerCase().includes(q));
   data.sort((a,b)=>a.opid.localeCompare(b.opid));
-  list.innerHTML=data.map(c=>{
-    const isNet=c.product==='NetManazer';
-    return `<div onclick="openEditDealForm('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#faf5ff';this.style.borderColor='#a855f7'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0'">
+  list.innerHTML=data.map(c=>`
+    <div onclick="openEditDealForm('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#faf5ff';this.style.borderColor='#a855f7'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0'">
       <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#1e293b;min-width:80px">${c.opid}</div>
-      <span class="prod-tag ${isNet?'prod-tag-net':'prod-tag-cnms'}" style="font-size:9px">${isNet?'⚡':'📡'} ${c.product}</span>
-      <span style="font-size:11px;color:#7c3aed;font-weight:700;font-family:'Rajdhani',sans-serif">₹${c.rate}/msg · ${c.period}M · ₹${c.monthlyBill.toLocaleString('en-IN')}/mo</span>
+      ${getProductBadge(c)}
+      <span style="font-size:11px;color:#7c3aed;font-weight:700;font-family:'Rajdhani',sans-serif">₹${c.rate} · ${formatPeriod(c.period)} · ₹${c.monthlyBill.toLocaleString('en-IN')}/mo</span>
       <span style="margin-left:auto;font-size:11px;color:#94a3b8;font-weight:600">Edit ›</span>
-    </div>`;
-  }).join('');
+    </div>
+  `).join('');
 }
-
 function openEditDealForm(opid){
   editDealTarget=opid;
   const c=CLIENTS.find(x=>x.opid===opid);
   if(!c) return;
   document.getElementById('editDealOpid').textContent=opid;
-  const isNet=c.product==='NetManazer';
-  document.getElementById('editDealCurrentBadges').innerHTML=
-    `<span class="prod-tag ${isNet?'prod-tag-net':'prod-tag-cnms'}" style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3);font-size:10px">${isNet?'⚡':'📡'} ${c.product}</span>`;
-  // Fill current values
+  document.getElementById('editDealCurrentBadges').innerHTML=getProductBadge(c).replace('>', ' style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3)">');
   document.getElementById('ed-rate').value=c.rate;
   document.getElementById('ed-min').value=c.minBilling;
-  document.getElementById('ed-period').value=c.period;
+  document.getElementById('ed-period').value=String(c.period);
   document.getElementById('ed-freesms').value=c.freeSMS||'';
   document.getElementById('ed-rate-cur').textContent='Current: ₹'+c.rate;
-  document.getElementById('ed-min-cur').textContent='Current: '+c.minBilling+' msgs';
-  // Plan field — hide for NetManazer
+  document.getElementById('ed-min-cur').textContent='Current: '+c.minBilling;
   const planField=document.getElementById('editPlanField');
-  if(isNet){
-    planField.style.opacity='0.35';
+  const planSelect=document.getElementById('ed-plan');
+  if(c.product==='NetManazer'){
+    planSelect.innerHTML='<option value="ISP">ISP</option>';
+    planSelect.value='ISP';
+    planField.style.opacity='0.65';
     planField.style.pointerEvents='none';
-    document.getElementById('ed-plan').value='Standard';
+  } else if(c.product==='IPTV'){
+    planSelect.innerHTML='<option value="IPTV">IPTV</option>';
+    planSelect.value='IPTV';
+    planField.style.opacity='0.65';
+    planField.style.pointerEvents='none';
   } else {
+    planSelect.innerHTML='<option value="Standard">Standard</option><option value="Pro">Pro</option>';
+    planSelect.value=getProductTypeDisplay(c);
     planField.style.opacity='1';
     planField.style.pointerEvents='auto';
-    document.getElementById('ed-plan').value=c.plan;
   }
   closeEditDealBrowser();
   liveEditPreview();
   document.getElementById('editDealFormBackdrop').classList.add('open');
 }
-
 function liveEditPreview(){
   const rate=parseFloat(document.getElementById('ed-rate')?.value)||0;
   const min=parseInt(document.getElementById('ed-min')?.value)||0;
-  const period=parseInt(document.getElementById('ed-period')?.value)||6;
+  const period=parseInt(document.getElementById('ed-period')?.value)||1;
   if(rate>0 && min>0){
-    const base=rate*min;
-    const tax=Math.round(base*0.18);
-    const bill=base+tax;
-    document.getElementById('ep-formula').textContent=`${rate}×${min}×${period}+Tax`;
+    const {base,tax,monthlyBill,salesDeal}=calcBilling(rate,min,period);
+    document.getElementById('ep-formula').textContent=salesDeal;
     document.getElementById('ep-breakdown').innerHTML=
-      `<b>Base:</b> ₹${rate} × ${min} = ₹${base.toLocaleString('en-IN')}<br>`+
+      `<b>Base:</b> ₹${base.toLocaleString('en-IN')}<br>`+
       `<b>GST (18%):</b> ₹${tax}<br>`+
-      `<b>Monthly Bill:</b> ₹${bill.toLocaleString('en-IN')}<br>`+
-      `<b>Contract (${period}M):</b> ₹${(bill*period).toLocaleString('en-IN')}`;
+      `<b>Monthly Bill:</b> ₹${monthlyBill.toLocaleString('en-IN')}<br>`+
+      `<b>Contract (${formatPeriod(period)}):</b> ₹${(monthlyBill*period).toLocaleString('en-IN')}`;
   } else {
     document.getElementById('ep-formula').textContent='—';
     document.getElementById('ep-breakdown').textContent='Enter values above to see preview';
   }
 }
-
 function applyEditDeal(){
   const c=CLIENTS.find(x=>x.opid===editDealTarget);
   if(!c) return;
@@ -1765,33 +1888,31 @@ function applyEditDeal(){
   const min=parseInt(document.getElementById('ed-min').value);
   const period=parseInt(document.getElementById('ed-period').value);
   if(!rate||!min){alert('Rate and Min. Billing are required');return;}
-  const base=rate*min;
-  const tax=Math.round(base*0.18);
+  const {base,tax,monthlyBill,salesDeal}=calcBilling(rate,min,period);
   c.rate=rate;
   c.minBilling=min;
   c.period=period;
   c.baseAmount=base;
   c.tax=tax;
-  c.monthlyBill=base+tax;
-  c.salesDeal=`${rate}×${min}×${period}+Tax`;
+  c.monthlyBill=monthlyBill;
+  c.salesDeal=salesDeal;
   c.freeSMS=document.getElementById('ed-freesms').value.trim()||null;
-  if(c.product!=='NetManazer') c.plan=document.getElementById('ed-plan').value;
+  if(c.product==='CNMS Onnet') c.productType=document.getElementById('ed-plan').value;
+  else c.productType=getProductTypeDisplay(c);
   closeEditDealForm();
   renderAll();
   renderClientsTable();
   showToast('✅ Deal updated for '+editDealTarget);
-  // Show github reminder
-  setTimeout(()=>showToast('📋 Don\'t forget to save changes to GitHub!'),4000);
+  setTimeout(()=>showToast('📋 Don\'t forget to save changes to GitHub!'),3500);
 }
 function closeEditDealForm(){document.getElementById('editDealFormBackdrop').classList.remove('open')}
 
-
+// ── RENDER ALL ─────────────────────────────────────────
 function renderAll(){
   updateKPI();
   renderBarChart();
   renderDonut();
 }
-
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     closeDetailModal();
@@ -1800,10 +1921,11 @@ document.addEventListener('keydown',e=>{
     closeStatusChange();
     closeEditDealBrowser();
     closeEditDealForm();
+    closeClientsFlyout();
   }
 });
-
 renderAll();
 </script>
+
 </body>
 </html>
