@@ -1,29 +1,29 @@
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  DATA
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 let CLIENTS = [
-  {opid:"CDNPL",status:"Blocked",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-01",billingEffective:"2025-12-01",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"GENTR",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-12",billingEffective:"2025-12-24",rate:1.0,minBilling:1000,period:3,salesDeal:"1×1000×3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"VENU",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2025-12-30",billingEffective:"2026-01-09",rate:2.0,minBilling:500,period:6,salesDeal:"2×500×6+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"MCAN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-31",billingEffective:"2026-01-01",rate:2.0,minBilling:500,period:12,salesDeal:"2×500×12+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"SCABN",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-01-29",billingEffective:"2026-02-02",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"KDIN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2026-02-17",billingEffective:"2026-02-23",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"GUJFI",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-02-19",billingEffective:"2026-02-24",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"HITCAB",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-03-13",billingEffective:"2026-03-17",rate:1.5,minBilling:500,period:12,salesDeal:"1.5×500×12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"YASHIKA",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-04-02",billingEffective:"2026-04-03",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"NCN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-12",rate:1.0,minBilling:1000,period:6,salesDeal:"1×1000×6+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
-  {opid:"Harsh",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-04",rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"BCT",status:"Under-Deployment",product:"CNMS Onnet",productType:"Pro",sheet:"ReActivation",onboardingDate:"2026-04-20",billingEffective:null,rate:1.5,minBilling:500,period:6,salesDeal:"1.5×500×6+Tax",freeSMS:null,baseAmount:750,tax:135,monthlyBill:885},
-  {opid:"SPEEDNET",status:"Under-Deployment",product:"NetManazer",productType:"ISP",sheet:"NetManazer",onboardingDate:"2026-03-26",billingEffective:null,rate:6,minBilling:250,period:6,salesDeal:"6×250×6+Tax",freeSMS:null,baseAmount:1500,tax:270,monthlyBill:1770},
-  {opid:"CITYNET",status:"Under-Deployment",product:"NetManazer",productType:"ISP",sheet:"NetManazer",onboardingDate:"2026-04-09",billingEffective:null,rate:4,minBilling:500,period:6,salesDeal:"4×500×6+Tax",freeSMS:null,baseAmount:2000,tax:360,monthlyBill:2360},
-  {opid:"IPTV01",status:"Active",product:"IPTV",productType:"IPTV",sheet:"NEW",onboardingDate:"2026-04-05",billingEffective:"2026-04-08",rate:3,minBilling:400,period:1,salesDeal:"3×400×1+Tax",freeSMS:null,baseAmount:1200,tax:216,monthlyBill:1416},
-  {opid:"IPTV02",status:"Under-Deployment",product:"IPTV",productType:"IPTV",sheet:"NEW",onboardingDate:"2026-04-18",billingEffective:null,rate:2.5,minBilling:350,period:3,salesDeal:"2.5×350×3+Tax",freeSMS:null,baseAmount:875,tax:158,monthlyBill:1033}
+  {opid:"CDNPL",status:"Blocked",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-01",billingEffective:"2025-12-01",rate:1.0,minBilling:1000,period:3,salesDeal:"1Ã—1000Ã—3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"GENTR",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-12",billingEffective:"2025-12-24",rate:1.0,minBilling:1000,period:3,salesDeal:"1Ã—1000Ã—3+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"VENU",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2025-12-30",billingEffective:"2026-01-09",rate:2.0,minBilling:500,period:6,salesDeal:"2Ã—500Ã—6+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"MCAN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2025-12-31",billingEffective:"2026-01-01",rate:2.0,minBilling:500,period:12,salesDeal:"2Ã—500Ã—12+Tax",freeSMS:"2 (WA)",baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"SCABN",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-01-29",billingEffective:"2026-02-02",rate:1.5,minBilling:500,period:12,salesDeal:"1.5Ã—500Ã—12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"KDIN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"NEW",onboardingDate:"2026-02-17",billingEffective:"2026-02-23",rate:1.5,minBilling:500,period:12,salesDeal:"1.5Ã—500Ã—12+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"GUJFI",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-02-19",billingEffective:"2026-02-24",rate:1.5,minBilling:500,period:12,salesDeal:"1.5Ã—500Ã—12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"HITCAB",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-03-13",billingEffective:"2026-03-17",rate:1.5,minBilling:500,period:12,salesDeal:"1.5Ã—500Ã—12+Tax",freeSMS:"1 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"YASHIKA",status:"Active",product:"CNMS Onnet",productType:"Pro",sheet:"NEW",onboardingDate:"2026-04-02",billingEffective:"2026-04-03",rate:1.5,minBilling:500,period:6,salesDeal:"1.5Ã—500Ã—6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"NCN",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-12",rate:1.0,minBilling:1000,period:6,salesDeal:"1Ã—1000Ã—6+Tax",freeSMS:null,baseAmount:1000,tax:180,monthlyBill:1180},
+  {opid:"Harsh",status:"Active",product:"CNMS Onnet",productType:"Standard",sheet:"ReActivation",onboardingDate:"2026-02-02",billingEffective:"2026-02-04",rate:1.5,minBilling:500,period:6,salesDeal:"1.5Ã—500Ã—6+Tax",freeSMS:"2 (WA)",baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"BCT",status:"Under-Deployment",product:"CNMS Onnet",productType:"Pro",sheet:"ReActivation",onboardingDate:"2026-04-20",billingEffective:null,rate:1.5,minBilling:500,period:6,salesDeal:"1.5Ã—500Ã—6+Tax",freeSMS:null,baseAmount:750,tax:135,monthlyBill:885},
+  {opid:"SPEEDNET",status:"Under-Deployment",product:"NetManazer",productType:"ISP",sheet:"NetManazer",onboardingDate:"2026-03-26",billingEffective:null,rate:6,minBilling:250,period:6,salesDeal:"6Ã—250Ã—6+Tax",freeSMS:null,baseAmount:1500,tax:270,monthlyBill:1770},
+  {opid:"CITYNET",status:"Under-Deployment",product:"NetManazer",productType:"ISP",sheet:"NetManazer",onboardingDate:"2026-04-09",billingEffective:null,rate:4,minBilling:500,period:6,salesDeal:"4Ã—500Ã—6+Tax",freeSMS:null,baseAmount:2000,tax:360,monthlyBill:2360},
+  {opid:"IPTV01",status:"Active",product:"IPTV",productType:"IPTV",sheet:"NEW",onboardingDate:"2026-04-05",billingEffective:"2026-04-08",rate:3,minBilling:400,period:1,salesDeal:"3Ã—400Ã—1+Tax",freeSMS:null,baseAmount:1200,tax:216,monthlyBill:1416},
+  {opid:"IPTV02",status:"Under-Deployment",product:"IPTV",productType:"IPTV",sheet:"NEW",onboardingDate:"2026-04-18",billingEffective:null,rate:2.5,minBilling:350,period:3,salesDeal:"2.5Ã—350Ã—3+Tax",freeSMS:null,baseAmount:875,tax:158,monthlyBill:1033}
 ];
 
 const PRODUCT_META = {
-  'NetManazer': { tab:'netmanazer', badgeClass:'prod-tag-net', label:'⚡ NetManazer' },
-  'CNMS Onnet': { tab:'cnms', badgeClass:'prod-tag-cnms', label:'📡 CNMS Onnet' },
-  'IPTV': { tab:'iptv', badgeClass:'prod-tag-iptv', label:'📺 IPTV' }
+  'NetManazer': { tab:'netmanazer', badgeClass:'prod-tag-net', label:'âš¡ NetManazer' },
+  'CNMS Onnet': { tab:'cnms', badgeClass:'prod-tag-cnms', label:'ðŸ“¡ CNMS Onnet' },
+  'IPTV': { tab:'iptv', badgeClass:'prod-tag-iptv', label:'ðŸ“º IPTV' }
 };
 
 const AUTH_CONFIG = {
@@ -31,16 +31,29 @@ const AUTH_CONFIG = {
   password: 'Reli@123'
 };
 const AUTH_SESSION_KEY = 'intellidata-dashboard-auth-user';
-const AUTH_PASSWORD_KEY = 'intellidata-dashboard-auth-password';
+const AUTH_USERS_KEY = 'intellidata-dashboard-users';
+const PERMISSION_OPTIONS = [
+  { key:'dashboard', label:'Dashboard', help:'Overview page and charts' },
+  { key:'clients.view', label:'Clients', help:'Open the clients page and list' },
+  { key:'clients.add', label:'Add Client', help:'Use the add client action' },
+  { key:'clients.status', label:'Update Status', help:'Change client deployment status' },
+  { key:'clients.deal', label:'Client Deal', help:'Edit client pricing and contract details' },
+  { key:'clients.delete', label:'Delete Client', help:'Delete client entries' },
+  { key:'billing', label:'Billing', help:'Access billing summary' },
+  { key:'reports', label:'Reports', help:'Access reports page' },
+  { key:'guide', label:'Update Guide', help:'Access GitHub update guide' }
+];
+const DEFAULT_USER_PERMISSIONS = ['dashboard'];
 
-// ── STATE ──────────────────────────────────────────────
+// â”€â”€ STATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let currentTab='all', clientStatusFilter='all', clientSort='opid';
 let lastAddedClient=null;
 let statusChangeTarget=null;
 let selectedNewStatus=null;
 let editDealTarget=null;
+let currentUser=null;
 
-// ── HELPERS ────────────────────────────────────────────
+// â”€â”€ HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function normalizeClient(client){
   if(!client.productType && client.plan) client.productType = client.plan;
   if(client.product === 'NetManazer') client.productType = 'ISP';
@@ -50,7 +63,7 @@ function normalizeClient(client){
 CLIENTS = CLIENTS.map(normalizeClient);
 
 function fmtDate(v){
-  if(!v) return '—';
+  if(!v) return 'â€”';
   const d=new Date(v);
   if(Number.isNaN(d.getTime())) return v;
   return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
@@ -110,8 +123,60 @@ function calcBilling(rate,minBilling,period){
     base,
     tax,
     monthlyBill,
-    salesDeal:`${rate}×${minBilling}×${period}+Tax`
+    salesDeal:`${rate}Ã—${minBilling}Ã—${period}+Tax`
   };
+}
+
+function getDefaultUsers(){
+  return [{
+    userId: AUTH_CONFIG.userId,
+    password: AUTH_CONFIG.password,
+    isAdmin: true,
+    permissions: PERMISSION_OPTIONS.map(option=>option.key)
+  }];
+}
+function getStoredUsers(){
+  try{
+    const raw=localStorage.getItem(AUTH_USERS_KEY);
+    if(!raw) return getDefaultUsers();
+    const parsed=JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length ? parsed : getDefaultUsers();
+  }catch(_err){
+    return getDefaultUsers();
+  }
+}
+function setStoredUsers(users){
+  try{
+    localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
+  }catch(_err){
+    // ignore storage failures
+  }
+}
+function ensureSeedUsers(){
+  const users=getStoredUsers();
+  if(!users.some(user=>user.userId===AUTH_CONFIG.userId)){
+    users.unshift(getDefaultUsers()[0]);
+    setStoredUsers(users);
+  }
+}
+function getUserById(userId){
+  return getStoredUsers().find(user=>user.userId===userId) || null;
+}
+function userHasPermission(permissionKey, user=currentUser){
+  if(!user) return false;
+  if(user.isAdmin) return true;
+  return Array.isArray(user.permissions) && user.permissions.includes(permissionKey);
+}
+function hasAnyClientAccess(user=currentUser){
+  return ['clients.view','clients.add','clients.status','clients.deal','clients.delete'].some(key=>userHasPermission(key, user));
+}
+function getFirstAccessiblePage(user=currentUser){
+  if(userHasPermission('dashboard', user)) return 'dashboard';
+  if(hasAnyClientAccess(user)) return 'clients';
+  if(userHasPermission('billing', user)) return 'billing';
+  if(userHasPermission('reports', user)) return 'reports';
+  if(userHasPermission('guide', user)) return 'github';
+  return 'dashboard';
 }
 
 function getStoredAuthUser(){
@@ -122,18 +187,13 @@ function getStoredAuthUser(){
   }
 }
 function getActivePassword(){
-  try{
-    return localStorage.getItem(AUTH_PASSWORD_KEY) || AUTH_CONFIG.password;
-  }catch(_err){
-    return AUTH_CONFIG.password;
-  }
+  return currentUser?.password || AUTH_CONFIG.password;
 }
 function setActivePassword(password){
-  try{
-    localStorage.setItem(AUTH_PASSWORD_KEY, password);
-  }catch(_err){
-    // ignore storage failures and keep runtime password only
-  }
+  if(!currentUser) return;
+  const users=getStoredUsers().map(user=>user.userId===currentUser.userId ? { ...user, password } : user);
+  setStoredUsers(users);
+  currentUser=getUserById(currentUser.userId);
 }
 function setStoredAuthUser(userId){
   try{
@@ -148,21 +208,28 @@ function setDashboardAccess(isAuthenticated, userId=''){
   const dashboardApp=document.getElementById('dashboardApp');
   const loginError=document.getElementById('loginError');
   const sessionUserChip=document.getElementById('sessionUserChip');
+  const manageUsersBtn=document.getElementById('manageUsersBtn');
   if(loginShell) loginShell.hidden=isAuthenticated;
   if(dashboardApp) dashboardApp.hidden=!isAuthenticated;
   if(loginError) loginError.hidden=true;
   if(sessionUserChip) sessionUserChip.textContent=`User: ${userId || AUTH_CONFIG.userId}`;
+  if(manageUsersBtn) manageUsersBtn.hidden=!(currentUser && currentUser.isAdmin);
+  if(isAuthenticated) applyPermissionVisibility();
 }
 function initializeLogin(){
+  ensureSeedUsers();
   const loginForm=document.getElementById('loginForm');
   const loginUserId=document.getElementById('loginUserId');
   const loginPassword=document.getElementById('loginPassword');
   const loginError=document.getElementById('loginError');
   const storedUser=getStoredAuthUser();
 
-  if(storedUser){
+  if(storedUser && getUserById(storedUser)){
+    currentUser=getUserById(storedUser);
     setDashboardAccess(true, storedUser);
+    setActivePage(getFirstAccessiblePage());
   }else{
+    currentUser=null;
     setDashboardAccess(false);
     if(loginUserId) loginUserId.focus();
   }
@@ -172,24 +239,29 @@ function initializeLogin(){
       event.preventDefault();
       const userId=(loginUserId?.value || '').trim();
       const password=loginPassword?.value || '';
-      const isValid=userId===AUTH_CONFIG.userId && password===getActivePassword();
-      if(!isValid){
+      const matchedUser=getUserById(userId);
+      if(!matchedUser || matchedUser.password!==password){
         if(loginError) loginError.hidden=false;
         if(loginPassword) loginPassword.value='';
         if(loginPassword) loginPassword.focus();
         return;
       }
+      currentUser=matchedUser;
       setStoredAuthUser(userId);
       setDashboardAccess(true, userId);
       loginForm.reset();
-      showToast('✅ Login successful');
+      setActivePage(getFirstAccessiblePage());
+      showToast('Login successful');
     });
   }
+  renderPermissionControls();
 }
 function logoutDashboard(){
   setStoredAuthUser('');
+  currentUser=null;
   setDashboardAccess(false);
   closePasswordModal();
+  closeUserManagerModal();
   closeClientsFlyout();
   const loginUserId=document.getElementById('loginUserId');
   const loginPassword=document.getElementById('loginPassword');
@@ -225,7 +297,7 @@ function changeDashboardPassword(){
   const confirmPassword=confirmPasswordInput?.value || '';
 
   if(passwordError) passwordError.hidden=true;
-  if(currentPassword!==getActivePassword()){
+  if(!currentUser || currentPassword!==getActivePassword()){
     if(passwordError){
       passwordError.textContent='Current password is incorrect.';
       passwordError.hidden=false;
@@ -251,7 +323,167 @@ function changeDashboardPassword(){
   showToast('Password updated successfully');
 }
 
-// ── DATE ───────────────────────────────────────────────
+function renderPermissionControls(){
+  const grid=document.getElementById('createPermissionGrid');
+  if(!grid) return;
+  grid.innerHTML=PERMISSION_OPTIONS.map(option=>`
+    <label class="permission-item">
+      <input type="checkbox" data-create-permission="${option.key}" ${DEFAULT_USER_PERMISSIONS.includes(option.key)?'checked':''}/>
+      <span class="permission-copy">
+        <span class="permission-label">${option.label}</span>
+        <span class="permission-help">${option.help}</span>
+      </span>
+    </label>
+  `).join('');
+}
+function getSelectedCreatePermissions(){
+  return Array.from(document.querySelectorAll('[data-create-permission]'))
+    .filter(input=>input.checked)
+    .map(input=>input.getAttribute('data-create-permission'));
+}
+function renderUserList(){
+  const userList=document.getElementById('userList');
+  if(!userList) return;
+  const users=getStoredUsers();
+  userList.innerHTML=users.map(user=>`
+    <div class="user-row">
+      <div class="user-row-top">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="user-id-badge">${user.userId}</span>
+          ${user.isAdmin ? '<span class="user-role-badge">Admin</span>' : ''}
+        </div>
+      </div>
+      <div class="user-permission-grid">
+        ${PERMISSION_OPTIONS.map(option=>`
+          <label class="permission-item">
+            <input type="checkbox" data-user-id="${user.userId}" data-user-permission="${option.key}" ${user.isAdmin || (user.permissions || []).includes(option.key) ? 'checked' : ''} ${user.isAdmin ? 'disabled' : ''}/>
+            <span class="permission-copy">
+              <span class="permission-label">${option.label}</span>
+              <span class="permission-help">${option.help}</span>
+            </span>
+          </label>
+        `).join('')}
+      </div>
+      ${user.isAdmin ? '' : `
+        <div class="user-actions">
+          <button class="mini-btn save" type="button" onclick="saveUserPermissions('${user.userId}')">Save Access</button>
+          <button class="mini-btn delete" type="button" onclick="deleteDashboardUser('${user.userId}')">Delete User</button>
+        </div>
+      `}
+    </div>
+  `).join('');
+}
+function openUserManagerModal(){
+  if(!currentUser || !currentUser.isAdmin){
+    showToast('Access denied');
+    return;
+  }
+  const error=document.getElementById('userManagerError');
+  if(error) error.hidden=true;
+  const userIdInput=document.getElementById('newUserIdInput');
+  const passwordInput=document.getElementById('newUserPasswordInput');
+  if(userIdInput) userIdInput.value='';
+  if(passwordInput) passwordInput.value='';
+  renderPermissionControls();
+  renderUserList();
+  document.getElementById('userManagerBackdrop')?.classList.add('open');
+}
+function closeUserManagerModal(){
+  document.getElementById('userManagerBackdrop')?.classList.remove('open');
+}
+function createDashboardUser(){
+  const error=document.getElementById('userManagerError');
+  const userId=(document.getElementById('newUserIdInput')?.value || '').trim();
+  const password=document.getElementById('newUserPasswordInput')?.value || '';
+  const permissions=getSelectedCreatePermissions();
+  if(error) error.hidden=true;
+  if(!userId || !password){
+    if(error){
+      error.textContent='User ID and password are required.';
+      error.hidden=false;
+    }
+    return;
+  }
+  if(!permissions.length){
+    if(error){
+      error.textContent='Select at least one permission.';
+      error.hidden=false;
+    }
+    return;
+  }
+  if(getUserById(userId)){
+    if(error){
+      error.textContent='That user ID already exists.';
+      error.hidden=false;
+    }
+    return;
+  }
+  const users=getStoredUsers();
+  users.push({ userId, password, isAdmin:false, permissions });
+  setStoredUsers(users);
+  renderUserList();
+  renderPermissionControls();
+  document.getElementById('newUserIdInput').value='';
+  document.getElementById('newUserPasswordInput').value='';
+  showToast('User created successfully');
+}
+function saveUserPermissions(userId){
+  const permissions=Array.from(document.querySelectorAll(`[data-user-id="${userId}"][data-user-permission]`))
+    .filter(input=>input.checked)
+    .map(input=>input.getAttribute('data-user-permission'));
+  if(!permissions.length){
+    showToast('Select at least one permission');
+    return;
+  }
+  const users=getStoredUsers().map(user=>user.userId===userId ? { ...user, permissions } : user);
+  setStoredUsers(users);
+  if(currentUser && currentUser.userId===userId){
+    currentUser=getUserById(userId);
+    applyPermissionVisibility();
+    setActivePage(getFirstAccessiblePage());
+  }
+  showToast('Permissions updated');
+}
+function deleteDashboardUser(userId){
+  const users=getStoredUsers().filter(user=>user.userId!==userId);
+  setStoredUsers(users);
+  renderUserList();
+  showToast('User deleted');
+}
+function applyPermissionVisibility(){
+  const map = {
+    navDashboard: userHasPermission('dashboard'),
+    clientsFlyoutWrap: hasAnyClientAccess(),
+    navBilling: userHasPermission('billing'),
+    navReports: userHasPermission('reports'),
+    navGuide: userHasPermission('guide'),
+    clientsViewItem: userHasPermission('clients.view'),
+    clientsAddItem: userHasPermission('clients.add'),
+    clientsStatusItem: userHasPermission('clients.status'),
+    clientsDealItem: userHasPermission('clients.deal')
+  };
+  Object.entries(map).forEach(([id, visible])=>{
+    const element=document.getElementById(id);
+    if(element) element.hidden=!visible;
+  });
+}
+function setActivePage(id){
+  const navMap = {
+    dashboard: document.getElementById('navDashboard'),
+    clients: document.getElementById('clientsNavIcon'),
+    billing: document.getElementById('navBilling'),
+    reports: document.getElementById('navReports'),
+    github: document.getElementById('navGuide')
+  };
+  showPage(id, navMap[id] || null);
+}
+function requirePermission(permissionKey, message='Access denied'){
+  if(userHasPermission(permissionKey)) return true;
+  showToast(message);
+  return false;
+}
+
+// â”€â”€ DATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function updateDate(){
   const now=new Date();
   const fmt=d=>d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
@@ -263,8 +495,20 @@ function updateDate(){
 }
 updateDate();
 
-// ── PAGE NAVIGATION ────────────────────────────────────
+// â”€â”€ PAGE NAVIGATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function showPage(id,el){
+  const pagePermissionMap = {
+    dashboard:'dashboard',
+    clients:'clients.view',
+    billing:'billing',
+    reports:'reports',
+    github:'guide'
+  };
+  const requiredPermission=pagePermissionMap[id];
+  if(requiredPermission && !userHasPermission(requiredPermission) && !(id==='clients' && hasAnyClientAccess())){
+    showToast('Access denied');
+    return;
+  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));
   document.getElementById('page-'+id).classList.add('active-page');
   document.querySelectorAll('.nav-icon').forEach(n=>n.classList.remove('active'));
@@ -286,6 +530,7 @@ function switchTab(tab,el){
 }
 
 function openAddClientFromSidebar(){
+  if(!requirePermission('clients.add')) return;
   closeClientsFlyout();
   showPage('clients', document.getElementById('clientsNavIcon'));
   window.setTimeout(()=>{
@@ -293,7 +538,7 @@ function openAddClientFromSidebar(){
   }, 60);
 }
 
-// ── SIDEBAR FLYOUT ─────────────────────────────────────
+// â”€â”€ SIDEBAR FLYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function toggleClientsFlyout(event){
   event.stopPropagation();
   const wrap = document.getElementById('clientsFlyoutWrap');
@@ -314,7 +559,7 @@ document.addEventListener('click',e=>{
   if(wrap && !wrap.contains(e.target)) closeClientsFlyout();
 });
 
-// ── KPI ────────────────────────────────────────────────
+// â”€â”€ KPI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function updateKPI(){
   const base=getBase();
   const act=base.filter(c=>c.status==='Active');
@@ -351,7 +596,7 @@ function updateKPI(){
   document.getElementById('inf-iptv-act').textContent=allIPTV.filter(c=>c.status==='Active').length;
 }
 
-// ── BAR CHART ──────────────────────────────────────────
+// â”€â”€ BAR CHART â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderBarChart(){
   const chart=document.getElementById('barChart');
   const xl=document.getElementById('barXLabels');
@@ -382,7 +627,7 @@ function renderBarChart(){
         <span class="chart-value-pill active">${row.active}</span>
         <span class="chart-value-pill deploy">${row.deploy}</span>
       </div>
-      <div class="chart-stack" title="${row.key} — Active: ${row.active}, Under-Deployment: ${row.deploy}">
+      <div class="chart-stack" title="${row.key} â€” Active: ${row.active}, Under-Deployment: ${row.deploy}">
         ${row.deploy ? `<div class="chart-bar deploy" style="height:${deployHeight}px"></div>` : '<div class="chart-bar deploy empty"></div>'}
         ${row.active ? `<div class="chart-bar active" style="height:${activeHeight}px"></div>` : '<div class="chart-bar active empty"></div>'}
       </div>
@@ -396,7 +641,7 @@ function renderBarChart(){
   });
 }
 
-// ── DONUT ──────────────────────────────────────────────
+// â”€â”€ DONUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderDonut(){
   const base=getBase();
   const net=base.filter(c=>c.product==='NetManazer').length;
@@ -430,7 +675,7 @@ function renderDonut(){
   `).join('');
 }
 
-// ── CLIENTS PAGE TABLE ─────────────────────────────────
+// â”€â”€ CLIENTS PAGE TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function setCPill(status,el){
   clientStatusFilter=status;
   document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
@@ -475,17 +720,17 @@ function renderClientsTable(){
       <td>${statusBadge(c.status)}</td>
       <td style="font-size:12px;font-weight:600">${fmtDate(c.onboardingDate)}</td>
       <td style="font-size:12px;font-weight:600">${fmtDate(c.billingEffective)}</td>
-      <td style="font-weight:700">₹${c.rate}</td>
+      <td style="font-weight:700">â‚¹${c.rate}</td>
       <td style="font-weight:700">${formatPeriod(c.period)}</td>
-      <td style="font-size:11px">${c.freeSMS||'—'}</td>
-      <td class="td-bill">₹${c.monthlyBill.toLocaleString('en-IN')}</td>
+      <td style="font-size:11px">${c.freeSMS||'â€”'}</td>
+      <td class="td-bill">â‚¹${c.monthlyBill.toLocaleString('en-IN')}</td>
       <td><span class="sheet-tag" style="${c.sheet==='NetManazer'?'background:#f0fdf4;color:#15803d;border-color:#bbf7d0':''}">${c.sheet}</span></td>
-      <td><button class="action-btn-delete" onclick="event.stopPropagation();deleteClient('${c.opid}')">Delete</button></td>
+      <td>${userHasPermission('clients.delete') ? `<button class="action-btn-delete" onclick="event.stopPropagation();deleteClient('${c.opid}')">Delete</button>` : '<span class="na-text">Restricted</span>'}</td>
     </tr>`;
   }).join('');
 }
 
-// ── BILLING PAGE ───────────────────────────────────────
+// â”€â”€ BILLING PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderBillingPage(){
   const base=getBase();
   const active=base.filter(c=>c.status==='Active').sort((a,b)=>b.monthlyBill-a.monthlyBill);
@@ -493,7 +738,7 @@ function renderBillingPage(){
   document.getElementById('billingContent').innerHTML=`
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px">
       <div class="info-card cnms-border"><div class="info-card-title">Active Clients</div><div class="info-big">${active.length}</div></div>
-      <div class="info-card rev-border"><div class="info-card-title">Monthly Revenue</div><div class="info-big">₹${total.toLocaleString('en-IN')}</div></div>
+      <div class="info-card rev-border"><div class="info-card-title">Monthly Revenue</div><div class="info-big">â‚¹${total.toLocaleString('en-IN')}</div></div>
       <div class="info-card net-border"><div class="info-card-title">Current Filter</div><div class="info-big" style="font-size:22px">${currentTab==='all'?'All Products':currentTab.toUpperCase()}</div></div>
     </div>
     <div class="table-card">
@@ -507,7 +752,7 @@ function renderBillingPage(){
               <td><div class="td-opid">${c.opid}</div></td>
               <td>${getProductBadge(c)}</td>
               <td><span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span></td>
-              <td class="td-bill">₹${c.monthlyBill.toLocaleString('en-IN')}</td>
+              <td class="td-bill">â‚¹${c.monthlyBill.toLocaleString('en-IN')}</td>
               <td>${fmtDate(c.billingEffective)}</td>
             </tr>`).join('') : '<tr class="empty-row"><td colspan="5">No active billing records available</td></tr>'}
           </tbody>
@@ -516,7 +761,7 @@ function renderBillingPage(){
     </div>`;
 }
 
-// ── DETAIL MODAL ───────────────────────────────────────
+// â”€â”€ DETAIL MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function openDetailModal(opid){
   const c=CLIENTS.find(x=>x.opid===opid);
   if(!c) return;
@@ -533,36 +778,36 @@ function openDetailModal(opid){
       <div class="mfield"><div class="mf-label">Sheet</div><div class="mf-val">${c.sheet}</div></div>
       <div class="mfield"><div class="mf-label">Onboarding Date</div><div class="mf-val">${fmtDate(c.onboardingDate)}</div></div>
       <div class="mfield"><div class="mf-label">Billing Effective</div><div class="mf-val">${fmtDate(c.billingEffective)}</div></div>
-      <div class="mfield"><div class="mf-label">Rate</div><div class="mf-val">₹${c.rate}</div></div>
+      <div class="mfield"><div class="mf-label">Rate</div><div class="mf-val">â‚¹${c.rate}</div></div>
       <div class="mfield"><div class="mf-label">Min. Billing (Connection/Subscribers)</div><div class="mf-val">${c.minBilling.toLocaleString('en-IN')}</div></div>
       <div class="mfield"><div class="mf-label">Period</div><div class="mf-val">${formatPeriod(c.period)}</div></div>
-      <div class="mfield"><div class="mf-label">Free SMS / WA</div><div class="mf-val">${c.freeSMS||'—'}</div></div>
+      <div class="mfield"><div class="mf-label">Free SMS / WA</div><div class="mf-val">${c.freeSMS||'â€”'}</div></div>
     </div>
 
     <div class="modal-section-title">Sales Deal</div>
     <button class="sales-deal-btn" onclick="toggleSalesDeal(this)">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4"/><path d="M20 20v-7a4 4 0 0 0-4-4H5"/></svg>
       View Sales Deal Formula &amp; Breakdown
-      <span style="margin-left:auto;font-size:11px;opacity:0.7" id="sdToggleText">▼ Show</span>
+      <span style="margin-left:auto;font-size:11px;opacity:0.7" id="sdToggleText">â–¼ Show</span>
     </button>
     <div class="sales-deal-expand" id="salesDealExpand">
       <div class="sales-formula">${c.salesDeal}</div>
       <div class="sales-breakdown">
-        <b>Rate:</b> ₹${c.rate}<br>
+        <b>Rate:</b> â‚¹${c.rate}<br>
         <b>Min. Billing (Connection/Subscribers):</b> ${c.minBilling.toLocaleString('en-IN')}<br>
         <b>Period:</b> ${formatPeriod(c.period)}<br>
-        <b>Base Calculation:</b> ₹${c.baseAmount.toLocaleString('en-IN')}<br>
-        <b>GST (18%):</b> ₹${c.tax.toLocaleString('en-IN')}<br>
-        <b>Monthly Bill:</b> ₹${c.monthlyBill.toLocaleString('en-IN')}
+        <b>Base Calculation:</b> â‚¹${c.baseAmount.toLocaleString('en-IN')}<br>
+        <b>GST (18%):</b> â‚¹${c.tax.toLocaleString('en-IN')}<br>
+        <b>Monthly Bill:</b> â‚¹${c.monthlyBill.toLocaleString('en-IN')}
       </div>
     </div>
 
     <div class="modal-section-title">Billing Breakdown</div>
     <table class="billing-table">
-      <tr><td>Base Amount</td><td>₹${c.baseAmount.toLocaleString('en-IN')}</td></tr>
-      <tr><td>GST / Tax (18%)</td><td>₹${c.tax.toLocaleString('en-IN')}</td></tr>
-      <tr class="total-row"><td>Monthly Bill</td><td>₹${c.monthlyBill.toLocaleString('en-IN')}</td></tr>
-      <tr class="contract-row"><td>Contract Value (${formatPeriod(c.period)})</td><td>₹${(c.monthlyBill*c.period).toLocaleString('en-IN')}</td></tr>
+      <tr><td>Base Amount</td><td>â‚¹${c.baseAmount.toLocaleString('en-IN')}</td></tr>
+      <tr><td>GST / Tax (18%)</td><td>â‚¹${c.tax.toLocaleString('en-IN')}</td></tr>
+      <tr class="total-row"><td>Monthly Bill</td><td>â‚¹${c.monthlyBill.toLocaleString('en-IN')}</td></tr>
+      <tr class="contract-row"><td>Contract Value (${formatPeriod(c.period)})</td><td>â‚¹${(c.monthlyBill*c.period).toLocaleString('en-IN')}</td></tr>
     </table>
 
     <div class="detail-actions">
@@ -574,11 +819,11 @@ function toggleSalesDeal(btn){
   const exp=document.getElementById('salesDealExpand');
   const txt=document.getElementById('sdToggleText');
   const isOpen=exp.classList.toggle('open');
-  txt.textContent=isOpen?'▲ Hide':'▼ Show';
+  txt.textContent=isOpen?'â–² Hide':'â–¼ Show';
 }
 function closeDetailModal(){document.getElementById('detailBackdrop').classList.remove('open')}
 
-// ── ADD CLIENT MODAL ───────────────────────────────────
+// â”€â”€ ADD CLIENT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function openAddModal(){
   const backdrop=document.getElementById('addBackdrop');
   if(!backdrop) return;
@@ -642,13 +887,14 @@ function updateFormCalc(){
     document.getElementById('fp-deal').textContent=salesDeal;
     document.getElementById('fp-bill').textContent=monthlyBill.toLocaleString('en-IN');
   } else {
-    document.getElementById('fp-base').textContent='—';
-    document.getElementById('fp-tax').textContent='—';
-    document.getElementById('fp-deal').textContent='—';
-    document.getElementById('fp-bill').textContent='—';
+    document.getElementById('fp-base').textContent='â€”';
+    document.getElementById('fp-tax').textContent='â€”';
+    document.getElementById('fp-deal').textContent='â€”';
+    document.getElementById('fp-bill').textContent='â€”';
   }
 }
 function saveNewClient(){
+  if(!requirePermission('clients.add')) return;
   const opid=document.getElementById('f-opid').value.trim().toUpperCase();
   const product=document.getElementById('f-product').value;
   const productType=product==='NetManazer'?'ISP':product==='IPTV'?'IPTV':document.getElementById('f-plan').value;
@@ -689,15 +935,16 @@ function saveNewClient(){
   renderClientsTable();
   renderBillingPage();
   closeAddModal();
-  showToast('✅ Client added successfully');
+  showToast('âœ… Client added successfully');
 }
 function copyGithubCode(){
   const code=document.getElementById('githubCopyCode').textContent;
-  navigator.clipboard.writeText(code).then(()=>showToast('📋 Data block copied'));
+  navigator.clipboard.writeText(code).then(()=>showToast('ðŸ“‹ Data block copied'));
 }
 
-// ── DELETE CLIENT ──────────────────────────────────────
+// â”€â”€ DELETE CLIENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function deleteClient(opid, closeDetail=false){
+  if(!requirePermission('clients.delete')) return;
   const client=CLIENTS.find(c=>c.opid===opid);
   if(!client) return;
   const ok=confirm(`Delete client ${opid}? This will remove the record from the current session.`);
@@ -707,10 +954,10 @@ function deleteClient(opid, closeDetail=false){
   renderAll();
   renderClientsTable();
   renderBillingPage();
-  showToast(`✅ ${opid} deleted successfully`);
+  showToast(`âœ… ${opid} deleted successfully`);
 }
 
-// ── TOAST ──────────────────────────────────────────────
+// â”€â”€ TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let toastTimer=null;
 function showToast(msg){
   const toast=document.getElementById('toast');
@@ -720,10 +967,11 @@ function showToast(msg){
   toastTimer=setTimeout(()=>toast.classList.remove('show'),2600);
 }
 
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  STATUS MANAGER BROWSER
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function openStatusManagerModal(){
+  if(!requirePermission('clients.status')) return;
   document.getElementById('statusBrowserSearch').value='';
   renderStatusBrowserList();
   document.getElementById('statusBrowserBackdrop').classList.add('open');
@@ -740,7 +988,7 @@ function renderStatusBrowserList(){
       <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#1e293b;min-width:80px">${c.opid}</div>
       ${getProductBadge(c)}
       ${statusBadge(c.status)}
-      <span style="margin-left:auto;font-size:11px;color:#94a3b8;font-weight:600">Change ›</span>
+      <span style="margin-left:auto;font-size:11px;color:#94a3b8;font-weight:600">Change â€º</span>
     </div>
   `).join('');
 }
@@ -769,6 +1017,7 @@ function selectStatus(val,el){
   } else row.classList.remove('show');
 }
 function applyStatusChange(){
+  if(!requirePermission('clients.status')) return;
   if(!selectedNewStatus){alert('Please select a new status');return;}
   const c=CLIENTS.find(x=>x.opid===statusChangeTarget);
   if(!c) return;
@@ -781,14 +1030,15 @@ function applyStatusChange(){
   closeStatusChange();
   renderAll();
   renderClientsTable();
-  showToast('✅ '+statusChangeTarget+' → '+selectedNewStatus);
+  showToast('âœ… '+statusChangeTarget+' â†’ '+selectedNewStatus);
 }
 function closeStatusChange(){document.getElementById('statusChangeBackdrop').classList.remove('open')}
 
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  EDIT DEAL BROWSER
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function openEditDealBrowser(){
+  if(!requirePermission('clients.deal')) return;
   document.getElementById('editDealSearch').value='';
   renderEditDealList();
   document.getElementById('editDealBrowserBackdrop').classList.add('open');
@@ -804,8 +1054,8 @@ function renderEditDealList(){
     <div onclick="openEditDealForm('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#faf5ff';this.style.borderColor='#a855f7'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0'">
       <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#1e293b;min-width:80px">${c.opid}</div>
       ${getProductBadge(c)}
-      <span style="font-size:11px;color:#7c3aed;font-weight:700;font-family:'Rajdhani',sans-serif">₹${c.rate} · ${formatPeriod(c.period)} · ₹${c.monthlyBill.toLocaleString('en-IN')}/mo</span>
-      <span style="margin-left:auto;font-size:11px;color:#94a3b8;font-weight:600">Edit ›</span>
+      <span style="font-size:11px;color:#7c3aed;font-weight:700;font-family:'Rajdhani',sans-serif">â‚¹${c.rate} Â· ${formatPeriod(c.period)} Â· â‚¹${c.monthlyBill.toLocaleString('en-IN')}/mo</span>
+      <span style="margin-left:auto;font-size:11px;color:#94a3b8;font-weight:600">Edit â€º</span>
     </div>
   `).join('');
 }
@@ -819,7 +1069,7 @@ function openEditDealForm(opid){
   document.getElementById('ed-min').value=c.minBilling;
   document.getElementById('ed-period').value=String(c.period);
   document.getElementById('ed-freesms').value=c.freeSMS||'';
-  document.getElementById('ed-rate-cur').textContent='Current: ₹'+c.rate;
+  document.getElementById('ed-rate-cur').textContent='Current: â‚¹'+c.rate;
   document.getElementById('ed-min-cur').textContent='Current: '+c.minBilling;
   const planField=document.getElementById('editProductTypeField');
   const planSelect=document.getElementById('ed-plan');
@@ -851,16 +1101,17 @@ function liveEditPreview(){
     const {base,tax,monthlyBill,salesDeal}=calcBilling(rate,min,period);
     document.getElementById('ep-formula').textContent=salesDeal;
     document.getElementById('ep-breakdown').innerHTML=
-      `<b>Base:</b> ₹${base.toLocaleString('en-IN')}<br>`+
-      `<b>GST (18%):</b> ₹${tax}<br>`+
-      `<b>Monthly Bill:</b> ₹${monthlyBill.toLocaleString('en-IN')}<br>`+
-      `<b>Contract (${formatPeriod(period)}):</b> ₹${(monthlyBill*period).toLocaleString('en-IN')}`;
+      `<b>Base:</b> â‚¹${base.toLocaleString('en-IN')}<br>`+
+      `<b>GST (18%):</b> â‚¹${tax}<br>`+
+      `<b>Monthly Bill:</b> â‚¹${monthlyBill.toLocaleString('en-IN')}<br>`+
+      `<b>Contract (${formatPeriod(period)}):</b> â‚¹${(monthlyBill*period).toLocaleString('en-IN')}`;
   } else {
-    document.getElementById('ep-formula').textContent='—';
+    document.getElementById('ep-formula').textContent='â€”';
     document.getElementById('ep-breakdown').textContent='Enter values above to see preview';
   }
 }
 function applyEditDeal(){
+  if(!requirePermission('clients.deal')) return;
   const c=CLIENTS.find(x=>x.opid===editDealTarget);
   if(!c) return;
   const rate=parseFloat(document.getElementById('ed-rate').value);
@@ -881,12 +1132,12 @@ function applyEditDeal(){
   closeEditDealForm();
   renderAll();
   renderClientsTable();
-  showToast('✅ Deal updated for '+editDealTarget);
-  setTimeout(()=>showToast('📋 Don\'t forget to save changes to GitHub!'),3500);
+  showToast('âœ… Deal updated for '+editDealTarget);
+  setTimeout(()=>showToast('ðŸ“‹ Don\'t forget to save changes to GitHub!'),3500);
 }
 function closeEditDealForm(){document.getElementById('editDealFormBackdrop').classList.remove('open')}
 
-// ── RENDER ALL ─────────────────────────────────────────
+// â”€â”€ RENDER ALL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderAll(){
   updateKPI();
   renderBarChart();
@@ -901,6 +1152,7 @@ document.addEventListener('keydown',e=>{
     closeEditDealBrowser();
     closeEditDealForm();
     closePasswordModal();
+    closeUserManagerModal();
     closeClientsFlyout();
   }
 });
