@@ -701,9 +701,9 @@ function renderDonut(){
   const iptv=base.filter(c=>c.product==='IPTV').length;
   const total=base.length||1;
   const slices=[
-    {label:'CNMS Onnet',val:cnms,color:'#1d4ed8'},
-    {label:'NetManazer',val:net,color:'#22c55e'},
-    {label:'IPTV',val:iptv,color:'#8b5cf6'}
+    {label:'CNMS Onnet',val:cnms,color:'#1d6fe5'},
+    {label:'NetManazer',val:net,color:'#25d6b0'},
+    {label:'IPTV',val:iptv,color:'#16324a'}
   ].filter(s=>s.val>0);
 
   const cx=65,cy=65,r=50,inner=32;
@@ -776,7 +776,7 @@ function renderClientsTable(){
       <td style="font-weight:700">${formatPeriod(c.period)}</td>
       <td style="font-size:11px">${c.freeSMS||'-'}</td>
       <td class="td-bill">Rs. ${c.monthlyBill.toLocaleString('en-IN')}</td>
-      <td><span class="sheet-tag" style="${c.sheet==='NetManazer'?'background:#f0fdf4;color:#15803d;border-color:#bbf7d0':''}">${c.sheet}</span></td>
+              <td><span class="sheet-tag" style="${c.sheet==='NetManazer'?'background:#eafcf8;color:#0f9f8f;border-color:#b6f0e2':''}">${c.sheet}</span></td>
       <td>${userHasPermission('clients.delete') ? `<button class="action-btn-delete" onclick="event.stopPropagation();deleteClient('${c.opid}')">Delete</button>` : '<span class="na-text">Restricted</span>'}</td>
     </tr>`;
   }).join('');
@@ -1036,7 +1036,7 @@ function renderStatusBrowserList(){
   if(q) data=data.filter(c=>c.opid.toLowerCase().includes(q)||c.status.toLowerCase().includes(q)||c.product.toLowerCase().includes(q));
   data.sort((a,b)=>a.opid.localeCompare(b.opid));
   list.innerHTML=data.map(c=>`
-    <div onclick="openStatusChange('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#f8fafc';this.style.borderColor='#3b82f6'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0'">
+    <div onclick="openStatusChange('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #d9e6f2;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#f7fbff';this.style.borderColor='#1d6fe5'" onmouseout="this.style.background='#fff';this.style.borderColor='#d9e6f2'">
       <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#1e293b;min-width:80px">${c.opid}</div>
       ${getProductBadge(c)}
       ${statusBadge(c.status)}
@@ -1103,10 +1103,10 @@ function renderEditDealList(){
   if(q) data=data.filter(c=>c.opid.toLowerCase().includes(q)||c.product.toLowerCase().includes(q));
   data.sort((a,b)=>a.opid.localeCompare(b.opid));
   list.innerHTML=data.map(c=>`
-    <div onclick="openEditDealForm('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#faf5ff';this.style.borderColor='#a855f7'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0'">
+    <div onclick="openEditDealForm('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #d9e6f2;cursor:pointer;transition:all 0.15s;background:#fff" onmouseover="this.style.background='#f1f9ff';this.style.borderColor='#2497e8'" onmouseout="this.style.background='#fff';this.style.borderColor='#d9e6f2'">
       <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#1e293b;min-width:80px">${c.opid}</div>
       ${getProductBadge(c)}
-      <span style="font-size:11px;color:#7c3aed;font-weight:700;font-family:'Rajdhani',sans-serif">Rs. ${c.rate} | ${formatPeriod(c.period)} | Rs. ${c.monthlyBill.toLocaleString('en-IN')}/mo</span>
+      <span style="font-size:11px;color:#1d6fe5;font-weight:700;font-family:'Rajdhani',sans-serif">Rs. ${c.rate} | ${formatPeriod(c.period)} | Rs. ${c.monthlyBill.toLocaleString('en-IN')}/mo</span>
       <span style="margin-left:auto;font-size:11px;color:#94a3b8;font-weight:600">Edit ></span>
     </div>
   `).join('');
