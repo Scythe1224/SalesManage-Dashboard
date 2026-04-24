@@ -396,6 +396,7 @@ function openUserManagerModal(){
     showToast('Access denied');
     return;
   }
+  closeUserListModal();
   const error=document.getElementById('userManagerError');
   if(error) error.hidden=true;
   const userIdInput=document.getElementById('newUserIdInput');
@@ -408,6 +409,18 @@ function openUserManagerModal(){
 }
 function closeUserManagerModal(){
   document.getElementById('userManagerBackdrop')?.classList.remove('open');
+}
+function openUserListModal(){
+  if(!currentUser || !currentUser.isAdmin){
+    showToast('Access denied');
+    return;
+  }
+  closeUserManagerModal();
+  renderUserList();
+  document.getElementById('userListBackdrop')?.classList.add('open');
+}
+function closeUserListModal(){
+  document.getElementById('userListBackdrop')?.classList.remove('open');
 }
 function createDashboardUser(){
   const error=document.getElementById('userManagerError');
@@ -443,6 +456,7 @@ function createDashboardUser(){
   renderPermissionControls();
   document.getElementById('newUserIdInput').value='';
   document.getElementById('newUserPasswordInput').value='';
+  closeUserManagerModal();
   showToast('User created successfully');
 }
 function saveUserPermissions(userId){

@@ -513,9 +513,11 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   padding:18px;display:grid;grid-template-columns:320px 1fr;gap:16px;
   overflow-y:auto;max-height:calc(92vh - 76px);
 }
+.user-manager-body.user-list-only{grid-template-columns:1fr}
 .user-create-card,.user-list-card{
   background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;
 }
+.user-create-card{max-width:520px}
 .user-card-title{
   font-size:13px;font-weight:800;color:#0f172a;margin-bottom:12px;
   text-transform:uppercase;letter-spacing:0.4px;
