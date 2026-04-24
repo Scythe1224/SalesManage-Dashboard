@@ -159,8 +159,12 @@ function ensureSeedUsers(){
     setStoredUsers(users);
   }
 }
+function normalizeUserId(value){
+  return (value || '').trim().toLowerCase();
+}
 function getUserById(userId){
-  return getStoredUsers().find(user=>user.userId===userId) || null;
+  const normalized=normalizeUserId(userId);
+  return getStoredUsers().find(user=>normalizeUserId(user.userId)===normalized) || null;
 }
 function userHasPermission(permissionKey, user=currentUser){
   if(!user) return false;
@@ -351,6 +355,20 @@ function renderUserList(){
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <span class="user-id-badge">${user.userId}</span>
           ${user.isAdmin ? '<span class="user-role-badge">Admin</span>' : ''}
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div class="permission-item">
+          <span class="permission-copy">
+            <span class="permission-label">User ID</span>
+            <span class="permission-help">${user.userId}</span>
+          </span>
+        </div>
+        <div class="permission-item">
+          <span class="permission-copy">
+            <span class="permission-label">Password</span>
+            <span class="permission-help">${user.password}</span>
+          </span>
         </div>
       </div>
       <div class="user-permission-grid">
