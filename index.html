@@ -146,13 +146,14 @@
     <div class="topbar-right">
       <div class="live-chip"><div class="live-dot"></div>LIVE</div>
       <div class="date-badge" id="liveDateBadge"></div>
-      <div class="session-chip" id="sessionUserChip">User: admin</div>
+      <div class="session-chip" id="sessionUserChip">User: kunal</div>
       <button class="icon-btn" onclick="renderAll()" title="Refresh">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       </button>
       <button class="icon-btn" title="Notifications">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       </button>
+      <button class="password-btn" type="button" onclick="openPasswordModal()">Change Password</button>
       <button class="logout-btn" type="button" onclick="logoutDashboard()">Logout</button>
     </div>
   </header>
@@ -616,6 +617,41 @@
     <svg width="12" height="12" fill="none" stroke="#15803d" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
   </div>
   <span id="toastMsg">Client added successfully!</span>
+</div>
+
+<div class="backdrop" id="passwordBackdrop" onclick="closePasswordModal()">
+  <div class="password-modal" onclick="event.stopPropagation()">
+    <div class="password-modal-hdr">
+      <div>
+        <div class="add-modal-title">🔐 Change Password</div>
+        <div style="font-size:11px;opacity:0.8;margin-top:2px">Update the dashboard password for user <b>kunal</b></div>
+      </div>
+      <button class="modal-close" style="margin-left:auto" onclick="closePasswordModal()">✕</button>
+    </div>
+    <div class="add-modal-body">
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label">Current Password</label>
+          <input class="form-input" id="currentPasswordInput" type="password" placeholder="Enter current password"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">New Password</label>
+          <input class="form-input" id="newPasswordInput" type="password" placeholder="Enter new password"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input class="form-input" id="confirmPasswordInput" type="password" placeholder="Re-enter new password"/>
+        </div>
+      </div>
+      <div class="login-error" id="passwordError" hidden>Password update failed.</div>
+      <div style="padding-top:6px;display:flex;gap:10px;justify-content:flex-end">
+        <button class="btn-cancel" type="button" onclick="closePasswordModal()">Cancel</button>
+        <button class="btn-submit" type="button" onclick="changeDashboardPassword()">Save Password</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->

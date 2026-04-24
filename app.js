@@ -27,10 +27,11 @@ const PRODUCT_META = {
 };
 
 const AUTH_CONFIG = {
-  userId: 'admin',
-  password: 'IntelliData@123'
+  userId: 'kunal',
+  password: 'Reli@123'
 };
 const AUTH_SESSION_KEY = 'intellidata-dashboard-auth-user';
+const AUTH_PASSWORD_KEY = 'intellidata-dashboard-auth-password';
 
 // ── STATE ──────────────────────────────────────────────
 let currentTab='all', clientStatusFilter='all', clientSort='opid';
@@ -120,6 +121,20 @@ function getStoredAuthUser(){
     return null;
   }
 }
+function getActivePassword(){
+  try{
+    return localStorage.getItem(AUTH_PASSWORD_KEY) || AUTH_CONFIG.password;
+  }catch(_err){
+    return AUTH_CONFIG.password;
+  }
+}
+function setActivePassword(password){
+  try{
+    localStorage.setItem(AUTH_PASSWORD_KEY, password);
+  }catch(_err){
+    // ignore storage failures and keep runtime password only
+  }
+}
 function setStoredAuthUser(userId){
   try{
     if(userId) sessionStorage.setItem(AUTH_SESSION_KEY, userId);
@@ -157,7 +172,7 @@ function initializeLogin(){
       event.preventDefault();
       const userId=(loginUserId?.value || '').trim();
       const password=loginPassword?.value || '';
-      const isValid=userId===AUTH_CONFIG.userId && password===AUTH_CONFIG.password;
+      const isValid=userId===AUTH_CONFIG.userId && password===getActivePassword();
       if(!isValid){
         if(loginError) loginError.hidden=false;
         if(loginPassword) loginPassword.value='';
@@ -174,6 +189,7 @@ function initializeLogin(){
 function logoutDashboard(){
   setStoredAuthUser('');
   setDashboardAccess(false);
+  closePasswordModal();
   closeClientsFlyout();
   const loginUserId=document.getElementById('loginUserId');
   const loginPassword=document.getElementById('loginPassword');
@@ -181,6 +197,58 @@ function logoutDashboard(){
   if(loginPassword) loginPassword.value='';
   if(loginUserId) loginUserId.focus();
   showToast('Logged out successfully');
+}
+function openPasswordModal(){
+  const backdrop=document.getElementById('passwordBackdrop');
+  const passwordError=document.getElementById('passwordError');
+  if(passwordError) passwordError.hidden=true;
+  if(backdrop) backdrop.classList.add('open');
+  const currentPasswordInput=document.getElementById('currentPasswordInput');
+  const newPasswordInput=document.getElementById('newPasswordInput');
+  const confirmPasswordInput=document.getElementById('confirmPasswordInput');
+  if(currentPasswordInput) currentPasswordInput.value='';
+  if(newPasswordInput) newPasswordInput.value='';
+  if(confirmPasswordInput) confirmPasswordInput.value='';
+  if(currentPasswordInput) currentPasswordInput.focus();
+}
+function closePasswordModal(){
+  const backdrop=document.getElementById('passwordBackdrop');
+  if(backdrop) backdrop.classList.remove('open');
+}
+function changeDashboardPassword(){
+  const currentPasswordInput=document.getElementById('currentPasswordInput');
+  const newPasswordInput=document.getElementById('newPasswordInput');
+  const confirmPasswordInput=document.getElementById('confirmPasswordInput');
+  const passwordError=document.getElementById('passwordError');
+  const currentPassword=currentPasswordInput?.value || '';
+  const newPassword=newPasswordInput?.value || '';
+  const confirmPassword=confirmPasswordInput?.value || '';
+
+  if(passwordError) passwordError.hidden=true;
+  if(currentPassword!==getActivePassword()){
+    if(passwordError){
+      passwordError.textContent='Current password is incorrect.';
+      passwordError.hidden=false;
+    }
+    return;
+  }
+  if(newPassword.length<6){
+    if(passwordError){
+      passwordError.textContent='New password must be at least 6 characters.';
+      passwordError.hidden=false;
+    }
+    return;
+  }
+  if(newPassword!==confirmPassword){
+    if(passwordError){
+      passwordError.textContent='New password and confirm password do not match.';
+      passwordError.hidden=false;
+    }
+    return;
+  }
+  setActivePassword(newPassword);
+  closePasswordModal();
+  showToast('Password updated successfully');
 }
 
 // ── DATE ───────────────────────────────────────────────
@@ -832,6 +900,7 @@ document.addEventListener('keydown',e=>{
     closeStatusChange();
     closeEditDealBrowser();
     closeEditDealForm();
+    closePasswordModal();
     closeClientsFlyout();
   }
 });

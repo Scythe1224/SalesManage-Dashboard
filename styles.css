@@ -138,6 +138,12 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:#f0f4f8;color:#
   font-weight:800;font-family:'Nunito',sans-serif;transition:all 0.18s;
 }
 .logout-btn:hover{background:#ffe4e6}
+.password-btn{
+  height:32px;padding:0 12px;border-radius:8px;border:1px solid #c7d2fe;
+  background:#eef2ff;color:#4338ca;cursor:pointer;font-size:12px;
+  font-weight:800;font-family:'Nunito',sans-serif;transition:all 0.18s;
+}
+.password-btn:hover{background:#e0e7ff}
 .date-badge{font-size:11px;color:#94a3b8;font-weight:600}
 
 /* ── SUB-NAV ─────────────────────────────────────────────── */
@@ -481,6 +487,16 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .backdrop.open .edit-modal{transform:scale(1)}
 .edit-modal-hdr{
   padding:16px 20px;background:linear-gradient(135deg,#7c3aed,#a855f7);
+  color:#fff;display:flex;align-items:center;gap:10px;
+}
+.password-modal{
+  background:#fff;border-radius:14px;width:92%;max-width:520px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;
+  transform:scale(0.95);transition:transform 0.2s;
+}
+.backdrop.open .password-modal{transform:scale(1)}
+.password-modal-hdr{
+  padding:16px 20px;background:linear-gradient(135deg,#4338ca,#2563eb);
   color:#fff;display:flex;align-items:center;gap:10px;
 }
 .edit-section{padding:14px 20px;border-bottom:1px solid #f1f5f9}
