@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>IntelliData â€” Client Onboarding Dashboard</title>
+<title>IntelliData - Client Onboarding Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 </head>
@@ -65,7 +65,7 @@
     <span class="nav-tooltip">Dashboard</span>
   </div>
 
-  <!-- CLIENTS ICON â€” flyout submenu -->
+  <!-- CLIENTS ICON Ã¢â‚¬â€ flyout submenu -->
   <div class="nav-flyout-wrap" id="clientsFlyoutWrap">
     <button class="nav-icon" id="clientsNavIcon" type="button" aria-haspopup="true" aria-expanded="false" onclick="toggleClientsFlyout(event)">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -76,22 +76,22 @@
       <div class="flyout-item" id="clientsViewItem" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'))">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         All Clients
-        <span class="flyout-arrow">â€º</span>
+        <span class="flyout-arrow">Ã¢â‚¬Âº</span>
       </div>
       <div class="flyout-item" id="clientsAddItem" onclick="openAddClientFromSidebar()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add New Client
-        <span class="flyout-arrow">â€º</span>
+        <span class="flyout-arrow">Ã¢â‚¬Âº</span>
       </div>
       <div class="flyout-item" id="clientsStatusItem" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'));openStatusManagerModal()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Update Status
-        <span class="flyout-arrow">â€º</span>
+        <span class="flyout-arrow">Ã¢â‚¬Âº</span>
       </div>
       <div class="flyout-item" id="clientsDealItem" onclick="closeClientsFlyout();showPage('clients', document.getElementById('clientsNavIcon'));openEditDealBrowser()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Client Deal
-        <span class="flyout-arrow">â€º</span>
+        <span class="flyout-arrow">Ã¢â‚¬Âº</span>
       </div>
     </div>
   </div>
@@ -184,9 +184,9 @@
     </button>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <!-- PAGE: DASHBOARD                         -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <div id="page-dashboard" class="page active-page">
 
     <!-- KPI CARDS -->
@@ -200,7 +200,7 @@
           <div class="kpi-title">Blocked / Inactive</div>
           <div class="kpi-number" id="kpi-blocked">1</div>
           <div class="kpi-sub"><span>CNMS: <b id="k-bl-cnms">1</b></span><span>NetManazer: <b id="k-bl-net">0</b></span></div>
-          <div class="kpi-date-strip"><span>From:</span><b id="kpi-from">â€”</b><span style="margin-left:8px">To:</span><b id="kpi-to">â€”</b></div>
+          <div class="kpi-date-strip"><span>From:</span><b id="kpi-from">Ã¢â‚¬â€</b><span style="margin-left:8px">To:</span><b id="kpi-to">Ã¢â‚¬â€</b></div>
         </div>
       </div>
       <div class="kpi-card kpi-active">
@@ -244,7 +244,7 @@
       </div>
       <div class="info-card rev-border">
         <div class="info-card-title">Monthly Revenue (Active)</div>
-        <div class="info-big">â‚¹<span id="inf-rev" style="color:#7c3aed">â€”</span></div>
+        <div class="info-big">Rs. <span id="inf-rev" style="color:#7c3aed">-</span></div>
         <div class="info-sub-row"><span>GST Incl.</span><span>All Product Types</span></div>
       </div>
     </div>
@@ -273,9 +273,9 @@
 
   </div><!-- /page-dashboard -->
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <!-- PAGE: CLIENTS                           -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <div id="page-clients" class="page">
     <div class="clients-header">
       <div>
@@ -286,10 +286,10 @@
 
     <div class="table-card">
       <div class="table-toolbar">
-        <div class="table-toolbar-title">ðŸ“‹ All Client Records</div>
+        <div class="table-toolbar-title">Ã°Å¸â€œâ€¹ All Client Records</div>
         <div class="search-box">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="clientSearch" placeholder="Search OPID, product, product typeâ€¦" oninput="renderClientsTable()"/>
+          <input type="text" id="clientSearch" placeholder="Search OPID, product, product typeÃ¢â‚¬Â¦" oninput="renderClientsTable()"/>
         </div>
         <button class="filter-pill active" onclick="setCPill('all',this)">All</button>
         <button class="filter-pill" onclick="setCPill('Active',this)">Active</button>
@@ -298,7 +298,7 @@
         <select class="sort-sel" onchange="clientSort=this.value;renderClientsTable()">
           <option value="opid">Sort: OPID</option>
           <option value="date">Sort: Date</option>
-          <option value="bill">Sort: Bill â†“</option>
+          <option value="bill">Sort: Bill Ã¢â€ â€œ</option>
         </select>
       </div>
       <div style="overflow-x:auto">
@@ -317,9 +317,9 @@
     </div>
   </div><!-- /page-clients -->
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <!-- PAGE: BILLING                           -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <div id="page-billing" class="page">
     <div style="background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
       <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#1e293b;margin-bottom:6px">Monthly Billing Summary</div>
@@ -328,23 +328,23 @@
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <!-- PAGE: REPORTS (placeholder)             -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <div id="page-reports" class="page">
     <div style="background:#fff;border-radius:10px;padding:40px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
-      <div style="font-size:48px;margin-bottom:14px">ðŸ“Š</div>
+      <div style="font-size:48px;margin-bottom:14px">Ã°Å¸â€œÅ </div>
       <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#1e293b;margin-bottom:8px">Reports Coming Soon</div>
       <div style="font-size:13px;color:#94a3b8">Monthly connection ledger and revenue reports will appear here.</div>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <!-- PAGE: GITHUB UPDATE GUIDE               -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
   <div id="page-github" class="page">
     <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#1e293b;margin-bottom:16px">
-      ðŸ”„ How to Update Your Dashboard on GitHub
+      Ã°Å¸â€â€ž How to Update Your Dashboard on GitHub
     </div>
 
     <div class="guide-card">
@@ -354,10 +354,10 @@
       </h3>
       <div class="step-list">
         <div class="guide-step">
-          <div class="step-num" style="background:#dcfce7;color:#15803d">â†’</div>
+          <div class="step-num" style="background:#dcfce7;color:#15803d">Ã¢â€ â€™</div>
           <div class="step-content">
             <div class="step-title">Use the "Add New Client" button</div>
-            <div class="step-desc">Click the <b style="color:#1d4ed8">Clients</b> icon in the sidebar â†’ click the blue <b style="color:#1d4ed8">+ Add New Client</b> button at the top right â†’ fill in the form â†’ click Save. The client appears instantly in your dashboard.</div>
+            <div class="step-desc">Click the <b style="color:#1d4ed8">Clients</b> icon in the sidebar Ã¢â€ â€™ click the blue <b style="color:#1d4ed8">+ Add New Client</b> button at the top right Ã¢â€ â€™ fill in the form Ã¢â€ â€™ click Save. The client appears instantly in your dashboard.</div>
           </div>
         </div>
         <div class="guide-step">
@@ -380,7 +380,7 @@
           <div class="step-num" style="background:#eff6ff;color:#1d4ed8">1</div>
           <div class="step-content">
             <div class="step-title">After adding your client, click "Copy Data Block" button</div>
-            <div class="step-desc">After saving a client in the Add Client form, a green "Copy Data for GitHub" button appears. Click it â€” the correctly formatted JavaScript object is now in your clipboard.</div>
+            <div class="step-desc">After saving a client in the Add Client form, a green "Copy Data for GitHub" button appears. Click it Ã¢â‚¬â€ the correctly formatted JavaScript object is now in your clipboard.</div>
           </div>
         </div>
         <div class="guide-step">
@@ -415,7 +415,7 @@
         <div class="guide-step">
           <div class="step-num" style="background:#f0fdf4;color:#15803d">2</div>
           <div class="step-content">
-            <div class="step-title">Click on index.html â†’ then click the pencil âœï¸ icon</div>
+            <div class="step-title">Click on index.html Ã¢â€ â€™ then click the pencil Ã¢Å“ÂÃ¯Â¸Â icon</div>
             <div class="step-desc">This opens the file editor directly in your browser. No software needed.</div>
           </div>
         </div>
@@ -425,9 +425,9 @@
             <div class="step-title">Find the CLIENTS array using Ctrl+F (Cmd+F on Mac)</div>
             <div class="step-desc">Search for the text: <span class="url-chip">const CLIENTS = [</span><br/>Scroll down to find the last entry in the array (it ends with a <b>}</b> before the closing <b>];</b>)</div>
             <div class="code-block">
-              <span class="cmt">// Find this section â€” add your new client just before the ];</span><br>
+              <span class="cmt">// Find this section Ã¢â‚¬â€ add your new client just before the ];</span><br>
               &nbsp;&nbsp;{<span class="kw">opid</span>:<span class="str">"CITYNET"</span>, ...},<br>
-              &nbsp;&nbsp;<span style="color:#fbbf24">â† PASTE YOUR NEW CLIENT ENTRY HERE</span><br>
+              &nbsp;&nbsp;<span style="color:#fbbf24">Ã¢â€ Â PASTE YOUR NEW CLIENT ENTRY HERE</span><br>
               ];<span class="cmt"> // &lt;-- end of array</span>
             </div>
           </div>
@@ -436,8 +436,8 @@
           <div class="step-num" style="background:#f0fdf4;color:#15803d">4</div>
           <div class="step-content">
             <div class="step-title">Paste your copied data here, then click "Commit changes"</div>
-            <div class="step-desc">Scroll to the bottom of the GitHub editor â†’ click the green <b style="color:#15803d">Commit changes</b> button â†’ your live site updates in about 60 seconds!</div>
-            <div class="guide-tip">ðŸ’¡ <span>Make sure the previous entry has a comma <b>,</b> at the end before your paste. Example: <code>...},   â† comma here</code></span></div>
+            <div class="step-desc">Scroll to the bottom of the GitHub editor Ã¢â€ â€™ click the green <b style="color:#15803d">Commit changes</b> button Ã¢â€ â€™ your live site updates in about 60 seconds!</div>
+            <div class="guide-tip">Ã°Å¸â€™Â¡ <span>Make sure the previous entry has a comma <b>,</b> at the end before your paste. Example: <code>...},   Ã¢â€ Â comma here</code></span></div>
           </div>
         </div>
       </div>
@@ -446,7 +446,7 @@
     <div class="guide-card">
       <h3>
         <span style="width:28px;height:28px;background:#faf5ff;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#7c3aed">4</span>
-        Quick Reference â€” Client Data Fields
+        Quick Reference Ã¢â‚¬â€ Client Data Fields
       </h3>
       <div class="code-block" style="font-size:10px;line-height:1.8">
         {<br>
@@ -457,10 +457,10 @@
         &nbsp;&nbsp;<span class="kw">sheet</span>: <span class="str">"NEW"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// "NEW" | "ReActivation" | "NetManazer"</span><br>
         &nbsp;&nbsp;<span class="kw">onboardingDate</span>: <span class="str">"2026-04-22"</span>, <span class="cmt">// YYYY-MM-DD format</span><br>
         &nbsp;&nbsp;<span class="kw">billingEffective</span>: <span class="str">"2026-04-22"</span>, <span class="cmt">// or null if not yet</span><br>
-        &nbsp;&nbsp;<span class="kw">rate</span>: 1.5,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// â‚¹ per SMS</span><br>
+        &nbsp;&nbsp;<span class="kw">rate</span>: 1.5,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// Ã¢â€šÂ¹ per SMS</span><br>
         &nbsp;&nbsp;<span class="kw">minBilling</span>: 500,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// minimum messages</span><br>
         &nbsp;&nbsp;<span class="kw">period</span>: 12,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// months</span><br>
-        &nbsp;&nbsp;<span class="kw">salesDeal</span>: <span class="str">"1.5Ã—500Ã—12+Tax"</span>,<br>
+        &nbsp;&nbsp;<span class="kw">salesDeal</span>: <span class="str">"1.5Ãƒâ€”500Ãƒâ€”12+Tax"</span>,<br>
         &nbsp;&nbsp;<span class="kw">freeSMS</span>: <span class="str">"2 (WA)"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// or null</span><br>
         &nbsp;&nbsp;<span class="kw">baseAmount</span>: 750,<br>
         &nbsp;&nbsp;<span class="kw">tax</span>: 135,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">// 18% GST</span><br>
@@ -474,9 +474,9 @@
 </div><!-- /main -->
 </div><!-- /app -->
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <!-- CLIENT DETAIL MODAL                             -->
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div class="backdrop" id="detailBackdrop" onclick="closeDetailModal()">
   <div class="detail-modal" onclick="event.stopPropagation()">
     <div class="modal-hdr" id="detailHdr">
@@ -484,23 +484,23 @@
         <div class="modal-opid" id="detailOpid"></div>
         <div style="display:flex;gap:6px;margin-top:4px" id="detailTags"></div>
       </div>
-      <button class="modal-close" onclick="closeDetailModal()">âœ•</button>
+      <button class="modal-close" onclick="closeDetailModal()">Ã¢Å“â€¢</button>
     </div>
     <div class="modal-body" id="detailBody"></div>
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <!-- ADD CLIENT MODAL                                -->
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div class="backdrop" id="addBackdrop" onclick="closeAddModal()">
   <div class="add-modal" onclick="event.stopPropagation()">
     <div class="add-modal-hdr">
       <div>
-        <div class="add-modal-title">âž• Add New Client</div>
+        <div class="add-modal-title">Ã¢Å¾â€¢ Add New Client</div>
         <div style="font-size:11px;opacity:0.8;margin-top:2px">Fill in all details to onboard a new client</div>
       </div>
-      <button class="modal-close" style="margin-left:auto" onclick="closeAddModal()">âœ•</button>
+      <button class="modal-close" style="margin-left:auto" onclick="closeAddModal()">Ã¢Å“â€¢</button>
     </div>
     <div class="add-modal-body">
       <div class="form-row">
@@ -579,7 +579,7 @@
       <div class="form-row full">
         <div class="form-group">
           <label class="form-label">Free SMS / WhatsApp</label>
-          <input class="form-input" id="f-freesms" placeholder="e.g. 2 (WA) â€” leave blank if none"/>
+          <input class="form-input" id="f-freesms" placeholder="e.g. 2 (WA) Ã¢â‚¬â€ leave blank if none"/>
         </div>
       </div>
 
@@ -587,11 +587,11 @@
 
       <!-- BILLING PREVIEW -->
       <div class="billing-preview">
-        <div class="billing-preview-title">ðŸ’° Billing Preview (Auto-calculated)</div>
-        <div class="bp-row"><span>Base Amount</span><span>â‚¹<b id="fp-base">â€”</b></span></div>
-        <div class="bp-row"><span>GST (18%)</span><span>â‚¹<b id="fp-tax">â€”</b></span></div>
-        <div class="bp-row"><span>Sales Deal Formula</span><span><b id="fp-deal">â€”</b></span></div>
-        <div class="bp-total"><span>Monthly Bill</span><span>â‚¹<span id="fp-bill">â€”</span></span></div>
+        <div class="billing-preview-title">Ã°Å¸â€™Â° Billing Preview (Auto-calculated)</div>
+        <div class="bp-row"><span>Base Amount</span><span>Ã¢â€šÂ¹<b id="fp-base">Ã¢â‚¬â€</b></span></div>
+        <div class="bp-row"><span>GST (18%)</span><span>Ã¢â€šÂ¹<b id="fp-tax">Ã¢â‚¬â€</b></span></div>
+        <div class="bp-row"><span>Sales Deal Formula</span><span><b id="fp-deal">Ã¢â‚¬â€</b></span></div>
+        <div class="bp-total"><span>Monthly Bill</span><span>Ã¢â€šÂ¹<span id="fp-bill">Ã¢â‚¬â€</span></span></div>
       </div>
 
       <div class="form-actions">
@@ -603,10 +603,10 @@
 
       <!-- COPY FOR GITHUB (shown after save) -->
       <div id="githubCopySection" style="display:none;margin-top:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 14px">
-        <div style="font-size:11px;font-weight:800;color:#15803d;margin-bottom:8px">âœ… Client added! Copy this to save permanently on GitHub:</div>
+        <div style="font-size:11px;font-weight:800;color:#15803d;margin-bottom:8px">Ã¢Å“â€¦ Client added! Copy this to save permanently on GitHub:</div>
         <div class="code-block" style="font-size:10px;max-height:120px;overflow-y:auto" id="githubCopyCode"></div>
         <button onclick="copyGithubCode()" style="margin-top:8px;padding:5px 14px;background:#15803d;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">
-          ðŸ“‹ Copy Data Block for GitHub
+          Ã°Å¸â€œâ€¹ Copy Data Block for GitHub
         </button>
       </div>
     </div>
@@ -625,10 +625,10 @@
   <div class="password-modal" onclick="event.stopPropagation()">
     <div class="password-modal-hdr">
       <div>
-        <div class="add-modal-title">ðŸ” Change Password</div>
+        <div class="add-modal-title">Ã°Å¸â€Â Change Password</div>
         <div style="font-size:11px;opacity:0.8;margin-top:2px">Update the dashboard password for user <b>kunal</b></div>
       </div>
-      <button class="modal-close" style="margin-left:auto" onclick="closePasswordModal()">âœ•</button>
+      <button class="modal-close" style="margin-left:auto" onclick="closePasswordModal()">X</button>
     </div>
     <div class="add-modal-body">
       <div class="form-row full">
@@ -660,10 +660,10 @@
   <div class="user-manager-modal" onclick="event.stopPropagation()">
     <div class="user-manager-hdr">
       <div>
-        <div class="add-modal-title">ðŸ‘¥ User Access Control</div>
+        <div class="add-modal-title">User Access Control</div>
         <div style="font-size:11px;opacity:0.8;margin-top:2px">Create a user and choose which dashboard sections they can access.</div>
       </div>
-      <button class="modal-close" style="margin-left:auto" onclick="closeUserManagerModal()">âœ•</button>
+      <button class="modal-close" style="margin-left:auto" onclick="closeUserManagerModal()">X</button>
     </div>
     <div class="user-manager-body">
       <div class="user-create-card">
@@ -692,10 +692,10 @@
   <div class="user-manager-modal" onclick="event.stopPropagation()">
     <div class="user-manager-hdr">
       <div>
-        <div class="add-modal-title">ðŸ‘¤ Created Users</div>
+        <div class="add-modal-title">Created Users</div>
         <div style="font-size:11px;opacity:0.8;margin-top:2px">View users, passwords, and manage their permissions.</div>
       </div>
-      <button class="modal-close" style="margin-left:auto" onclick="closeUserListModal()">âœ•</button>
+      <button class="modal-close" style="margin-left:auto" onclick="closeUserListModal()">X</button>
     </div>
     <div class="user-manager-body user-list-only">
       <div class="user-list-card">
@@ -710,22 +710,22 @@
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-<!-- STATUS MANAGER â€” pick client then change status     -->
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
+<!-- STATUS MANAGER Ã¢â‚¬â€ pick client then change status     -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div class="backdrop" id="statusBrowserBackdrop" onclick="closeStatusBrowser()">
   <div class="add-modal" style="max-width:500px" onclick="event.stopPropagation()">
     <div class="add-modal-hdr" style="background:linear-gradient(135deg,#b45309,#f59e0b)">
       <div>
-        <div class="add-modal-title">â± Update Client Status</div>
+        <div class="add-modal-title">Ã¢ÂÂ± Update Client Status</div>
         <div style="font-size:11px;opacity:0.8;margin-top:2px">Select a client to change their deployment status</div>
       </div>
-      <button class="modal-close" style="margin-left:auto" onclick="closeStatusBrowser()">âœ•</button>
+      <button class="modal-close" style="margin-left:auto" onclick="closeStatusBrowser()">Ã¢Å“â€¢</button>
     </div>
     <div class="add-modal-body" style="padding:14px 16px">
       <div class="search-box" style="margin-bottom:12px;width:100%">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;color:#94a3b8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="statusBrowserSearch" placeholder="Search OPIDâ€¦" oninput="renderStatusBrowserList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
+        <input type="text" id="statusBrowserSearch" placeholder="Search OPIDÃ¢â‚¬Â¦" oninput="renderStatusBrowserList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
       </div>
       <div id="statusBrowserList" style="display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto"></div>
     </div>
@@ -738,11 +738,11 @@
     <div class="status-modal-hdr">
       <div>
         <div style="font-size:11px;opacity:0.8;margin-bottom:2px">Changing status for</div>
-        <div class="status-opid-badge" id="scOpid">â€”</div>
+        <div class="status-opid-badge" id="scOpid">Ã¢â‚¬â€</div>
       </div>
       <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div id="scCurrentStatus"></div>
-        <button class="modal-close" onclick="closeStatusChange()">âœ•</button>
+        <button class="modal-close" onclick="closeStatusChange()">Ã¢Å“â€¢</button>
       </div>
     </div>
     <div style="padding:14px 20px 8px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px">Select new status</div>
@@ -750,28 +750,28 @@
       <div class="status-option" onclick="selectStatus('Active',this)">
         <input type="radio" name="newStatus" value="Active"/>
         <div>
-          <div class="status-option-label" style="color:#15803d">âœ… Active</div>
+          <div class="status-option-label" style="color:#15803d">Ã¢Å“â€¦ Active</div>
           <div class="status-option-sub">Client is live and billing is running</div>
         </div>
       </div>
       <div class="status-option" onclick="selectStatus('Under-Deployment',this)">
         <input type="radio" name="newStatus" value="Under-Deployment"/>
         <div>
-          <div class="status-option-label" style="color:#b45309">â³ Under-Deployment</div>
+          <div class="status-option-label" style="color:#b45309">Ã¢ÂÂ³ Under-Deployment</div>
           <div class="status-option-sub">Setup in progress, not yet live</div>
         </div>
       </div>
       <div class="status-option" onclick="selectStatus('Blocked',this)">
         <input type="radio" name="newStatus" value="Blocked"/>
         <div>
-          <div class="status-option-label" style="color:#be185d">ðŸš« Blocked</div>
+          <div class="status-option-label" style="color:#be185d">Ã°Å¸Å¡Â« Blocked</div>
           <div class="status-option-sub">Account suspended or payment issue</div>
         </div>
       </div>
     </div>
-    <!-- Activation date â€” shows only when Active selected -->
+    <!-- Activation date Ã¢â‚¬â€ shows only when Active selected -->
     <div class="activation-row" id="activationRow">
-      <div style="font-size:11px;font-weight:800;color:#15803d;margin-bottom:4px">ðŸ“… Billing Effective Date (required for activation)</div>
+      <div style="font-size:11px;font-weight:800;color:#15803d;margin-bottom:4px">Ã°Å¸â€œâ€¦ Billing Effective Date (required for activation)</div>
       <input type="date" class="form-input" id="activationDate" style="width:100%"/>
       <div style="font-size:10px;color:#94a3b8">The date from which billing will start</div>
     </div>
@@ -782,22 +782,22 @@
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-<!-- EDIT DEAL â€” browse clients to edit rates/deal       -->
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
+<!-- EDIT DEAL Ã¢â‚¬â€ browse clients to edit rates/deal       -->
+<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div class="backdrop" id="editDealBrowserBackdrop" onclick="closeEditDealBrowser()">
   <div class="add-modal" style="max-width:500px" onclick="event.stopPropagation()">
     <div class="add-modal-hdr" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
       <div>
-        <div class="add-modal-title">âœï¸ Client Deal</div>
+        <div class="add-modal-title">Ã¢Å“ÂÃ¯Â¸Â Client Deal</div>
         <div style="font-size:11px;opacity:0.8;margin-top:2px">Select a client to update their rates or deal</div>
       </div>
-      <button class="modal-close" style="margin-left:auto" onclick="closeEditDealBrowser()">âœ•</button>
+      <button class="modal-close" style="margin-left:auto" onclick="closeEditDealBrowser()">Ã¢Å“â€¢</button>
     </div>
     <div class="add-modal-body" style="padding:14px 16px">
       <div class="search-box" style="margin-bottom:12px;width:100%">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;color:#94a3b8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="editDealSearch" placeholder="Search OPIDâ€¦" oninput="renderEditDealList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
+        <input type="text" id="editDealSearch" placeholder="Search OPIDÃ¢â‚¬Â¦" oninput="renderEditDealList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
       </div>
       <div id="editDealBrowserList" style="display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto"></div>
     </div>
@@ -810,10 +810,10 @@
     <div class="edit-modal-hdr">
       <div>
         <div style="font-size:11px;opacity:0.8;margin-bottom:2px">Editing deal for</div>
-        <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px" id="editDealOpid">â€”</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px" id="editDealOpid">Ã¢â‚¬â€</div>
       </div>
       <div id="editDealCurrentBadges" style="margin-left:10px;display:flex;gap:6px;flex-wrap:wrap"></div>
-      <button class="modal-close" style="margin-left:auto" onclick="closeEditDealForm()">âœ•</button>
+      <button class="modal-close" style="margin-left:auto" onclick="closeEditDealForm()">Ã¢Å“â€¢</button>
     </div>
 
     <div class="edit-section">
@@ -861,7 +861,7 @@
     <!-- Live Deal Preview -->
     <div style="padding:10px 20px 4px;font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px">Updated Deal Preview</div>
     <div class="deal-preview-box">
-      <div class="deal-formula-live" id="ep-formula">â€”</div>
+      <div class="deal-formula-live" id="ep-formula">Ã¢â‚¬â€</div>
       <div class="deal-breakdown-live" id="ep-breakdown">Enter values above to see preview</div>
     </div>
 
