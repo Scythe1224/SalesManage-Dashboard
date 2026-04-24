@@ -26,6 +26,12 @@ const PRODUCT_META = {
   'IPTV': { tab:'iptv', badgeClass:'prod-tag-iptv', label:'📺 IPTV' }
 };
 
+const AUTH_CONFIG = {
+  userId: 'admin',
+  password: 'IntelliData@123'
+};
+const AUTH_SESSION_KEY = 'intellidata-dashboard-auth-user';
+
 // ── STATE ──────────────────────────────────────────────
 let currentTab='all', clientStatusFilter='all', clientSort='opid';
 let lastAddedClient=null;
@@ -105,6 +111,76 @@ function calcBilling(rate,minBilling,period){
     monthlyBill,
     salesDeal:`${rate}×${minBilling}×${period}+Tax`
   };
+}
+
+function getStoredAuthUser(){
+  try{
+    return sessionStorage.getItem(AUTH_SESSION_KEY);
+  }catch(_err){
+    return null;
+  }
+}
+function setStoredAuthUser(userId){
+  try{
+    if(userId) sessionStorage.setItem(AUTH_SESSION_KEY, userId);
+    else sessionStorage.removeItem(AUTH_SESSION_KEY);
+  }catch(_err){
+    // local preview can block storage in some cases
+  }
+}
+function setDashboardAccess(isAuthenticated, userId=''){
+  const loginShell=document.getElementById('loginShell');
+  const dashboardApp=document.getElementById('dashboardApp');
+  const loginError=document.getElementById('loginError');
+  const sessionUserChip=document.getElementById('sessionUserChip');
+  if(loginShell) loginShell.hidden=isAuthenticated;
+  if(dashboardApp) dashboardApp.hidden=!isAuthenticated;
+  if(loginError) loginError.hidden=true;
+  if(sessionUserChip) sessionUserChip.textContent=`User: ${userId || AUTH_CONFIG.userId}`;
+}
+function initializeLogin(){
+  const loginForm=document.getElementById('loginForm');
+  const loginUserId=document.getElementById('loginUserId');
+  const loginPassword=document.getElementById('loginPassword');
+  const loginError=document.getElementById('loginError');
+  const storedUser=getStoredAuthUser();
+
+  if(storedUser){
+    setDashboardAccess(true, storedUser);
+  }else{
+    setDashboardAccess(false);
+    if(loginUserId) loginUserId.focus();
+  }
+
+  if(loginForm){
+    loginForm.addEventListener('submit',event=>{
+      event.preventDefault();
+      const userId=(loginUserId?.value || '').trim();
+      const password=loginPassword?.value || '';
+      const isValid=userId===AUTH_CONFIG.userId && password===AUTH_CONFIG.password;
+      if(!isValid){
+        if(loginError) loginError.hidden=false;
+        if(loginPassword) loginPassword.value='';
+        if(loginPassword) loginPassword.focus();
+        return;
+      }
+      setStoredAuthUser(userId);
+      setDashboardAccess(true, userId);
+      loginForm.reset();
+      showToast('✅ Login successful');
+    });
+  }
+}
+function logoutDashboard(){
+  setStoredAuthUser('');
+  setDashboardAccess(false);
+  closeClientsFlyout();
+  const loginUserId=document.getElementById('loginUserId');
+  const loginPassword=document.getElementById('loginPassword');
+  if(loginUserId) loginUserId.value='';
+  if(loginPassword) loginPassword.value='';
+  if(loginUserId) loginUserId.focus();
+  showToast('Logged out successfully');
 }
 
 // ── DATE ───────────────────────────────────────────────
@@ -760,3 +836,4 @@ document.addEventListener('keydown',e=>{
   }
 });
 renderAll();
+initializeLogin();

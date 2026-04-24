@@ -9,7 +9,44 @@
 </head>
 <body>
 
-<div class="app">
+<div class="login-shell" id="loginShell">
+  <div class="login-panel">
+    <div class="login-brand">
+      <div class="login-brand-icon">
+        <svg width="24" height="24" viewBox="0 0 36 36">
+          <rect x="2" y="18" width="7" height="14" rx="1" fill="#22c55e"/>
+          <rect x="11" y="10" width="7" height="22" rx="1" fill="#93c5fd"/>
+          <rect x="20" y="4" width="7" height="28" rx="1" fill="#22c55e" opacity="0.7"/>
+          <polyline points="4,15 13,8 22,2 30,8" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="login-brand-title">INTELLI<span>DATA</span></div>
+        <div class="login-brand-sub">Client Onboarding Dashboard</div>
+      </div>
+    </div>
+
+    <form class="login-form" id="loginForm">
+      <div class="login-title">Sign In</div>
+      <div class="login-copy">Enter your user ID and password to access the dashboard.</div>
+
+      <div class="login-field">
+        <label for="loginUserId">User ID</label>
+        <input id="loginUserId" type="text" autocomplete="username" placeholder="Enter user ID" required/>
+      </div>
+
+      <div class="login-field">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter password" required/>
+      </div>
+
+      <div class="login-error" id="loginError" hidden>Invalid user ID or password.</div>
+      <button class="login-submit" type="submit">Login to Dashboard</button>
+    </form>
+  </div>
+</div>
+
+<div class="app" id="dashboardApp" hidden>
 
 <!-- SIDEBAR -->
 <nav class="sidebar">
@@ -109,12 +146,14 @@
     <div class="topbar-right">
       <div class="live-chip"><div class="live-dot"></div>LIVE</div>
       <div class="date-badge" id="liveDateBadge"></div>
+      <div class="session-chip" id="sessionUserChip">User: admin</div>
       <button class="icon-btn" onclick="renderAll()" title="Refresh">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       </button>
       <button class="icon-btn" title="Notifications">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       </button>
+      <button class="logout-btn" type="button" onclick="logoutDashboard()">Logout</button>
     </div>
   </header>
 
