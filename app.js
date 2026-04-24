@@ -348,7 +348,8 @@ function getSelectedCreatePermissions(){
 function renderUserList(){
   const userList=document.getElementById('userList');
   if(!userList) return;
-  const users=getStoredUsers();
+  const query=(document.getElementById('userListSearch')?.value || '').trim().toLowerCase();
+  const users=getStoredUsers().filter(user=>!query || user.userId.toLowerCase().includes(query));
   userList.innerHTML=users.map(user=>`
     <div class="user-row">
       <div class="user-row-top">
@@ -383,6 +384,12 @@ function renderUserList(){
         `).join('')}
       </div>
       ${user.isAdmin ? '' : `
+        <div class="user-password-edit">
+          <input class="user-password-input" type="text" id="password-edit-${user.userId}" placeholder="Enter new password for ${user.userId}"/>
+          <button class="mini-btn password" type="button" onclick="updateUserPassword('${user.userId}')">Update Password</button>
+        </div>
+      `}
+      ${user.isAdmin ? '' : `
         <div class="user-actions">
           <button class="mini-btn save" type="button" onclick="saveUserPermissions('${user.userId}')">Save Access</button>
           <button class="mini-btn delete" type="button" onclick="deleteDashboardUser('${user.userId}')">Delete User</button>
@@ -390,6 +397,19 @@ function renderUserList(){
       `}
     </div>
   `).join('');
+}
+function updateUserPassword(userId){
+  const input=document.getElementById(`password-edit-${userId}`);
+  const newPassword=(input?.value || '').trim();
+  if(newPassword.length<6){
+    showToast('Password must be at least 6 characters');
+    return;
+  }
+  const users=getStoredUsers().map(user=>user.userId===userId ? { ...user, password:newPassword } : user);
+  setStoredUsers(users);
+  if(input) input.value='';
+  renderUserList();
+  showToast('User password updated');
 }
 function openUserManagerModal(){
   if(!currentUser || !currentUser.isAdmin){

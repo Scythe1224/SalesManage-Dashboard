@@ -700,6 +700,10 @@
     <div class="user-manager-body user-list-only">
       <div class="user-list-card">
         <div class="user-card-title">Existing Users</div>
+        <div class="search-box user-search-box" style="margin-bottom:12px;width:100%">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="userListSearch" placeholder="Search user ID..." oninput="renderUserList()" style="width:100%"/>
+        </div>
         <div id="userList"></div>
       </div>
     </div>
