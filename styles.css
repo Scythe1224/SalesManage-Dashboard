@@ -642,10 +642,11 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-editor-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:.8px}
 .invoice-editor-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .invoice-switcher-row{
-  display:grid;grid-template-columns:1fr 220px;gap:12px;padding:14px 20px;
+  display:grid;grid-template-columns:1fr 220px 160px;gap:12px;padding:14px 20px;
   background:#eef6ff;border-bottom:1px solid #dbe8f7;
 }
 .invoice-switcher-field{display:flex;flex-direction:column;gap:6px}
+.invoice-settings-btn{width:100%;height:38px}
 .invoice-switcher-field label,.invoice-field span{
   font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.55px;
 }
@@ -755,8 +756,59 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-page-footer{margin-top:auto;padding-top:18px}
 .invoice-page-footer-note{font-size:12px;line-height:1.7;color:#334155;padding:10px 0;white-space:pre-line}
 .invoice-page-footer-image{width:100%;max-height:120px;object-fit:contain;display:block;border-radius:4px}
+.invoice-company-modal{
+  width:min(1180px,95vw);max-height:90vh;overflow:hidden;background:#f8fbff;border-radius:18px;
+  box-shadow:0 20px 60px rgba(15,23,42,.24);transform:scale(.98);transition:transform .2s ease;
+  display:flex;flex-direction:column;
+}
+.backdrop.open .invoice-company-modal{transform:scale(1)}
+.invoice-company-hdr{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:18px 20px;background:linear-gradient(135deg,#163e96,#23b7d9);color:#fff;
+}
+.invoice-company-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:.8px}
+.invoice-company-actions{display:flex;gap:8px;align-items:center}
+.invoice-company-body{
+  display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px;padding:18px 20px 20px;overflow:auto;
+}
+.invoice-company-list-col{
+  background:#fff;border:1px solid #dfeaf5;border-radius:14px;padding:14px;
+  box-shadow:0 8px 24px rgba(148,163,184,.08);display:flex;flex-direction:column;gap:12px;min-height:0;
+}
+.invoice-company-list-title{
+  font-size:12px;font-weight:900;color:#16324a;text-transform:uppercase;letter-spacing:.8px;
+}
+.invoice-company-list{display:flex;flex-direction:column;gap:8px;overflow:auto}
+.invoice-company-list-item{
+  display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #d9e6f2;border-radius:12px;background:#f8fbff;
+  cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;transition:border-color .15s ease,background .15s ease;
+}
+.invoice-company-list-item:hover,.invoice-company-list-item.active{border-color:var(--ocrm-blue);background:#eef6ff}
+.invoice-company-swatch{width:16px;height:16px;border-radius:50%;flex:0 0 auto}
+.invoice-company-copy{display:flex;flex-direction:column;min-width:0}
+.invoice-company-name{font-size:13px;font-weight:800;color:#0f172a}
+.invoice-company-meta{font-size:11px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.invoice-company-form-col{min-width:0}
+.invoice-company-asset-previews{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px;
+}
+.invoice-company-asset-card{
+  border:1px solid #dfeaf5;border-radius:12px;background:#f8fbff;padding:10px;
+}
+.invoice-company-asset-label{
+  font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.55px;margin-bottom:8px;
+}
+.invoice-company-asset-preview{
+  min-height:110px;border:1px dashed #c5d7eb;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;
+  color:#94a3b8;font-size:12px;overflow:hidden;padding:8px;text-align:center;
+}
+.invoice-company-asset-preview img{max-width:100%;max-height:92px;object-fit:contain;display:block}
+.invoice-company-form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 
 @media (max-width: 1100px){
   .invoice-editor-body{grid-template-columns:1fr}
   .invoice-item-row{grid-template-columns:minmax(0,1fr) 1fr 1fr 1fr 36px;align-items:start}
+  .invoice-switcher-row{grid-template-columns:1fr}
+  .invoice-company-body{grid-template-columns:1fr}
+  .invoice-company-asset-previews{grid-template-columns:1fr}
 }

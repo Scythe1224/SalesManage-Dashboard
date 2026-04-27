@@ -46,6 +46,7 @@ const PERMISSION_OPTIONS = [
 ];
 const DEFAULT_USER_PERMISSIONS = ['dashboard'];
 const INVOICE_STORAGE_KEY = 'intellidata-dashboard-proforma-invoices';
+const INVOICE_COMPANY_STORAGE_KEY = 'intellidata-dashboard-invoice-companies';
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ STATE ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 let currentTab='all', clientStatusFilter='all', clientSort='opid';
@@ -57,6 +58,8 @@ let currentUser=null;
 let proformaTargetOpid=null;
 let currentInvoiceId=null;
 let currentInvoiceDraft=null;
+let currentInvoiceCompanySettingsId=null;
+let currentInvoiceCompanySettingsDraft=null;
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ HELPERS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function normalizeClient(client){
@@ -152,6 +155,96 @@ function getInvoicesForOpid(opid){
     .filter(invoice=>!opid || invoice.opid===opid)
     .sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0));
 }
+function getDefaultInvoiceCompanies(){
+  return [{
+    id:'intellidata',
+    name:'Intellidata',
+    issuerName:'Intellidata Tech Solutions Pvt. Ltd.',
+    issuerGstin:'08AAHCI0947G1ZJ',
+    issuerAddress:'2nd Floor CYB 5, Office No. 201, Dream Heights, ITI Road, RIICO Heavy Industrial Area, Jodhpur, Rajasthan, 342003',
+    bankDetails:'Payee Name: Intellidata Tech Solutions Pvt. Ltd.\nBank Account Number: 016705013444\nBank Name: ICICI Bank\nBranch Name: Jaljog Circle, Residency Road\nIFSC Code: ICIC0000167',
+    signatureLabel:'Authorised Signatory',
+    tableColor:'#1d6fe5',
+    headerData:'',
+    footerImageData:'',
+    signatureData:''
+  },{
+    id:'reliablesoft',
+    name:'ReliableSoft',
+    issuerName:'ReliableSoft',
+    issuerGstin:'',
+    issuerAddress:'',
+    bankDetails:'',
+    signatureLabel:'Authorised Signatory',
+    tableColor:'#14b8a6',
+    headerData:'',
+    footerImageData:'',
+    signatureData:''
+  }];
+}
+function getStoredInvoiceCompanies(){
+  try{
+    const raw=localStorage.getItem(INVOICE_COMPANY_STORAGE_KEY);
+    const parsed=raw ? JSON.parse(raw) : [];
+    const defaults=getDefaultInvoiceCompanies();
+    if(!Array.isArray(parsed) || !parsed.length) return defaults;
+    const merged=[...parsed];
+    defaults.forEach(company=>{
+      if(!merged.some(item=>item.id===company.id)) merged.push(company);
+    });
+    return merged;
+  }catch(_err){
+    return getDefaultInvoiceCompanies();
+  }
+}
+function setStoredInvoiceCompanies(companies){
+  try{
+    localStorage.setItem(INVOICE_COMPANY_STORAGE_KEY, JSON.stringify(companies));
+  }catch(_err){
+    showToast('Company settings could not be saved.');
+  }
+}
+function ensureSeedInvoiceCompanies(){
+  const companies=getStoredInvoiceCompanies();
+  setStoredInvoiceCompanies(companies);
+}
+function makeInvoiceCompanyId(name){
+  const base=String(name || 'company').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') || `company-${Date.now()}`;
+  let candidate=base;
+  let count=2;
+  const companies=getStoredInvoiceCompanies();
+  while(companies.some(company=>company.id===candidate && company.id!==currentInvoiceCompanySettingsId)){
+    candidate=`${base}-${count++}`;
+  }
+  return candidate;
+}
+function getInvoiceCompanyById(companyId){
+  const companies=getStoredInvoiceCompanies();
+  return companies.find(company=>company.id===companyId) || companies[0] || null;
+}
+function inferInvoiceCompanyId(invoice){
+  if(invoice?.companyId && getInvoiceCompanyById(invoice.companyId)) return invoice.companyId;
+  const issuer=(invoice?.issuerName || '').toLowerCase();
+  if(issuer.includes('reliable')) return 'reliablesoft';
+  return 'intellidata';
+}
+function getInvoiceCompanyPreset(companyId, product='CNMS Onnet'){
+  const company=getInvoiceCompanyById(companyId) || getStoredInvoiceCompanies()[0];
+  const fallbackAccent=getThemeMeta(product).accent;
+  return {
+    companyId:company?.id || 'intellidata',
+    issuerName:company?.issuerName || company?.name || '',
+    issuerGstin:company?.issuerGstin || '',
+    issuerAddress:company?.issuerAddress || '',
+    bankDetails:company?.bankDetails || '',
+    signatureLabel:company?.signatureLabel || 'Authorised Signatory',
+    tableColor:company?.tableColor || fallbackAccent,
+    headerData:company?.headerData || '',
+    footerImageData:company?.footerImageData || '',
+    signatureData:company?.signatureData || '',
+    accent:company?.tableColor || fallbackAccent
+  };
+}
 function getThemeMeta(product){
   if(product==='NetManazer'){
     return { accent:'#25d6b0', accentSoft:'#e8fffa', heading:'OCRM PROFORMA INVOICE' };
@@ -173,16 +266,18 @@ function createDefaultInvoice(client){
   const product=client?.product || 'CNMS Onnet';
   const opid=client?.opid || '';
   const count=getStoredInvoices().length + 1;
+  const companyDefaults=getInvoiceCompanyPreset(client?.companyId || 'intellidata', product);
   return {
     id:`inv-${Date.now()}`,
     opid,
     product,
+    companyId:companyDefaults.companyId,
     invoiceNo:`PI/${month}-${year}/${count}`,
     invoiceDate:now.toISOString().split('T')[0],
     issuerTitle:'Issued By',
-    issuerName:'Intellidata Tech Solutions Pvt. Ltd.',
-    issuerAddress:'2nd Floor CYB 5, Office No. 201, Dream Heights, ITI Road, RIICO Heavy Industrial Area, Jodhpur, Rajasthan, 342003',
-    issuerGstin:'08AAHCI0947G1ZJ',
+    issuerName:companyDefaults.issuerName,
+    issuerAddress:companyDefaults.issuerAddress,
+    issuerGstin:companyDefaults.issuerGstin,
     recipientTitle:'Recipient',
     recipientName:'',
     recipientAddress:'',
@@ -190,8 +285,8 @@ function createDefaultInvoice(client){
     termsTitle:'Terms & Conditions',
     terms:'Payment: Full Advance',
     bankTitle:'Bank & Payment Details',
-    bankDetails:'Payee Name: Intellidata Tech Solutions Pvt. Ltd.\nBank Account Number: 016705013444\nBank Name: ICICI Bank\nBranch Name: Jaljog Circle, Residency Road\nIFSC Code: ICIC0000167',
-    signatureLabel:'Authorised Signatory',
+    bankDetails:companyDefaults.bankDetails,
+    signatureLabel:companyDefaults.signatureLabel,
     items:[{
       id:`item-${Date.now()}`,
       description:`${product} onboarding`,
@@ -203,10 +298,11 @@ function createDefaultInvoice(client){
     notes:'',
     footerNote:'',
     themeLabel:'Proforma Invoice',
-    tableColor:'#1d6fe5',
-    headerData:'',
-    footerImageData:'',
-    signatureData:'',
+    tableColor:companyDefaults.tableColor,
+    headerData:companyDefaults.headerData,
+    footerImageData:companyDefaults.footerImageData,
+    signatureData:companyDefaults.signatureData,
+    accent:companyDefaults.accent,
     qrData:'',
     createdAt:new Date().toISOString(),
     updatedAt:new Date().toISOString()
@@ -319,6 +415,7 @@ function setDashboardAccess(isAuthenticated, userId=''){
 }
 function initializeLogin(){
   ensureSeedUsers();
+  ensureSeedInvoiceCompanies();
   const loginForm=document.getElementById('loginForm');
   const loginUserId=document.getElementById('loginUserId');
   const loginPassword=document.getElementById('loginPassword');
@@ -1298,6 +1395,187 @@ function applyEditDeal(){
 }
 function closeEditDealForm(){document.getElementById('editDealFormBackdrop').classList.remove('open')}
 
+function populateInvoiceCompanyOptions(selectedId=''){
+  const select=document.getElementById('invoiceCompanySelect');
+  if(!select) return;
+  const companies=getStoredInvoiceCompanies();
+  const activeId=selectedId || currentInvoiceDraft?.companyId || companies[0]?.id || 'intellidata';
+  select.innerHTML=companies.map(company=>`<option value="${company.id}" ${company.id===activeId?'selected':''}>${escapeHtml(company.name)}</option>`).join('');
+}
+function applyInvoiceCompanySettingsToForm(companyId, preserveInvoiceMeta=true){
+  const preset=getInvoiceCompanyPreset(companyId, document.getElementById('inv-product')?.value || currentInvoiceDraft?.product || 'CNMS Onnet');
+  if(!preset.companyId) return;
+  const issuerName=document.getElementById('inv-issuer-name');
+  const issuerGstin=document.getElementById('inv-issuer-gstin');
+  const issuerAddress=document.getElementById('inv-issuer-address');
+  const bank=document.getElementById('inv-bank');
+  const signatureLabel=document.getElementById('inv-signature-label');
+  if(issuerName) issuerName.value=preset.issuerName;
+  if(issuerGstin) issuerGstin.value=preset.issuerGstin;
+  if(issuerAddress) issuerAddress.value=preset.issuerAddress;
+  if(bank) bank.value=preset.bankDetails;
+  if(signatureLabel) signatureLabel.value=preset.signatureLabel;
+  currentInvoiceDraft={
+    ...currentInvoiceDraft,
+    ...preset,
+    companyId:preset.companyId,
+    issuerName:preset.issuerName,
+    issuerGstin:preset.issuerGstin,
+    issuerAddress:preset.issuerAddress,
+    bankDetails:preset.bankDetails,
+    signatureLabel:preset.signatureLabel
+  };
+  const select=document.getElementById('invoiceCompanySelect');
+  if(select) select.value=preset.companyId;
+  if(preserveInvoiceMeta) syncInvoicePreview();
+}
+function handleInvoiceCompanyChange(){
+  const companyId=document.getElementById('invoiceCompanySelect')?.value || 'intellidata';
+  applyInvoiceCompanySettingsToForm(companyId, true);
+}
+function openInvoiceCompanySettings(){
+  if(!currentUser || !currentUser.isAdmin){
+    showToast('Only admin can manage company settings');
+    return;
+  }
+  renderInvoiceCompanyList();
+  const firstCompany=getStoredInvoiceCompanies()[0];
+  loadInvoiceCompanySettingsForm(currentInvoiceDraft?.companyId || firstCompany?.id || 'intellidata');
+  document.getElementById('invoiceCompanySettingsBackdrop')?.classList.add('open');
+}
+function closeInvoiceCompanySettings(){
+  document.getElementById('invoiceCompanySettingsBackdrop')?.classList.remove('open');
+}
+function renderInvoiceCompanyList(){
+  const list=document.getElementById('invoiceCompanyList');
+  if(!list) return;
+  const companies=getStoredInvoiceCompanies();
+  list.innerHTML=companies.map(company=>`<button class="invoice-company-list-item ${company.id===currentInvoiceCompanySettingsId?'active':''}" type="button" onclick="loadInvoiceCompanySettingsForm('${company.id}')">
+    <span class="invoice-company-swatch" style="background:${escapeHtml(company.tableColor || '#1d6fe5')}"></span>
+    <span class="invoice-company-copy">
+      <span class="invoice-company-name">${escapeHtml(company.name)}</span>
+      <span class="invoice-company-meta">${escapeHtml(company.issuerName || company.name)}</span>
+    </span>
+  </button>`).join('');
+}
+function renderInvoiceCompanyAssetPreview(containerId, imageData, emptyText){
+  const node=document.getElementById(containerId);
+  if(!node) return;
+  node.innerHTML=imageData ? `<img src="${imageData}" alt="${emptyText}" />` : `<span>${emptyText}</span>`;
+}
+function loadInvoiceCompanySettingsForm(companyId){
+  const company=getInvoiceCompanyById(companyId);
+  if(!company) return;
+  currentInvoiceCompanySettingsId=company.id;
+  currentInvoiceCompanySettingsDraft=JSON.parse(JSON.stringify(company));
+  document.getElementById('invoiceCompanyName').value=company.name || '';
+  document.getElementById('invoiceCompanyIssuerName').value=company.issuerName || '';
+  document.getElementById('invoiceCompanyGstin').value=company.issuerGstin || '';
+  document.getElementById('invoiceCompanyAddress').value=company.issuerAddress || '';
+  document.getElementById('invoiceCompanyBank').value=company.bankDetails || '';
+  document.getElementById('invoiceCompanySignatureLabel').value=company.signatureLabel || 'Authorised Signatory';
+  document.getElementById('invoiceCompanyTableColor').value=company.tableColor || '#1d6fe5';
+  renderInvoiceCompanyAssetPreview('invoiceCompanyHeaderPreview', company.headerData, 'No header uploaded');
+  renderInvoiceCompanyAssetPreview('invoiceCompanyFooterPreview', company.footerImageData, 'No footer uploaded');
+  renderInvoiceCompanyAssetPreview('invoiceCompanySignaturePreview', company.signatureData, 'No signature uploaded');
+  renderInvoiceCompanyList();
+}
+function startNewInvoiceCompany(){
+  currentInvoiceCompanySettingsId='';
+  currentInvoiceCompanySettingsDraft={
+    id:'',
+    name:'',
+    issuerName:'',
+    issuerGstin:'',
+    issuerAddress:'',
+    bankDetails:'',
+    signatureLabel:'Authorised Signatory',
+    tableColor:'#1d6fe5',
+    headerData:'',
+    footerImageData:'',
+    signatureData:''
+  };
+  document.getElementById('invoiceCompanyName').value='';
+  document.getElementById('invoiceCompanyIssuerName').value='';
+  document.getElementById('invoiceCompanyGstin').value='';
+  document.getElementById('invoiceCompanyAddress').value='';
+  document.getElementById('invoiceCompanyBank').value='';
+  document.getElementById('invoiceCompanySignatureLabel').value='Authorised Signatory';
+  document.getElementById('invoiceCompanyTableColor').value='#1d6fe5';
+  renderInvoiceCompanyAssetPreview('invoiceCompanyHeaderPreview', '', 'No header uploaded');
+  renderInvoiceCompanyAssetPreview('invoiceCompanyFooterPreview', '', 'No footer uploaded');
+  renderInvoiceCompanyAssetPreview('invoiceCompanySignaturePreview', '', 'No signature uploaded');
+  renderInvoiceCompanyList();
+}
+function handleInvoiceCompanyAssetUpload(event, field){
+  const file=event.target.files?.[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    currentInvoiceCompanySettingsDraft=currentInvoiceCompanySettingsDraft || {};
+    currentInvoiceCompanySettingsDraft[field]=reader.result;
+    if(field==='headerData') renderInvoiceCompanyAssetPreview('invoiceCompanyHeaderPreview', reader.result, 'No header uploaded');
+    if(field==='footerImageData') renderInvoiceCompanyAssetPreview('invoiceCompanyFooterPreview', reader.result, 'No footer uploaded');
+    if(field==='signatureData') renderInvoiceCompanyAssetPreview('invoiceCompanySignaturePreview', reader.result, 'No signature uploaded');
+  };
+  reader.readAsDataURL(file);
+}
+function saveInvoiceCompanySettings(){
+  const name=document.getElementById('invoiceCompanyName')?.value.trim();
+  if(!name){
+    showToast('Please enter the company name');
+    return;
+  }
+  const companies=getStoredInvoiceCompanies();
+  const companyId=currentInvoiceCompanySettingsId || makeInvoiceCompanyId(name);
+  const companyData={
+    id:companyId,
+    name,
+    issuerName:document.getElementById('invoiceCompanyIssuerName')?.value.trim() || name,
+    issuerGstin:document.getElementById('invoiceCompanyGstin')?.value.trim() || '',
+    issuerAddress:document.getElementById('invoiceCompanyAddress')?.value.trim() || '',
+    bankDetails:document.getElementById('invoiceCompanyBank')?.value.trim() || '',
+    signatureLabel:document.getElementById('invoiceCompanySignatureLabel')?.value.trim() || 'Authorised Signatory',
+    tableColor:document.getElementById('invoiceCompanyTableColor')?.value || '#1d6fe5',
+    headerData:currentInvoiceCompanySettingsDraft?.headerData || '',
+    footerImageData:currentInvoiceCompanySettingsDraft?.footerImageData || '',
+    signatureData:currentInvoiceCompanySettingsDraft?.signatureData || ''
+  };
+  const existingIndex=companies.findIndex(company=>company.id===companyId);
+  if(existingIndex>=0) companies[existingIndex]=companyData;
+  else companies.push(companyData);
+  setStoredInvoiceCompanies(companies);
+  currentInvoiceCompanySettingsId=companyId;
+  currentInvoiceCompanySettingsDraft=companyData;
+  populateInvoiceCompanyOptions(currentInvoiceDraft?.companyId || companyId);
+  renderInvoiceCompanyList();
+  loadInvoiceCompanySettingsForm(companyId);
+  if((currentInvoiceDraft?.companyId || document.getElementById('invoiceCompanySelect')?.value)===companyId){
+    applyInvoiceCompanySettingsToForm(companyId, true);
+  }
+  showToast('Company settings saved');
+}
+function deleteInvoiceCompanySettings(){
+  const companyId=currentInvoiceCompanySettingsId;
+  if(!companyId){
+    showToast('Select a company to delete');
+    return;
+  }
+  if(['intellidata','reliablesoft'].includes(companyId)){
+    showToast('Default companies cannot be deleted');
+    return;
+  }
+  const companies=getStoredInvoiceCompanies().filter(company=>company.id!==companyId);
+  setStoredInvoiceCompanies(companies);
+  const fallbackId=companies[0]?.id || 'intellidata';
+  populateInvoiceCompanyOptions(fallbackId);
+  if((currentInvoiceDraft?.companyId || document.getElementById('invoiceCompanySelect')?.value)===companyId){
+    applyInvoiceCompanySettingsToForm(fallbackId, true);
+  }
+  loadInvoiceCompanySettingsForm(fallbackId);
+  showToast('Company deleted');
+}
+
 function openInvoiceBrowser(){
   if(!requirePermission('clients.invoice')) return;
   openInvoiceEditor();
@@ -1326,6 +1604,7 @@ function openInvoiceEditor(opid=''){
   closeInvoiceBrowser();
   document.getElementById('invoiceEditorTitle').textContent='New Proforma Invoice';
   populateInvoiceSwitcher('', '');
+  populateInvoiceCompanyOptions('intellidata');
   if(client) loadInvoiceDraft(createDefaultInvoice(client));
   else loadInvoiceDraft(createDefaultInvoice({ product:'CNMS Onnet', opid:'' }));
   document.getElementById('invoiceEditorBackdrop')?.classList.add('open');
@@ -1339,14 +1618,14 @@ function populateInvoiceSwitcher(opid, selectedId=''){
 }
 function loadSelectedInvoice(value){
   if(value==='draft'){
-    loadInvoiceDraft(createDefaultInvoice({ product:document.getElementById('inv-product')?.value || 'CNMS Onnet', opid:'' }));
+    loadInvoiceDraft(createDefaultInvoice({ product:document.getElementById('inv-product')?.value || 'CNMS Onnet', opid:'', companyId:document.getElementById('invoiceCompanySelect')?.value || 'intellidata' }));
     return;
   }
   const invoice=getStoredInvoices().find(item=>item.id===value);
   if(invoice) loadInvoiceDraft(invoice);
 }
 function createAnotherInvoiceDraft(){
-  loadInvoiceDraft(createDefaultInvoice({ product:document.getElementById('inv-product')?.value || 'CNMS Onnet', opid:'' }));
+  loadInvoiceDraft(createDefaultInvoice({ product:document.getElementById('inv-product')?.value || 'CNMS Onnet', opid:'', companyId:document.getElementById('invoiceCompanySelect')?.value || 'intellidata' }));
   const select=document.getElementById('invoiceSelect');
   if(select) select.value='draft';
 }
@@ -1354,9 +1633,11 @@ function loadInvoiceDraft(invoice){
   currentInvoiceDraft=JSON.parse(JSON.stringify(invoice));
   currentInvoiceId=invoice.id || null;
   const product=invoice.product || 'CNMS Onnet';
+  const companyId=inferInvoiceCompanyId(invoice);
   document.getElementById('invoiceEditorTitle').textContent=invoice.invoiceNo ? 'Edit Proforma Invoice' : 'New Proforma Invoice';
   document.getElementById('inv-product').value=product;
-  document.getElementById('invoiceAccent').value=invoice.accent || 'auto';
+  populateInvoiceCompanyOptions(companyId);
+  document.getElementById('invoiceCompanySelect').value=companyId;
   document.getElementById('inv-no').value=invoice.invoiceNo || '';
   document.getElementById('inv-date').value=invoice.invoiceDate || '';
   document.getElementById('inv-issuer-name').value=invoice.issuerName || '';
@@ -1367,12 +1648,11 @@ function loadInvoiceDraft(invoice){
   document.getElementById('inv-recipient-address').value=invoice.recipientAddress || '';
   document.getElementById('inv-gst').value=invoice.gstPercent ?? 18;
   document.getElementById('inv-notes').value=invoice.notes || '';
-  document.getElementById('inv-theme-label').value=invoice.themeLabel || 'Proforma Invoice';
-  document.getElementById('inv-table-color').value=invoice.tableColor || '#1d6fe5';
   document.getElementById('inv-terms').value=invoice.terms || '';
   document.getElementById('inv-bank').value=invoice.bankDetails || '';
   document.getElementById('inv-footer-note').value=invoice.footerNote || '';
   document.getElementById('inv-signature-label').value=invoice.signatureLabel || 'Authorised Signatory';
+  currentInvoiceDraft.companyId=companyId;
   renderInvoiceItems(invoice.items || []);
   document.getElementById('invoiceDraftMeta').textContent=`${product} - ${invoice.invoiceNo || 'Draft'}`;
   populateInvoiceSwitcher('', invoice.id);
@@ -1427,7 +1707,8 @@ function getInvoiceFormData(){
     id:currentInvoiceId || `inv-${Date.now()}`,
     opid:proformaTargetOpid || '',
     product,
-    accent:document.getElementById('invoiceAccent').value || 'auto',
+    companyId:document.getElementById('invoiceCompanySelect')?.value || currentInvoiceDraft?.companyId || 'intellidata',
+    accent:currentInvoiceDraft?.accent || getThemeMeta(product).accent,
     invoiceNo:document.getElementById('inv-no').value.trim(),
     invoiceDate:document.getElementById('inv-date').value,
     issuerName:document.getElementById('inv-issuer-name').value.trim(),
@@ -1438,8 +1719,8 @@ function getInvoiceFormData(){
     recipientAddress:document.getElementById('inv-recipient-address').value.trim(),
     gstPercent,
     notes:document.getElementById('inv-notes').value.trim(),
-    themeLabel:document.getElementById('inv-theme-label').value.trim() || 'Proforma Invoice',
-    tableColor:document.getElementById('inv-table-color').value || '#1d6fe5',
+    themeLabel:'Proforma Invoice',
+    tableColor:currentInvoiceDraft?.tableColor || getThemeMeta(product).accent,
     terms:document.getElementById('inv-terms').value.trim(),
     bankDetails:document.getElementById('inv-bank').value.trim(),
     footerNote:document.getElementById('inv-footer-note').value.trim(),
@@ -1478,7 +1759,7 @@ function syncInvoicePreview(){
   if(!preview) return;
   const data=getInvoiceFormData();
   currentInvoiceDraft={...currentInvoiceDraft,...data};
-  const accent=data.accent && data.accent!=='auto' ? data.accent : getThemeMeta(data.product).accent;
+  const accent=data.tableColor || data.accent || getThemeMeta(data.product).accent;
   const tableColor=data.tableColor || accent;
   const brandMarkup=data.headerData
     ? `<img class="invoice-brand-banner" src="${data.headerData}" alt="Invoice header"/>`
@@ -1534,9 +1815,6 @@ function handleInvoiceImageUpload(event,type){
   const reader=new FileReader();
   reader.onload=()=>{
     currentInvoiceDraft=currentInvoiceDraft || {};
-    if(type==='header') currentInvoiceDraft.headerData=reader.result;
-    if(type==='footerImage') currentInvoiceDraft.footerImageData=reader.result;
-    if(type==='signature') currentInvoiceDraft.signatureData=reader.result;
     if(type==='qr') currentInvoiceDraft.qrData=reader.result;
     syncInvoicePreview();
   };
@@ -1587,6 +1865,7 @@ document.addEventListener('keydown',e=>{
     closeEditDealForm();
     closeInvoiceBrowser();
     closeInvoiceEditor();
+    closeInvoiceCompanySettings();
     closePasswordModal();
     closeUserManagerModal();
     closeClientsFlyout();
