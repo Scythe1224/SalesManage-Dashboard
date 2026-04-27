@@ -192,7 +192,6 @@ function createDefaultInvoice(client){
     bankTitle:'Bank & Payment Details',
     bankDetails:'Payee Name: Intellidata Tech Solutions Pvt. Ltd.\nBank Account Number: 016705013444\nBank Name: ICICI Bank\nBranch Name: Jaljog Circle, Residency Road\nIFSC Code: ICIC0000167',
     signatureLabel:'Authorised Signatory',
-    subtitle:getInvoiceTitle({ product }),
     items:[{
       id:`item-${Date.now()}`,
       description:`${product} onboarding`,
@@ -1360,7 +1359,6 @@ function loadInvoiceDraft(invoice){
   document.getElementById('invoiceAccent').value=invoice.accent || 'auto';
   document.getElementById('inv-no').value=invoice.invoiceNo || '';
   document.getElementById('inv-date').value=invoice.invoiceDate || '';
-  document.getElementById('inv-subtitle').value=invoice.subtitle || '';
   document.getElementById('inv-issuer-name').value=invoice.issuerName || '';
   document.getElementById('inv-issuer-gstin').value=invoice.issuerGstin || '';
   document.getElementById('inv-issuer-address').value=invoice.issuerAddress || '';
@@ -1385,7 +1383,7 @@ function renderInvoiceItems(items){
   if(!wrap) return;
   const rows=(items && items.length ? items : [{ id:`item-${Date.now()}`, description:'', qty:1, rate:0, amount:0 }]);
   wrap.innerHTML=rows.map((item,index)=>`<div class="invoice-item-row">
-    <label class="invoice-field"><span>Description</span><textarea class="invoice-textarea" data-item-field="description" data-item-index="${index}" oninput="syncInvoicePreview()">${escapeHtml(item.description || '')}</textarea></label>
+    <label class="invoice-field invoice-field-description"><span>Description</span><input class="invoice-input invoice-description-input" type="text" value="${escapeHtml(item.description || '')}" data-item-field="description" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
     <label class="invoice-field"><span>Qty</span><input class="invoice-input" type="number" min="0" step="1" value="${item.qty ?? 1}" data-item-field="qty" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
     <label class="invoice-field"><span>Rate</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.rate ?? 0}" data-item-field="rate" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
     <label class="invoice-field"><span>Amount</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.amount ?? 0}" data-item-field="amount" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
@@ -1432,7 +1430,6 @@ function getInvoiceFormData(){
     accent:document.getElementById('invoiceAccent').value || 'auto',
     invoiceNo:document.getElementById('inv-no').value.trim(),
     invoiceDate:document.getElementById('inv-date').value,
-    subtitle:document.getElementById('inv-subtitle').value.trim(),
     issuerName:document.getElementById('inv-issuer-name').value.trim(),
     issuerGstin:document.getElementById('inv-issuer-gstin').value.trim(),
     issuerAddress:document.getElementById('inv-issuer-address').value.trim(),
@@ -1483,14 +1480,13 @@ function syncInvoicePreview(){
   currentInvoiceDraft={...currentInvoiceDraft,...data};
   const accent=data.accent && data.accent!=='auto' ? data.accent : getThemeMeta(data.product).accent;
   const tableColor=data.tableColor || accent;
-  preview.innerHTML=`<div class="invoice-brand">
-    ${data.headerData ? `<img class="invoice-uploaded-banner" src="${data.headerData}" alt="Invoice header"/>` : ''}
+  const brandMarkup=data.headerData
+    ? `<img class="invoice-brand-banner" src="${data.headerData}" alt="Invoice header"/>`
+    : `<img class="invoice-brand-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/><div class="invoice-brand-copy"><h1 style="color:${accent}">OCRM</h1><p>${escapeHtml(getInvoiceTitle({ product:data.product }))}</p></div>`;
+  preview.innerHTML=`<div class="invoice-page-main">
+  <div class="invoice-brand">
     <div class="invoice-brand-left">
-      <img class="invoice-brand-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/>
-      <div class="invoice-brand-copy">
-        <h1 style="color:${accent}">OCRM</h1>
-        <p>${escapeHtml(data.subtitle || getInvoiceTitle({ product:data.product }))}</p>
-      </div>
+      ${brandMarkup}
     </div>
     <div class="invoice-heading">${escapeHtml(data.themeLabel || 'Proforma Invoice')}</div>
   </div>
@@ -1507,9 +1503,11 @@ function syncInvoicePreview(){
     <div class="invoice-box"><table class="invoice-total-table"><tr><td>Subtotal</td><td>${formatCurrency(data.subtotal)}</td></tr><tr><td>GST (${escapeHtml(data.gstPercent)}%)</td><td>${formatCurrency(data.gstAmount)}</td></tr><tr><td>Total Payable Amount</td><td>${formatCurrency(data.total)}</td></tr></table></div>
   </div>
   <div class="invoice-footer-grid">
-    <div class="invoice-box"><div class="invoice-box-title">Terms & Conditions</div><div class="invoice-box-body">${nl2br(data.terms || 'Payment: Full Advance')}</div><div class="invoice-box-title">Bank & Payment Details</div><div class="invoice-box-body">${nl2br(data.bankDetails || '-')}</div>${data.footerNote ? `<div class="invoice-box-body" style="border-top:1px solid #d9e6f2">${nl2br(data.footerNote)}</div>` : ''}${data.footerImageData ? `<img class="invoice-footer-image" src="${data.footerImageData}" alt="Invoice footer"/>` : ''}</div>
+    <div class="invoice-box"><div class="invoice-box-title">Terms & Conditions</div><div class="invoice-box-body">${nl2br(data.terms || 'Payment: Full Advance')}</div><div class="invoice-box-title">Bank & Payment Details</div><div class="invoice-box-body">${nl2br(data.bankDetails || '-')}</div></div>
     <div class="invoice-image-box"><div class="invoice-scan-wrap"><div style="flex:1"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">Scan To Pay</div>${currentInvoiceDraft.qrData ? `<img class="invoice-qr-img" src="${currentInvoiceDraft.qrData}" alt="QR"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload QR</div>'}</div><div class="invoice-signature-area" style="flex:1.2"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">For ${escapeHtml(data.issuerName || 'Company')}</div>${currentInvoiceDraft.signatureData ? `<img class="invoice-signature-img" src="${currentInvoiceDraft.signatureData}" alt="Signature"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload Signature</div>'}<div class="invoice-signature-label">${escapeHtml(data.signatureLabel)}</div></div></div></div>
-  </div>`;
+  </div>
+  </div>
+  <div class="invoice-page-footer">${data.footerNote ? `<div class="invoice-page-footer-note">${nl2br(data.footerNote)}</div>` : ''}${data.footerImageData ? `<img class="invoice-page-footer-image" src="${data.footerImageData}" alt="Invoice footer"/>` : ''}</div>`;
   fitInvoicePreview();
 }
 function saveInvoiceDraft(){
@@ -1551,7 +1549,7 @@ function fitInvoicePreview(){
   if(!wrap || !stage || !sheet) return;
   const naturalWidth=794;
   const naturalHeight=sheet.offsetHeight || 1123;
-  const scale=Math.min(1, Math.max(0.58, (wrap.clientWidth - 8) / naturalWidth));
+  const scale=Math.min(1, Math.max(0.42, (wrap.clientWidth - 24) / naturalWidth));
   sheet.style.transform=`scale(${scale})`;
   stage.style.height=`${naturalHeight * scale}px`;
 }
