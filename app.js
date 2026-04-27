@@ -149,7 +149,7 @@ function setStoredInvoices(invoices){
 }
 function getInvoicesForOpid(opid){
   return getStoredInvoices()
-    .filter(invoice=>invoice.opid===opid)
+    .filter(invoice=>!opid || invoice.opid===opid)
     .sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0));
 }
 function getThemeMeta(product){
@@ -170,19 +170,21 @@ function createDefaultInvoice(client){
   const now=new Date();
   const year=String(now.getFullYear()).slice(-2);
   const month=String(now.getMonth()+1).padStart(2,'0');
-  const count=getInvoicesForOpid(client.opid).length + 1;
+  const product=client?.product || 'CNMS Onnet';
+  const opid=client?.opid || '';
+  const count=getStoredInvoices().length + 1;
   return {
     id:`inv-${Date.now()}`,
-    opid:client.opid,
-    product:client.product,
-    invoiceNo:`${client.opid}/PI/${month}-${year}/${count}`,
+    opid,
+    product,
+    invoiceNo:`PI/${month}-${year}/${count}`,
     invoiceDate:now.toISOString().split('T')[0],
     issuerTitle:'Issued By',
     issuerName:'Intellidata Tech Solutions Pvt. Ltd.',
     issuerAddress:'2nd Floor CYB 5, Office No. 201, Dream Heights, ITI Road, RIICO Heavy Industrial Area, Jodhpur, Rajasthan, 342003',
     issuerGstin:'08AAHCI0947G1ZJ',
     recipientTitle:'Recipient',
-    recipientName:client.opid,
+    recipientName:'',
     recipientAddress:'',
     recipientGstin:'',
     termsTitle:'Terms & Conditions',
@@ -190,13 +192,13 @@ function createDefaultInvoice(client){
     bankTitle:'Bank & Payment Details',
     bankDetails:'Payee Name: Intellidata Tech Solutions Pvt. Ltd.\nBank Account Number: 016705013444\nBank Name: ICICI Bank\nBranch Name: Jaljog Circle, Residency Road\nIFSC Code: ICIC0000167',
     signatureLabel:'Authorised Signatory',
-    subtitle:getInvoiceTitle(client),
+    subtitle:getInvoiceTitle({ product }),
     items:[{
       id:`item-${Date.now()}`,
-      description:`${client.product} onboarding for ${client.opid}`,
+      description:`${product} onboarding`,
       qty:1,
-      rate:client.monthlyBill,
-      amount:client.monthlyBill
+      rate:client?.monthlyBill || 0,
+      amount:client?.monthlyBill || 0
     }],
     gstPercent:18,
     notes:'',
@@ -1295,10 +1297,7 @@ function closeEditDealForm(){document.getElementById('editDealFormBackdrop').cla
 
 function openInvoiceBrowser(){
   if(!requirePermission('clients.invoice')) return;
-  const search=document.getElementById('invoiceBrowserSearch');
-  if(search) search.value='';
-  renderInvoiceBrowserList();
-  document.getElementById('invoiceBrowserBackdrop')?.classList.add('open');
+  openInvoiceEditor();
 }
 function closeInvoiceBrowser(){document.getElementById('invoiceBrowserBackdrop')?.classList.remove('open')}
 function renderInvoiceBrowserList(){
@@ -1318,45 +1317,42 @@ function renderInvoiceBrowserList(){
     </div>`;
   }).join('');
 }
-function openInvoiceEditor(opid){
-  proformaTargetOpid=opid;
-  const client=CLIENTS.find(item=>item.opid===opid);
-  if(!client) return;
+function openInvoiceEditor(opid=''){
+  proformaTargetOpid=opid || '';
+  const client=opid ? CLIENTS.find(item=>item.opid===opid) : null;
   closeInvoiceBrowser();
-  document.getElementById('invoiceEditorTitle').textContent=`${opid} - ${client.product}`;
-  populateInvoiceSwitcher(opid);
-  const firstInvoice=getInvoicesForOpid(opid)[0];
-  if(firstInvoice) loadInvoiceDraft(firstInvoice);
-  else loadInvoiceDraft(createDefaultInvoice(client));
+  document.getElementById('invoiceEditorTitle').textContent='New Proforma Invoice';
+  populateInvoiceSwitcher('', '');
+  if(client) loadInvoiceDraft(createDefaultInvoice(client));
+  else loadInvoiceDraft(createDefaultInvoice({ product:'CNMS Onnet', opid:'' }));
   document.getElementById('invoiceEditorBackdrop')?.classList.add('open');
 }
 function closeInvoiceEditor(){document.getElementById('invoiceEditorBackdrop')?.classList.remove('open')}
 function populateInvoiceSwitcher(opid, selectedId=''){
   const select=document.getElementById('invoiceSelect');
   if(!select) return;
-  const invoices=getInvoicesForOpid(opid);
+  const invoices=getStoredInvoices().sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0));
   select.innerHTML=`<option value="draft">New Draft</option>` + invoices.map(invoice=>`<option value="${invoice.id}" ${invoice.id===selectedId?'selected':''}>${invoice.invoiceNo || invoice.id} - ${fmtDate(invoice.invoiceDate)}</option>`).join('');
 }
 function loadSelectedInvoice(value){
   if(value==='draft'){
-    const client=CLIENTS.find(item=>item.opid===proformaTargetOpid);
-    if(client) loadInvoiceDraft(createDefaultInvoice(client));
+    loadInvoiceDraft(createDefaultInvoice({ product:document.getElementById('inv-product')?.value || 'CNMS Onnet', opid:'' }));
     return;
   }
   const invoice=getStoredInvoices().find(item=>item.id===value);
   if(invoice) loadInvoiceDraft(invoice);
 }
 function createAnotherInvoiceDraft(){
-  const client=CLIENTS.find(item=>item.opid===proformaTargetOpid);
-  if(!client) return;
-  loadInvoiceDraft(createDefaultInvoice(client));
+  loadInvoiceDraft(createDefaultInvoice({ product:document.getElementById('inv-product')?.value || 'CNMS Onnet', opid:'' }));
   const select=document.getElementById('invoiceSelect');
   if(select) select.value='draft';
 }
 function loadInvoiceDraft(invoice){
   currentInvoiceDraft=JSON.parse(JSON.stringify(invoice));
   currentInvoiceId=invoice.id || null;
-  const client=CLIENTS.find(item=>item.opid===invoice.opid);
+  const product=invoice.product || 'CNMS Onnet';
+  document.getElementById('invoiceEditorTitle').textContent=invoice.invoiceNo ? 'Edit Proforma Invoice' : 'New Proforma Invoice';
+  document.getElementById('inv-product').value=product;
   document.getElementById('invoiceAccent').value=invoice.accent || 'auto';
   document.getElementById('inv-no').value=invoice.invoiceNo || '';
   document.getElementById('inv-date').value=invoice.invoiceDate || '';
@@ -1374,8 +1370,8 @@ function loadInvoiceDraft(invoice){
   document.getElementById('inv-footer-note').value=invoice.footerNote || '';
   document.getElementById('inv-signature-label').value=invoice.signatureLabel || 'Authorised Signatory';
   renderInvoiceItems(invoice.items || []);
-  document.getElementById('invoiceDraftMeta').textContent=`${client?.product || ''} - ${invoice.invoiceNo || 'Draft'}`;
-  populateInvoiceSwitcher(invoice.opid, invoice.id);
+  document.getElementById('invoiceDraftMeta').textContent=`${product} - ${invoice.invoiceNo || 'Draft'}`;
+  populateInvoiceSwitcher('', invoice.id);
   syncInvoicePreview();
 }
 function renderInvoiceItems(items){
@@ -1418,14 +1414,15 @@ function removeInvoiceItem(index){
 }
 function getInvoiceFormData(){
   const client=CLIENTS.find(item=>item.opid===proformaTargetOpid);
+  const product=document.getElementById('inv-product').value || client?.product || 'CNMS Onnet';
   const items=collectInvoiceItems();
   const gstPercent=Number(document.getElementById('inv-gst').value || 0);
   const subtotal=items.reduce((sum,item)=>sum + Number(item.amount || 0),0);
   const gstAmount=subtotal * (gstPercent/100);
   return {
     id:currentInvoiceId || `inv-${Date.now()}`,
-    opid:proformaTargetOpid,
-    product:client?.product || 'CNMS Onnet',
+    opid:proformaTargetOpid || '',
+    product,
     accent:document.getElementById('invoiceAccent').value || 'auto',
     invoiceNo:document.getElementById('inv-no').value.trim(),
     invoiceDate:document.getElementById('inv-date').value,
@@ -1471,7 +1468,7 @@ function amountInWords(amount){
 }
 function syncInvoicePreview(){
   const preview=document.getElementById('invoicePreview');
-  if(!preview || !proformaTargetOpid) return;
+  if(!preview) return;
   const data=getInvoiceFormData();
   currentInvoiceDraft={...currentInvoiceDraft,...data};
   const accent=data.accent && data.accent!=='auto' ? data.accent : getThemeMeta(data.product).accent;
@@ -1487,7 +1484,7 @@ function syncInvoicePreview(){
   </div>
   <div class="invoice-meta-grid">
     <div class="invoice-meta-card"><h3>Issued By</h3><div class="meta-strong">${escapeHtml(data.issuerName)}</div><div class="meta-copy">${escapeHtml(data.issuerAddress)}</div></div>
-    <div class="invoice-meta-card"><h3>Recipient</h3><div class="meta-strong">${escapeHtml(data.recipientName || data.opid)}</div><div class="meta-copy">${escapeHtml(data.recipientAddress)}</div></div>
+    <div class="invoice-meta-card"><h3>Recipient</h3><div class="meta-strong">${escapeHtml(data.recipientName || '-')}</div><div class="meta-copy">${escapeHtml(data.recipientAddress)}</div></div>
     <div class="invoice-meta-card"><h3>Dated: ${escapeHtml(fmtDate(data.invoiceDate))}</h3><div class="meta-copy"><b>Proforma Invoice No.:</b> ${escapeHtml(data.invoiceNo || '-')}</div><div class="meta-copy"><b>Issuer GSTIN No.:</b> ${escapeHtml(data.issuerGstin || '-')}</div><div class="meta-copy"><b>Recipient GSTIN No.:</b> ${escapeHtml(data.recipientGstin || '-')}</div></div>
   </div>
   <table class="invoice-line-table"><thead><tr><th style="background:${accent}">Description</th><th style="background:${accent};width:82px">Qty</th><th style="background:${accent};width:112px">Rate</th><th style="background:${accent};width:132px">Amount</th></tr></thead><tbody>
@@ -1544,7 +1541,7 @@ async function downloadInvoicePdf(){
   const width=pdf.internal.pageSize.getWidth();
   const height=(canvas.height * width) / canvas.width;
   pdf.addImage(image,'PNG',0,0,width,height);
-  const fileName=(currentInvoiceDraft?.invoiceNo || `${proformaTargetOpid}-proforma-invoice`).replace(/[\\/:*?"<>|]+/g,'-');
+  const fileName=(currentInvoiceDraft?.invoiceNo || 'proforma-invoice').replace(/[\\/:*?"<>|]+/g,'-');
   pdf.save(`${fileName}.pdf`);
   showToast('PDF downloaded');
 }

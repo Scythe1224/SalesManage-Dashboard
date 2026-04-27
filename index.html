@@ -907,6 +907,7 @@
         <div class="invoice-form-card">
           <div class="invoice-form-section">Invoice Details</div>
           <div class="invoice-form-grid two">
+            <label class="invoice-field"><span>Product</span><select id="inv-product" class="invoice-input" onchange="syncInvoicePreview()"><option value="CNMS Onnet">CNMS Onnet</option><option value="NetManazer">NetManazer</option><option value="IPTV">IPTV</option></select></label>
             <label class="invoice-field"><span>Invoice No.</span><input id="inv-no" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
             <label class="invoice-field"><span>Date</span><input id="inv-date" class="invoice-input" type="date" oninput="syncInvoicePreview()"/></label>
           </div>
