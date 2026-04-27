@@ -632,7 +632,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-editor-modal{
   width:min(1320px,96vw);max-height:92vh;overflow:hidden;background:#f8fbff;
   border-radius:18px;box-shadow:0 20px 60px rgba(15,23,42,0.24);transform:scale(.98);
-  transition:transform .2s ease;
+  transition:transform .2s ease;display:flex;flex-direction:column;
 }
 .backdrop.open .invoice-editor-modal{transform:scale(1)}
 .invoice-editor-hdr{
@@ -658,9 +658,9 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-mini-input:focus,.invoice-input:focus,.invoice-textarea:focus{border-color:var(--ocrm-blue);box-shadow:0 0 0 3px rgba(29,111,229,.1)}
 .invoice-editor-body{
   display:grid;grid-template-columns:minmax(360px,520px) minmax(420px,1fr);gap:18px;
-  padding:18px 20px 20px;max-height:calc(92vh - 144px);overflow:hidden;
+  padding:18px 20px 20px;flex:1;min-height:0;overflow:auto;align-items:start;
 }
-.invoice-form-col{overflow:auto;padding-right:4px}
+.invoice-form-col{overflow:auto;min-height:0;padding-right:4px}
 .invoice-form-card{
   background:#fff;border:1px solid #dfeaf5;border-radius:14px;padding:14px 14px 16px;
   box-shadow:0 8px 24px rgba(148,163,184,.08);margin-bottom:14px;
@@ -679,13 +679,13 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   width:32px;height:38px;border:none;border-radius:10px;background:#fee2e2;color:#b91c1c;
   font-weight:900;cursor:pointer;
 }
-.invoice-preview-col{display:flex;flex-direction:column;min-width:0}
+.invoice-preview-col{display:flex;flex-direction:column;min-width:0;min-height:0}
 .invoice-preview-toolbar{
   display:flex;justify-content:space-between;align-items:center;padding:0 4px 8px;
   color:#64748b;font-size:11px;font-weight:700;
 }
 .invoice-preview-wrap{
-  flex:1;overflow:auto;background:linear-gradient(180deg,#edf5ff,#f8fbff);
+  flex:1;min-height:0;overflow:auto;background:linear-gradient(180deg,#edf5ff,#f8fbff);
   border:1px solid #dbe8f7;border-radius:16px;padding:18px;
 }
 .invoice-preview-sheet{
@@ -743,6 +743,6 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-signature-label{font-size:12px;font-weight:900;color:#1d4ed8;margin-top:8px}
 
 @media (max-width: 1100px){
-  .invoice-editor-body{grid-template-columns:1fr;max-height:calc(92vh - 144px)}
+  .invoice-editor-body{grid-template-columns:1fr}
   .invoice-preview-sheet{width:min(794px,100%)}
 }
