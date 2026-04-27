@@ -627,3 +627,122 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .url-chip{background:var(--ocrm-soft-blue);color:var(--ocrm-blue);border:1px solid #c8ddfb;border-radius:5px;padding:3px 8px;font-size:11px;font-family:monospace;font-weight:600}
 .guide-tip{background:#fffbeb;border:1px solid #fde68a;border-radius:7px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:8px;display:flex;gap:8px;align-items:flex-start}
 .na-text{color:#94a3b8;font-style:italic}
+
+/* PROFORMA INVOICE */
+.invoice-editor-modal{
+  width:min(1320px,96vw);max-height:92vh;overflow:hidden;background:#f8fbff;
+  border-radius:18px;box-shadow:0 20px 60px rgba(15,23,42,0.24);transform:scale(.98);
+  transition:transform .2s ease;
+}
+.backdrop.open .invoice-editor-modal{transform:scale(1)}
+.invoice-editor-hdr{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:18px 20px;background:linear-gradient(135deg,#163e96,#23b7d9);color:#fff;
+}
+.invoice-editor-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:.8px}
+.invoice-editor-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.invoice-switcher-row{
+  display:grid;grid-template-columns:1fr 220px;gap:12px;padding:14px 20px;
+  background:#eef6ff;border-bottom:1px solid #dbe8f7;
+}
+.invoice-switcher-field{display:flex;flex-direction:column;gap:6px}
+.invoice-switcher-field label,.invoice-field span{
+  font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.55px;
+}
+.invoice-mini-input,.invoice-input,.invoice-textarea{
+  width:100%;border:1px solid #d6e3f1;border-radius:10px;background:#fff;color:#0f172a;
+  font-family:'Nunito',sans-serif;font-size:13px;outline:none;
+}
+.invoice-mini-input,.invoice-input{height:38px;padding:0 12px}
+.invoice-textarea{min-height:78px;padding:10px 12px;resize:vertical}
+.invoice-mini-input:focus,.invoice-input:focus,.invoice-textarea:focus{border-color:var(--ocrm-blue);box-shadow:0 0 0 3px rgba(29,111,229,.1)}
+.invoice-editor-body{
+  display:grid;grid-template-columns:minmax(360px,520px) minmax(420px,1fr);gap:18px;
+  padding:18px 20px 20px;max-height:calc(92vh - 144px);overflow:hidden;
+}
+.invoice-form-col{overflow:auto;padding-right:4px}
+.invoice-form-card{
+  background:#fff;border:1px solid #dfeaf5;border-radius:14px;padding:14px 14px 16px;
+  box-shadow:0 8px 24px rgba(148,163,184,.08);margin-bottom:14px;
+}
+.invoice-form-section{
+  font-size:12px;font-weight:900;color:#16324a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;
+}
+.invoice-form-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.invoice-form-grid.two{grid-template-columns:1fr 1fr}
+.invoice-field{display:flex;flex-direction:column;gap:6px}
+.invoice-item-row{
+  display:grid;grid-template-columns:minmax(0,1.8fr) 88px 112px 112px 32px;gap:8px;align-items:end;
+  padding:10px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fbff;margin-bottom:8px;
+}
+.invoice-remove-btn{
+  width:32px;height:38px;border:none;border-radius:10px;background:#fee2e2;color:#b91c1c;
+  font-weight:900;cursor:pointer;
+}
+.invoice-preview-col{display:flex;flex-direction:column;min-width:0}
+.invoice-preview-toolbar{
+  display:flex;justify-content:space-between;align-items:center;padding:0 4px 8px;
+  color:#64748b;font-size:11px;font-weight:700;
+}
+.invoice-preview-wrap{
+  flex:1;overflow:auto;background:linear-gradient(180deg,#edf5ff,#f8fbff);
+  border:1px solid #dbe8f7;border-radius:16px;padding:18px;
+}
+.invoice-preview-sheet{
+  width:794px;min-height:1123px;margin:0 auto;background:#fff;border-radius:6px;
+  box-shadow:0 20px 40px rgba(15,23,42,.12);padding:36px 34px;color:#111827;
+}
+.invoice-brand{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-bottom:18px;border-bottom:2px solid #e5eef8;
+}
+.invoice-brand-left{display:flex;align-items:flex-start;gap:18px}
+.invoice-brand-logo{width:190px;max-width:100%;height:auto}
+.invoice-brand-copy h1{
+  margin:0;font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;letter-spacing:1px;color:#16324a;
+}
+.invoice-brand-copy p{margin:6px 0 0;font-size:13px;color:#64748b;letter-spacing:1.6px}
+.invoice-heading{font-size:16px;font-weight:900;color:#cbd5e1;text-transform:uppercase;letter-spacing:.9px}
+.invoice-meta-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;padding:18px 0;border-bottom:1px solid #e5eef8;
+}
+.invoice-meta-card h3{margin:0 0 10px;font-size:13px;font-weight:800;color:#0f172a}
+.invoice-meta-card .meta-strong{font-size:12px;font-weight:800;line-height:1.5;color:#111827}
+.invoice-meta-card .meta-copy{font-size:12px;line-height:1.6;color:#334155;white-space:pre-line}
+.invoice-line-table{
+  width:100%;border-collapse:collapse;margin-top:18px;border:1px solid #d9e6f2;
+}
+.invoice-line-table th,.invoice-line-table td{
+  border:1px solid #d9e6f2;padding:11px 10px;font-size:12px;vertical-align:top;
+}
+.invoice-line-table th{color:#fff;text-transform:uppercase;font-size:11px;letter-spacing:.4px}
+.invoice-line-table td.num{text-align:right;font-weight:800}
+.invoice-summary{
+  display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:20px;
+}
+.invoice-box{
+  border:1px solid #d9e6f2;background:#fff;border-radius:4px;overflow:hidden;
+}
+.invoice-box-title{
+  padding:10px 12px;font-size:12px;font-weight:800;color:#16324a;border-bottom:1px solid #d9e6f2;background:#f8fbff;
+}
+.invoice-box-body{padding:12px;font-size:12px;line-height:1.7;color:#334155;white-space:pre-line}
+.invoice-total-table{width:100%;border-collapse:collapse}
+.invoice-total-table td{border-bottom:1px solid #e5eef8;padding:8px 12px;font-size:12px}
+.invoice-total-table td:last-child{text-align:right;font-weight:800}
+.invoice-total-table tr:last-child td{font-size:14px;font-weight:900;color:#0f172a}
+.invoice-footer-grid{
+  display:grid;grid-template-columns:1.2fr .9fr;gap:18px;margin-top:18px;align-items:stretch;
+}
+.invoice-image-box{
+  border:1px solid #d9e6f2;border-radius:4px;min-height:160px;padding:10px 12px;background:#fff;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.invoice-scan-wrap{display:flex;gap:16px;align-items:flex-start}
+.invoice-qr-img,.invoice-signature-img{max-width:100%;max-height:120px;object-fit:contain}
+.invoice-signature-area{text-align:center}
+.invoice-signature-label{font-size:12px;font-weight:900;color:#1d4ed8;margin-top:8px}
+
+@media (max-width: 1100px){
+  .invoice-editor-body{grid-template-columns:1fr;max-height:calc(92vh - 144px)}
+  .invoice-preview-sheet{width:min(794px,100%)}
+}

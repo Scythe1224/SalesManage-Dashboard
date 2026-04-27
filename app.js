@@ -38,12 +38,14 @@ const PERMISSION_OPTIONS = [
   { key:'clients.add', label:'Add Client', help:'Use the add client action' },
   { key:'clients.status', label:'Update Status', help:'Change client deployment status' },
   { key:'clients.deal', label:'Client Deal', help:'Edit client pricing and contract details' },
+  { key:'clients.invoice', label:'Proforma Invoice', help:'Create and download proforma invoices' },
   { key:'clients.delete', label:'Delete Client', help:'Delete client entries' },
   { key:'billing', label:'Billing', help:'Access billing summary' },
   { key:'reports', label:'Reports', help:'Access reports page' },
   { key:'guide', label:'Update Guide', help:'Access GitHub update guide' }
 ];
 const DEFAULT_USER_PERMISSIONS = ['dashboard'];
+const INVOICE_STORAGE_KEY = 'intellidata-dashboard-proforma-invoices';
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ STATE ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 let currentTab='all', clientStatusFilter='all', clientSort='opid';
@@ -52,6 +54,9 @@ let statusChangeTarget=null;
 let selectedNewStatus=null;
 let editDealTarget=null;
 let currentUser=null;
+let proformaTargetOpid=null;
+let currentInvoiceId=null;
+let currentInvoiceDraft=null;
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ HELPERS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function normalizeClient(client){
@@ -126,6 +131,93 @@ function calcBilling(rate,minBilling,period){
     salesDeal:`${rate} x ${minBilling} x ${period} + Tax`
   };
 }
+function getStoredInvoices(){
+  try{
+    const raw=localStorage.getItem(INVOICE_STORAGE_KEY);
+    const parsed=raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(_err){
+    return [];
+  }
+}
+function setStoredInvoices(invoices){
+  try{
+    localStorage.setItem(INVOICE_STORAGE_KEY, JSON.stringify(invoices));
+  }catch(_err){
+    showToast('Invoice storage is full. Remove some old invoices or smaller images.');
+  }
+}
+function getInvoicesForOpid(opid){
+  return getStoredInvoices()
+    .filter(invoice=>invoice.opid===opid)
+    .sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0));
+}
+function getThemeMeta(product){
+  if(product==='NetManazer'){
+    return { accent:'#25d6b0', accentSoft:'#e8fffa', heading:'OCRM PROFORMA INVOICE' };
+  }
+  if(product==='IPTV'){
+    return { accent:'#16324a', accentSoft:'#eef4ff', heading:'OCRM PROFORMA INVOICE' };
+  }
+  return { accent:'#1d6fe5', accentSoft:'#eff6ff', heading:'OCRM PROFORMA INVOICE' };
+}
+function getInvoiceTitle(client){
+  if(client.product==='NetManazer') return 'ISP | BROADBAND | CRM';
+  if(client.product==='IPTV') return 'IPTV | CABLE TV | CRM';
+  return 'ISP | BROADBAND | CABLE TV CRM';
+}
+function createDefaultInvoice(client){
+  const now=new Date();
+  const year=String(now.getFullYear()).slice(-2);
+  const month=String(now.getMonth()+1).padStart(2,'0');
+  const count=getInvoicesForOpid(client.opid).length + 1;
+  return {
+    id:`inv-${Date.now()}`,
+    opid:client.opid,
+    product:client.product,
+    invoiceNo:`${client.opid}/PI/${month}-${year}/${count}`,
+    invoiceDate:now.toISOString().split('T')[0],
+    issuerTitle:'Issued By',
+    issuerName:'Intellidata Tech Solutions Pvt. Ltd.',
+    issuerAddress:'2nd Floor CYB 5, Office No. 201, Dream Heights, ITI Road, RIICO Heavy Industrial Area, Jodhpur, Rajasthan, 342003',
+    issuerGstin:'08AAHCI0947G1ZJ',
+    recipientTitle:'Recipient',
+    recipientName:client.opid,
+    recipientAddress:'',
+    recipientGstin:'',
+    termsTitle:'Terms & Conditions',
+    terms:'Payment: Full Advance',
+    bankTitle:'Bank & Payment Details',
+    bankDetails:'Payee Name: Intellidata Tech Solutions Pvt. Ltd.\nBank Account Number: 016705013444\nBank Name: ICICI Bank\nBranch Name: Jaljog Circle, Residency Road\nIFSC Code: ICIC0000167',
+    signatureLabel:'Authorised Signatory',
+    subtitle:getInvoiceTitle(client),
+    items:[{
+      id:`item-${Date.now()}`,
+      description:`${client.product} onboarding for ${client.opid}`,
+      qty:1,
+      rate:client.monthlyBill,
+      amount:client.monthlyBill
+    }],
+    gstPercent:18,
+    notes:'',
+    footerNote:'',
+    signatureData:'',
+    qrData:'',
+    createdAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  };
+}
+function escapeHtml(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+function nl2br(value){
+  return escapeHtml(value).replace(/\n/g,'<br>');
+}
 
 function getDefaultUsers(){
   return [{
@@ -172,7 +264,7 @@ function userHasPermission(permissionKey, user=currentUser){
   return Array.isArray(user.permissions) && user.permissions.includes(permissionKey);
 }
 function hasAnyClientAccess(user=currentUser){
-  return ['clients.view','clients.add','clients.status','clients.deal','clients.delete'].some(key=>userHasPermission(key, user));
+  return ['clients.view','clients.add','clients.status','clients.deal','clients.invoice','clients.delete'].some(key=>userHasPermission(key, user));
 }
 function getFirstAccessiblePage(user=currentUser){
   if(userHasPermission('dashboard', user)) return 'dashboard';
@@ -512,7 +604,8 @@ function applyPermissionVisibility(){
     clientsViewItem: userHasPermission('clients.view'),
     clientsAddItem: userHasPermission('clients.add'),
     clientsStatusItem: userHasPermission('clients.status'),
-    clientsDealItem: userHasPermission('clients.deal')
+    clientsDealItem: userHasPermission('clients.deal'),
+    clientsInvoiceItem: userHasPermission('clients.invoice')
   };
   Object.entries(map).forEach(([id, visible])=>{
     const element=document.getElementById(id);
@@ -587,6 +680,14 @@ function openAddClientFromSidebar(){
   showPage('clients', document.getElementById('clientsNavIcon'));
   window.setTimeout(()=>{
     openAddModal();
+  }, 60);
+}
+function openProformaInvoiceFromSidebar(){
+  if(!requirePermission('clients.invoice')) return;
+  closeClientsFlyout();
+  showPage('clients', document.getElementById('clientsNavIcon'));
+  window.setTimeout(()=>{
+    openInvoiceBrowser();
   }, 60);
 }
 
@@ -865,6 +966,7 @@ function openDetailModal(opid){
     </table>
 
     <div class="detail-actions">
+      ${userHasPermission('clients.invoice') ? `<button class="btn-submit" style="margin-right:auto" onclick="closeDetailModal();openInvoiceEditor('${c.opid}')">Proforma Invoice</button>` : ''}
       <button class="btn-delete-client" onclick="deleteClient('${c.opid}', true)">Delete Client</button>
     </div>`;
   document.getElementById('detailBackdrop').classList.add('open');
@@ -1191,6 +1293,262 @@ function applyEditDeal(){
 }
 function closeEditDealForm(){document.getElementById('editDealFormBackdrop').classList.remove('open')}
 
+function openInvoiceBrowser(){
+  if(!requirePermission('clients.invoice')) return;
+  const search=document.getElementById('invoiceBrowserSearch');
+  if(search) search.value='';
+  renderInvoiceBrowserList();
+  document.getElementById('invoiceBrowserBackdrop')?.classList.add('open');
+}
+function closeInvoiceBrowser(){document.getElementById('invoiceBrowserBackdrop')?.classList.remove('open')}
+function renderInvoiceBrowserList(){
+  const q=(document.getElementById('invoiceBrowserSearch')?.value || '').toLowerCase();
+  const list=document.getElementById('invoiceBrowserList');
+  if(!list) return;
+  let data=[...CLIENTS];
+  if(q) data=data.filter(c=>c.opid.toLowerCase().includes(q)||c.product.toLowerCase().includes(q)||getProductTypeDisplay(c).toLowerCase().includes(q));
+  data.sort((a,b)=>a.opid.localeCompare(b.opid));
+  list.innerHTML=data.map(c=>{
+    const count=getInvoicesForOpid(c.opid).length;
+    return `<div onclick="openInvoiceEditor('${c.opid}')" style="display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;border:1px solid #d9e6f2;cursor:pointer;transition:all .15s;background:#fff" onmouseover="this.style.background='#f5fbff';this.style.borderColor='#1d6fe5'" onmouseout="this.style.background='#fff';this.style.borderColor='#d9e6f2'">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#1e293b;min-width:84px">${c.opid}</div>
+      ${getProductBadge(c)}
+      <span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span>
+      <span style="margin-left:auto;font-size:11px;font-weight:800;color:#1d6fe5">${count} invoice${count===1?'':'s'}</span>
+    </div>`;
+  }).join('');
+}
+function openInvoiceEditor(opid){
+  proformaTargetOpid=opid;
+  const client=CLIENTS.find(item=>item.opid===opid);
+  if(!client) return;
+  closeInvoiceBrowser();
+  document.getElementById('invoiceEditorTitle').textContent=`${opid} - ${client.product}`;
+  populateInvoiceSwitcher(opid);
+  const firstInvoice=getInvoicesForOpid(opid)[0];
+  if(firstInvoice) loadInvoiceDraft(firstInvoice);
+  else loadInvoiceDraft(createDefaultInvoice(client));
+  document.getElementById('invoiceEditorBackdrop')?.classList.add('open');
+}
+function closeInvoiceEditor(){document.getElementById('invoiceEditorBackdrop')?.classList.remove('open')}
+function populateInvoiceSwitcher(opid, selectedId=''){
+  const select=document.getElementById('invoiceSelect');
+  if(!select) return;
+  const invoices=getInvoicesForOpid(opid);
+  select.innerHTML=`<option value="draft">New Draft</option>` + invoices.map(invoice=>`<option value="${invoice.id}" ${invoice.id===selectedId?'selected':''}>${invoice.invoiceNo || invoice.id} - ${fmtDate(invoice.invoiceDate)}</option>`).join('');
+}
+function loadSelectedInvoice(value){
+  if(value==='draft'){
+    const client=CLIENTS.find(item=>item.opid===proformaTargetOpid);
+    if(client) loadInvoiceDraft(createDefaultInvoice(client));
+    return;
+  }
+  const invoice=getStoredInvoices().find(item=>item.id===value);
+  if(invoice) loadInvoiceDraft(invoice);
+}
+function createAnotherInvoiceDraft(){
+  const client=CLIENTS.find(item=>item.opid===proformaTargetOpid);
+  if(!client) return;
+  loadInvoiceDraft(createDefaultInvoice(client));
+  const select=document.getElementById('invoiceSelect');
+  if(select) select.value='draft';
+}
+function loadInvoiceDraft(invoice){
+  currentInvoiceDraft=JSON.parse(JSON.stringify(invoice));
+  currentInvoiceId=invoice.id || null;
+  const client=CLIENTS.find(item=>item.opid===invoice.opid);
+  document.getElementById('invoiceAccent').value=invoice.accent || 'auto';
+  document.getElementById('inv-no').value=invoice.invoiceNo || '';
+  document.getElementById('inv-date').value=invoice.invoiceDate || '';
+  document.getElementById('inv-subtitle').value=invoice.subtitle || '';
+  document.getElementById('inv-issuer-name').value=invoice.issuerName || '';
+  document.getElementById('inv-issuer-gstin').value=invoice.issuerGstin || '';
+  document.getElementById('inv-issuer-address').value=invoice.issuerAddress || '';
+  document.getElementById('inv-recipient-name').value=invoice.recipientName || '';
+  document.getElementById('inv-recipient-gstin').value=invoice.recipientGstin || '';
+  document.getElementById('inv-recipient-address').value=invoice.recipientAddress || '';
+  document.getElementById('inv-gst').value=invoice.gstPercent ?? 18;
+  document.getElementById('inv-notes').value=invoice.notes || '';
+  document.getElementById('inv-terms').value=invoice.terms || '';
+  document.getElementById('inv-bank').value=invoice.bankDetails || '';
+  document.getElementById('inv-footer-note').value=invoice.footerNote || '';
+  document.getElementById('inv-signature-label').value=invoice.signatureLabel || 'Authorised Signatory';
+  renderInvoiceItems(invoice.items || []);
+  document.getElementById('invoiceDraftMeta').textContent=`${client?.product || ''} - ${invoice.invoiceNo || 'Draft'}`;
+  populateInvoiceSwitcher(invoice.opid, invoice.id);
+  syncInvoicePreview();
+}
+function renderInvoiceItems(items){
+  const wrap=document.getElementById('invoiceItems');
+  if(!wrap) return;
+  const rows=(items && items.length ? items : [{ id:`item-${Date.now()}`, description:'', qty:1, rate:0, amount:0 }]);
+  wrap.innerHTML=rows.map((item,index)=>`<div class="invoice-item-row">
+    <label class="invoice-field"><span>Description</span><textarea class="invoice-textarea" data-item-field="description" data-item-index="${index}" oninput="syncInvoicePreview()">${escapeHtml(item.description || '')}</textarea></label>
+    <label class="invoice-field"><span>Qty</span><input class="invoice-input" type="number" min="0" step="1" value="${item.qty ?? 1}" data-item-field="qty" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
+    <label class="invoice-field"><span>Rate</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.rate ?? 0}" data-item-field="rate" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
+    <label class="invoice-field"><span>Amount</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.amount ?? 0}" data-item-field="amount" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
+    <button class="invoice-remove-btn" type="button" onclick="removeInvoiceItem(${index})">X</button>
+  </div>`).join('');
+}
+function collectInvoiceItems(){
+  const rows={};
+  document.querySelectorAll('[data-item-index]').forEach(input=>{
+    const index=input.getAttribute('data-item-index');
+    const field=input.getAttribute('data-item-field');
+    rows[index]=rows[index] || { id:`item-${Date.now()}-${index}` };
+    rows[index][field]=input.value;
+  });
+  return Object.values(rows).map(item=>{
+    const qty=Number(item.qty || 0);
+    const rate=Number(item.rate || 0);
+    const manualAmount=Number(item.amount || 0);
+    return { id:item.id || `item-${Date.now()}`, description:(item.description || '').trim(), qty, rate, amount:manualAmount || (qty*rate) };
+  }).filter(item=>item.description || item.qty || item.rate || item.amount);
+}
+function addInvoiceItem(){
+  const items=collectInvoiceItems();
+  items.push({ id:`item-${Date.now()}`, description:'', qty:1, rate:0, amount:0 });
+  renderInvoiceItems(items);
+}
+function removeInvoiceItem(index){
+  const items=collectInvoiceItems();
+  items.splice(index,1);
+  renderInvoiceItems(items);
+  syncInvoicePreview();
+}
+function getInvoiceFormData(){
+  const client=CLIENTS.find(item=>item.opid===proformaTargetOpid);
+  const items=collectInvoiceItems();
+  const gstPercent=Number(document.getElementById('inv-gst').value || 0);
+  const subtotal=items.reduce((sum,item)=>sum + Number(item.amount || 0),0);
+  const gstAmount=subtotal * (gstPercent/100);
+  return {
+    id:currentInvoiceId || `inv-${Date.now()}`,
+    opid:proformaTargetOpid,
+    product:client?.product || 'CNMS Onnet',
+    accent:document.getElementById('invoiceAccent').value || 'auto',
+    invoiceNo:document.getElementById('inv-no').value.trim(),
+    invoiceDate:document.getElementById('inv-date').value,
+    subtitle:document.getElementById('inv-subtitle').value.trim(),
+    issuerName:document.getElementById('inv-issuer-name').value.trim(),
+    issuerGstin:document.getElementById('inv-issuer-gstin').value.trim(),
+    issuerAddress:document.getElementById('inv-issuer-address').value.trim(),
+    recipientName:document.getElementById('inv-recipient-name').value.trim(),
+    recipientGstin:document.getElementById('inv-recipient-gstin').value.trim(),
+    recipientAddress:document.getElementById('inv-recipient-address').value.trim(),
+    gstPercent,
+    notes:document.getElementById('inv-notes').value.trim(),
+    terms:document.getElementById('inv-terms').value.trim(),
+    bankDetails:document.getElementById('inv-bank').value.trim(),
+    footerNote:document.getElementById('inv-footer-note').value.trim(),
+    signatureLabel:document.getElementById('inv-signature-label').value.trim() || 'Authorised Signatory',
+    signatureData:currentInvoiceDraft?.signatureData || '',
+    qrData:currentInvoiceDraft?.qrData || '',
+    items,
+    subtotal,
+    gstAmount,
+    total:subtotal + gstAmount,
+    createdAt:currentInvoiceDraft?.createdAt || new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  };
+}
+function formatCurrency(value){
+  return `Rs. ${Math.round(Number(value || 0)).toLocaleString('en-IN')}`;
+}
+function amountInWords(amount){
+  const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+  const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  function twoDigits(num){ if(num<20) return ones[num]; return `${tens[Math.floor(num/10)]}${num%10 ? ' ' + ones[num%10] : ''}`.trim(); }
+  function threeDigits(num){ const hundred=Math.floor(num/100); const rest=num%100; return `${hundred ? ones[hundred] + ' Hundred ' : ''}${rest ? twoDigits(rest) : ''}`.trim(); }
+  let num=Math.round(Number(amount || 0));
+  if(!num) return 'Zero Only';
+  const parts=[]; const crore=Math.floor(num/10000000); num%=10000000; const lakh=Math.floor(num/100000); num%=100000; const thousand=Math.floor(num/1000); num%=1000;
+  if(crore) parts.push(`${twoDigits(crore)} Crore`);
+  if(lakh) parts.push(`${twoDigits(lakh)} Lakh`);
+  if(thousand) parts.push(`${twoDigits(thousand)} Thousand`);
+  if(num) parts.push(threeDigits(num));
+  return `${parts.join(' ').trim()} Only`;
+}
+function syncInvoicePreview(){
+  const preview=document.getElementById('invoicePreview');
+  if(!preview || !proformaTargetOpid) return;
+  const data=getInvoiceFormData();
+  currentInvoiceDraft={...currentInvoiceDraft,...data};
+  const accent=data.accent && data.accent!=='auto' ? data.accent : getThemeMeta(data.product).accent;
+  preview.innerHTML=`<div class="invoice-brand">
+    <div class="invoice-brand-left">
+      <img class="invoice-brand-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/>
+      <div class="invoice-brand-copy">
+        <h1 style="color:${accent}">OCRM</h1>
+        <p>${escapeHtml(data.subtitle || getInvoiceTitle({ product:data.product }))}</p>
+      </div>
+    </div>
+    <div class="invoice-heading">Proforma Invoice</div>
+  </div>
+  <div class="invoice-meta-grid">
+    <div class="invoice-meta-card"><h3>Issued By</h3><div class="meta-strong">${escapeHtml(data.issuerName)}</div><div class="meta-copy">${escapeHtml(data.issuerAddress)}</div></div>
+    <div class="invoice-meta-card"><h3>Recipient</h3><div class="meta-strong">${escapeHtml(data.recipientName || data.opid)}</div><div class="meta-copy">${escapeHtml(data.recipientAddress)}</div></div>
+    <div class="invoice-meta-card"><h3>Dated: ${escapeHtml(fmtDate(data.invoiceDate))}</h3><div class="meta-copy"><b>Proforma Invoice No.:</b> ${escapeHtml(data.invoiceNo || '-')}</div><div class="meta-copy"><b>Issuer GSTIN No.:</b> ${escapeHtml(data.issuerGstin || '-')}</div><div class="meta-copy"><b>Recipient GSTIN No.:</b> ${escapeHtml(data.recipientGstin || '-')}</div></div>
+  </div>
+  <table class="invoice-line-table"><thead><tr><th style="background:${accent}">Description</th><th style="background:${accent};width:82px">Qty</th><th style="background:${accent};width:112px">Rate</th><th style="background:${accent};width:132px">Amount</th></tr></thead><tbody>
+  ${data.items.length ? data.items.map(item=>`<tr><td>${escapeHtml(item.description)}</td><td class="num">${escapeHtml(item.qty)}</td><td class="num">${formatCurrency(item.rate)}</td><td class="num">${formatCurrency(item.amount)}</td></tr>`).join('') : '<tr><td colspan="4">Add description rows from the left panel.</td></tr>'}
+  </tbody></table>
+  <div class="invoice-summary">
+    <div class="invoice-box"><div class="invoice-box-title">Amount Chargeable (in words)</div><div class="invoice-box-body">${escapeHtml(amountInWords(data.total))}${data.notes ? `<br><br>${escapeHtml(data.notes)}` : ''}</div></div>
+    <div class="invoice-box"><table class="invoice-total-table"><tr><td>Subtotal</td><td>${formatCurrency(data.subtotal)}</td></tr><tr><td>GST (${escapeHtml(data.gstPercent)}%)</td><td>${formatCurrency(data.gstAmount)}</td></tr><tr><td>Total Payable Amount</td><td>${formatCurrency(data.total)}</td></tr></table></div>
+  </div>
+  <div class="invoice-footer-grid">
+    <div class="invoice-box"><div class="invoice-box-title">Terms & Conditions</div><div class="invoice-box-body">${nl2br(data.terms || 'Payment: Full Advance')}</div><div class="invoice-box-title">Bank & Payment Details</div><div class="invoice-box-body">${nl2br(data.bankDetails || '-')}</div>${data.footerNote ? `<div class="invoice-box-body" style="border-top:1px solid #d9e6f2">${nl2br(data.footerNote)}</div>` : ''}</div>
+    <div class="invoice-image-box"><div class="invoice-scan-wrap"><div style="flex:1"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">Scan To Pay</div>${currentInvoiceDraft.qrData ? `<img class="invoice-qr-img" src="${currentInvoiceDraft.qrData}" alt="QR"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload QR</div>'}</div><div class="invoice-signature-area" style="flex:1.2"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">For ${escapeHtml(data.issuerName || 'Company')}</div>${currentInvoiceDraft.signatureData ? `<img class="invoice-signature-img" src="${currentInvoiceDraft.signatureData}" alt="Signature"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload Signature</div>'}<div class="invoice-signature-label">${escapeHtml(data.signatureLabel)}</div></div></div></div>
+  </div>`;
+}
+function saveInvoiceDraft(){
+  const data=getInvoiceFormData();
+  if(!data.invoiceNo){ showToast('Please enter the Proforma Invoice number'); return false; }
+  if(!data.recipientName){ showToast('Please enter the recipient name'); return false; }
+  if(!data.items.length){ showToast('Add at least one description row'); return false; }
+  const invoices=getStoredInvoices();
+  const index=invoices.findIndex(item=>item.id===data.id);
+  if(index>=0) invoices[index]=data; else invoices.push(data);
+  setStoredInvoices(invoices);
+  currentInvoiceId=data.id;
+  currentInvoiceDraft=data;
+  populateInvoiceSwitcher(data.opid, data.id);
+  const select=document.getElementById('invoiceSelect');
+  if(select) select.value=data.id;
+  document.getElementById('invoiceDraftMeta').textContent=`${data.product} - ${data.invoiceNo}`;
+  showToast('Proforma invoice saved');
+  return true;
+}
+function handleInvoiceImageUpload(event,type){
+  const file=event.target.files?.[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    currentInvoiceDraft=currentInvoiceDraft || {};
+    if(type==='signature') currentInvoiceDraft.signatureData=reader.result;
+    if(type==='qr') currentInvoiceDraft.qrData=reader.result;
+    syncInvoicePreview();
+  };
+  reader.readAsDataURL(file);
+}
+async function downloadInvoicePdf(){
+  const preview=document.getElementById('invoicePreview');
+  if(!preview) return;
+  if(!saveInvoiceDraft()) return;
+  if(typeof html2canvas==='undefined' || !window.jspdf?.jsPDF){ window.print(); return; }
+  const canvas=await html2canvas(preview,{ scale:2, useCORS:true, backgroundColor:'#ffffff' });
+  const image=canvas.toDataURL('image/png');
+  const { jsPDF } = window.jspdf;
+  const pdf=new jsPDF('p','pt','a4');
+  const width=pdf.internal.pageSize.getWidth();
+  const height=(canvas.height * width) / canvas.width;
+  pdf.addImage(image,'PNG',0,0,width,height);
+  const fileName=(currentInvoiceDraft?.invoiceNo || `${proformaTargetOpid}-proforma-invoice`).replace(/[\\/:*?"<>|]+/g,'-');
+  pdf.save(`${fileName}.pdf`);
+  showToast('PDF downloaded');
+}
+
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ RENDER ALL ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function renderAll(){
   updateKPI();
@@ -1205,6 +1563,8 @@ document.addEventListener('keydown',e=>{
     closeStatusChange();
     closeEditDealBrowser();
     closeEditDealForm();
+    closeInvoiceBrowser();
+    closeInvoiceEditor();
     closePasswordModal();
     closeUserManagerModal();
     closeClientsFlyout();

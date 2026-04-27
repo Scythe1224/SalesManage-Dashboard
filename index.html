@@ -76,6 +76,11 @@
         Client Deal
         <span class="flyout-arrow">></span>
       </div>
+      <div class="flyout-item" id="clientsInvoiceItem" onclick="openProformaInvoiceFromSidebar()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+        Proforma Invoice
+        <span class="flyout-arrow">></span>
+      </div>
     </div>
   </div>
 
@@ -847,7 +852,123 @@
   </div>
 </div>
 
+<div class="backdrop" id="invoiceBrowserBackdrop" onclick="closeInvoiceBrowser()">
+  <div class="add-modal" style="max-width:560px" onclick="event.stopPropagation()">
+    <div class="add-modal-hdr" style="background:linear-gradient(135deg,#0f4cbd,#23b7d9)">
+      <div>
+        <div class="add-modal-title">Proforma Invoice</div>
+        <div style="font-size:11px;opacity:0.82;margin-top:2px">Select a client and create multiple editable invoices.</div>
+      </div>
+      <button class="modal-close" style="margin-left:auto" onclick="closeInvoiceBrowser()">X</button>
+    </div>
+    <div class="add-modal-body" style="padding:14px 16px">
+      <div class="search-box" style="margin-bottom:12px;width:100%">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;color:#94a3b8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="invoiceBrowserSearch" placeholder="Search OPID or product..." oninput="renderInvoiceBrowserList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
+      </div>
+      <div id="invoiceBrowserList" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto"></div>
+    </div>
+  </div>
+</div>
 
+<div class="backdrop" id="invoiceEditorBackdrop" onclick="closeInvoiceEditor()">
+  <div class="invoice-editor-modal" onclick="event.stopPropagation()">
+    <div class="invoice-editor-hdr">
+      <div>
+        <div style="font-size:11px;opacity:0.82;margin-bottom:3px">Proforma Invoice Workspace</div>
+        <div class="invoice-editor-title" id="invoiceEditorTitle">-</div>
+      </div>
+      <div class="invoice-editor-actions">
+        <button class="password-btn" type="button" onclick="createAnotherInvoiceDraft()">New Invoice</button>
+        <button class="password-btn" type="button" onclick="saveInvoiceDraft()">Save Invoice</button>
+        <button class="logout-btn" type="button" onclick="downloadInvoicePdf()">Download PDF</button>
+        <button class="modal-close" type="button" onclick="closeInvoiceEditor()">X</button>
+      </div>
+    </div>
+
+    <div class="invoice-switcher-row">
+      <div class="invoice-switcher-field">
+        <label for="invoiceSelect">Saved Invoices</label>
+        <select id="invoiceSelect" class="invoice-mini-input" onchange="loadSelectedInvoice(this.value)"></select>
+      </div>
+      <div class="invoice-switcher-field">
+        <label for="invoiceAccent">Theme</label>
+        <select id="invoiceAccent" class="invoice-mini-input" onchange="syncInvoicePreview()">
+          <option value="auto">Auto by Product</option>
+          <option value="#1d6fe5">Blue</option>
+          <option value="#25d6b0">Teal</option>
+          <option value="#16324a">Navy</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="invoice-editor-body">
+      <div class="invoice-form-col">
+        <div class="invoice-form-card">
+          <div class="invoice-form-section">Invoice Details</div>
+          <div class="invoice-form-grid two">
+            <label class="invoice-field"><span>Invoice No.</span><input id="inv-no" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Date</span><input id="inv-date" class="invoice-input" type="date" oninput="syncInvoicePreview()"/></label>
+          </div>
+        </div>
+
+        <div class="invoice-form-card">
+          <div class="invoice-form-section">Issuer</div>
+          <div class="invoice-form-grid">
+            <label class="invoice-field"><span>Header Subtitle</span><input id="inv-subtitle" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Company Name</span><input id="inv-issuer-name" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>GSTIN</span><input id="inv-issuer-gstin" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Address</span><textarea id="inv-issuer-address" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
+          </div>
+        </div>
+
+        <div class="invoice-form-card">
+          <div class="invoice-form-section">Recipient</div>
+          <div class="invoice-form-grid">
+            <label class="invoice-field"><span>Recipient Name</span><input id="inv-recipient-name" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Recipient GSTIN</span><input id="inv-recipient-gstin" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Recipient Address</span><textarea id="inv-recipient-address" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
+          </div>
+        </div>
+
+        <div class="invoice-form-card">
+          <div class="invoice-form-section">Description & Amounts</div>
+          <div id="invoiceItems"></div>
+          <button class="mini-btn save" type="button" style="margin-top:10px" onclick="addInvoiceItem()">Add Description Row</button>
+          <div class="invoice-form-grid two" style="margin-top:12px">
+            <label class="invoice-field"><span>GST %</span><input id="inv-gst" class="invoice-input" type="number" min="0" step="0.01" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Notes</span><input id="inv-notes" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+          </div>
+        </div>
+
+        <div class="invoice-form-card">
+          <div class="invoice-form-section">Footer, Signature & QR</div>
+          <div class="invoice-form-grid">
+            <label class="invoice-field"><span>Terms & Conditions</span><textarea id="inv-terms" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
+            <label class="invoice-field"><span>Bank / Payment Details</span><textarea id="inv-bank" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
+            <label class="invoice-field"><span>Footer Note</span><textarea id="inv-footer-note" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
+            <label class="invoice-field"><span>Signature Label</span><input id="inv-signature-label" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Upload Signature</span><input id="inv-signature-file" class="invoice-input" type="file" accept="image/*" onchange="handleInvoiceImageUpload(event,'signature')"/></label>
+            <label class="invoice-field"><span>Upload QR</span><input id="inv-qr-file" class="invoice-input" type="file" accept="image/*" onchange="handleInvoiceImageUpload(event,'qr')"/></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice-preview-col">
+        <div class="invoice-preview-toolbar">
+          <span>Live Preview</span>
+          <span id="invoiceDraftMeta"></span>
+        </div>
+        <div class="invoice-preview-wrap">
+          <div class="invoice-preview-sheet" id="invoicePreview"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="app.js"></script>
 
 </body>
