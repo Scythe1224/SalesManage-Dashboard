@@ -770,7 +770,6 @@ function renderClientsTable(){
         <button class="td-opid-btn" onclick="openDetailModal('${c.opid}')">
           <span class="td-opid">${c.opid}</span>
         </button>
-        ${c.sheet==='ReActivation'?'<span class="sheet-tag">Re-Activation</span>':''}
       </td>
       <td>${getProductBadge(c)}</td>
       <td><span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span></td>
