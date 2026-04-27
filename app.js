@@ -760,24 +760,24 @@ function renderClientsTable(){
     currentTab==='all' ? `Showing ${data.length} of ${CLIENTS.length} clients` : `Showing ${data.length} ${mapLabel[currentTab] || 'clients'}`;
   const tbody=document.getElementById('clientsTableBody');
   if(!data.length){
-    tbody.innerHTML='<tr class="empty-row"><td colspan="12">No clients match the current filter</td></tr>';
+    tbody.innerHTML='<tr class="empty-row"><td colspan="7">No clients match the current filter</td></tr>';
     return;
   }
   tbody.innerHTML=data.map(c=>{
     const rowClass = c.product==='NetManazer'?'td-net':c.product==='IPTV'?'td-iptv':'td-cnms';
-    return `<tr class="${rowClass}" onclick="openDetailModal('${c.opid}')">
-      <td><div class="td-opid">${c.opid}</div>${c.sheet==='ReActivation'?'<span class="sheet-tag">Re-Activation</span>':''}</td>
+    return `<tr class="${rowClass}">
+      <td>
+        <button class="td-opid-btn" onclick="openDetailModal('${c.opid}')">
+          <span class="td-opid">${c.opid}</span>
+        </button>
+        ${c.sheet==='ReActivation'?'<span class="sheet-tag">Re-Activation</span>':''}
+      </td>
       <td>${getProductBadge(c)}</td>
       <td><span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span></td>
       <td>${statusBadge(c.status)}</td>
       <td style="font-size:12px;font-weight:600">${fmtDate(c.onboardingDate)}</td>
       <td style="font-size:12px;font-weight:600">${fmtDate(c.billingEffective)}</td>
-      <td style="font-weight:700">Rs. ${c.rate}</td>
-      <td style="font-weight:700">${formatPeriod(c.period)}</td>
-      <td style="font-size:11px">${c.freeSMS||'-'}</td>
-      <td class="td-bill">Rs. ${c.monthlyBill.toLocaleString('en-IN')}</td>
-              <td><span class="sheet-tag" style="${c.sheet==='NetManazer'?'background:#eafcf8;color:#0f9f8f;border-color:#b6f0e2':''}">${c.sheet}</span></td>
-      <td>${userHasPermission('clients.delete') ? `<button class="action-btn-delete" onclick="event.stopPropagation();deleteClient('${c.opid}')">Delete</button>` : '<span class="na-text">Restricted</span>'}</td>
+      <td>${userHasPermission('clients.delete') ? `<button class="action-btn-delete" onclick="deleteClient('${c.opid}')">Delete</button>` : '<span class="na-text">Restricted</span>'}</td>
     </tr>`;
   }).join('');
 }
@@ -826,14 +826,17 @@ function openDetailModal(opid){
   document.getElementById('detailBody').innerHTML=`
     <div class="modal-section-title">Client Details</div>
     <div class="modal-grid">
+      <div class="mfield"><div class="mf-label">Product</div><div class="mf-val">${c.product}</div></div>
       <div class="mfield"><div class="mf-label">Product Type</div><div class="mf-val"><span class="product-type-tag ${getProductTypeClass(c)}">${getProductTypeDisplay(c)}</span></div></div>
       <div class="mfield"><div class="mf-label">Sheet</div><div class="mf-val">${c.sheet}</div></div>
+      <div class="mfield"><div class="mf-label">Status</div><div class="mf-val">${c.status}</div></div>
       <div class="mfield"><div class="mf-label">Onboarding Date</div><div class="mf-val">${fmtDate(c.onboardingDate)}</div></div>
       <div class="mfield"><div class="mf-label">Billing Effective</div><div class="mf-val">${fmtDate(c.billingEffective)}</div></div>
       <div class="mfield"><div class="mf-label">Rate</div><div class="mf-val">Rs. ${c.rate}</div></div>
       <div class="mfield"><div class="mf-label">Min. Billing (Connection/Subscribers)</div><div class="mf-val">${c.minBilling.toLocaleString('en-IN')}</div></div>
       <div class="mfield"><div class="mf-label">Period</div><div class="mf-val">${formatPeriod(c.period)}</div></div>
       <div class="mfield"><div class="mf-label">Free SMS / WA</div><div class="mf-val">${c.freeSMS||'-'}</div></div>
+      <div class="mfield"><div class="mf-label">Monthly Bill</div><div class="mf-val">Rs. ${c.monthlyBill.toLocaleString('en-IN')}</div></div>
     </div>
 
     <div class="modal-section-title">Sales Deal</div>
