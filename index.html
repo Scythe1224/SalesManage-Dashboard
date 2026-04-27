@@ -935,16 +935,22 @@
         <div class="invoice-form-card">
           <div class="invoice-form-section">Description & Amounts</div>
           <div id="invoiceItems"></div>
-          <button class="mini-btn save" type="button" style="margin-top:10px" onclick="addInvoiceItem()">Add Description Row</button>
+          <button class="mini-btn save" type="button" style="margin-top:10px" onclick="addInvoiceItem()">Add Item</button>
           <div class="invoice-form-grid two" style="margin-top:12px">
             <label class="invoice-field"><span>GST %</span><input id="inv-gst" class="invoice-input" type="number" min="0" step="0.01" oninput="syncInvoicePreview()"/></label>
             <label class="invoice-field"><span>Notes</span><input id="inv-notes" class="invoice-input" type="text" oninput="syncInvoicePreview()"/></label>
           </div>
+          <div class="invoice-form-grid two" style="margin-top:12px">
+            <label class="invoice-field"><span>Table Header Color</span><input id="inv-table-color" class="invoice-color-input" type="color" value="#1d6fe5" oninput="syncInvoicePreview()"/></label>
+            <label class="invoice-field"><span>Theme Label</span><input id="inv-theme-label" class="invoice-input" type="text" placeholder="Proforma Invoice" oninput="syncInvoicePreview()"/></label>
+          </div>
         </div>
 
         <div class="invoice-form-card">
-          <div class="invoice-form-section">Footer, Signature & QR</div>
+          <div class="invoice-form-section">Header, Footer, Signature & QR</div>
           <div class="invoice-form-grid">
+            <label class="invoice-field"><span>Upload Header</span><input id="inv-header-file" class="invoice-input" type="file" accept="image/*" onchange="handleInvoiceImageUpload(event,'header')"/></label>
+            <label class="invoice-field"><span>Upload Footer</span><input id="inv-footer-file" class="invoice-input" type="file" accept="image/*" onchange="handleInvoiceImageUpload(event,'footerImage')"/></label>
             <label class="invoice-field"><span>Terms & Conditions</span><textarea id="inv-terms" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
             <label class="invoice-field"><span>Bank / Payment Details</span><textarea id="inv-bank" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
             <label class="invoice-field"><span>Footer Note</span><textarea id="inv-footer-note" class="invoice-textarea" oninput="syncInvoicePreview()"></textarea></label>
@@ -960,8 +966,10 @@
           <span>Live Preview</span>
           <span id="invoiceDraftMeta"></span>
         </div>
-        <div class="invoice-preview-wrap">
-          <div class="invoice-preview-sheet" id="invoicePreview"></div>
+        <div class="invoice-preview-wrap" id="invoicePreviewWrap">
+          <div class="invoice-preview-stage" id="invoicePreviewStage">
+            <div class="invoice-preview-sheet" id="invoicePreview"></div>
+          </div>
         </div>
       </div>
     </div>

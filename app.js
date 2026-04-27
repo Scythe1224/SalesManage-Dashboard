@@ -203,6 +203,10 @@ function createDefaultInvoice(client){
     gstPercent:18,
     notes:'',
     footerNote:'',
+    themeLabel:'Proforma Invoice',
+    tableColor:'#1d6fe5',
+    headerData:'',
+    footerImageData:'',
     signatureData:'',
     qrData:'',
     createdAt:new Date().toISOString(),
@@ -1365,6 +1369,8 @@ function loadInvoiceDraft(invoice){
   document.getElementById('inv-recipient-address').value=invoice.recipientAddress || '';
   document.getElementById('inv-gst').value=invoice.gstPercent ?? 18;
   document.getElementById('inv-notes').value=invoice.notes || '';
+  document.getElementById('inv-theme-label').value=invoice.themeLabel || 'Proforma Invoice';
+  document.getElementById('inv-table-color').value=invoice.tableColor || '#1d6fe5';
   document.getElementById('inv-terms').value=invoice.terms || '';
   document.getElementById('inv-bank').value=invoice.bankDetails || '';
   document.getElementById('inv-footer-note').value=invoice.footerNote || '';
@@ -1435,10 +1441,14 @@ function getInvoiceFormData(){
     recipientAddress:document.getElementById('inv-recipient-address').value.trim(),
     gstPercent,
     notes:document.getElementById('inv-notes').value.trim(),
+    themeLabel:document.getElementById('inv-theme-label').value.trim() || 'Proforma Invoice',
+    tableColor:document.getElementById('inv-table-color').value || '#1d6fe5',
     terms:document.getElementById('inv-terms').value.trim(),
     bankDetails:document.getElementById('inv-bank').value.trim(),
     footerNote:document.getElementById('inv-footer-note').value.trim(),
     signatureLabel:document.getElementById('inv-signature-label').value.trim() || 'Authorised Signatory',
+    headerData:currentInvoiceDraft?.headerData || '',
+    footerImageData:currentInvoiceDraft?.footerImageData || '',
     signatureData:currentInvoiceDraft?.signatureData || '',
     qrData:currentInvoiceDraft?.qrData || '',
     items,
@@ -1472,7 +1482,9 @@ function syncInvoicePreview(){
   const data=getInvoiceFormData();
   currentInvoiceDraft={...currentInvoiceDraft,...data};
   const accent=data.accent && data.accent!=='auto' ? data.accent : getThemeMeta(data.product).accent;
+  const tableColor=data.tableColor || accent;
   preview.innerHTML=`<div class="invoice-brand">
+    ${data.headerData ? `<img class="invoice-uploaded-banner" src="${data.headerData}" alt="Invoice header"/>` : ''}
     <div class="invoice-brand-left">
       <img class="invoice-brand-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/>
       <div class="invoice-brand-copy">
@@ -1480,14 +1492,14 @@ function syncInvoicePreview(){
         <p>${escapeHtml(data.subtitle || getInvoiceTitle({ product:data.product }))}</p>
       </div>
     </div>
-    <div class="invoice-heading">Proforma Invoice</div>
+    <div class="invoice-heading">${escapeHtml(data.themeLabel || 'Proforma Invoice')}</div>
   </div>
   <div class="invoice-meta-grid">
     <div class="invoice-meta-card"><h3>Issued By</h3><div class="meta-strong">${escapeHtml(data.issuerName)}</div><div class="meta-copy">${escapeHtml(data.issuerAddress)}</div></div>
     <div class="invoice-meta-card"><h3>Recipient</h3><div class="meta-strong">${escapeHtml(data.recipientName || '-')}</div><div class="meta-copy">${escapeHtml(data.recipientAddress)}</div></div>
     <div class="invoice-meta-card"><h3>Dated: ${escapeHtml(fmtDate(data.invoiceDate))}</h3><div class="meta-copy"><b>Proforma Invoice No.:</b> ${escapeHtml(data.invoiceNo || '-')}</div><div class="meta-copy"><b>Issuer GSTIN No.:</b> ${escapeHtml(data.issuerGstin || '-')}</div><div class="meta-copy"><b>Recipient GSTIN No.:</b> ${escapeHtml(data.recipientGstin || '-')}</div></div>
   </div>
-  <table class="invoice-line-table"><thead><tr><th style="background:${accent}">Description</th><th style="background:${accent};width:82px">Qty</th><th style="background:${accent};width:112px">Rate</th><th style="background:${accent};width:132px">Amount</th></tr></thead><tbody>
+  <table class="invoice-line-table"><thead><tr><th style="background:${tableColor}">Description</th><th style="background:${tableColor};width:82px">Qty</th><th style="background:${tableColor};width:112px">Rate</th><th style="background:${tableColor};width:132px">Amount</th></tr></thead><tbody>
   ${data.items.length ? data.items.map(item=>`<tr><td>${escapeHtml(item.description)}</td><td class="num">${escapeHtml(item.qty)}</td><td class="num">${formatCurrency(item.rate)}</td><td class="num">${formatCurrency(item.amount)}</td></tr>`).join('') : '<tr><td colspan="4">Add description rows from the left panel.</td></tr>'}
   </tbody></table>
   <div class="invoice-summary">
@@ -1495,9 +1507,10 @@ function syncInvoicePreview(){
     <div class="invoice-box"><table class="invoice-total-table"><tr><td>Subtotal</td><td>${formatCurrency(data.subtotal)}</td></tr><tr><td>GST (${escapeHtml(data.gstPercent)}%)</td><td>${formatCurrency(data.gstAmount)}</td></tr><tr><td>Total Payable Amount</td><td>${formatCurrency(data.total)}</td></tr></table></div>
   </div>
   <div class="invoice-footer-grid">
-    <div class="invoice-box"><div class="invoice-box-title">Terms & Conditions</div><div class="invoice-box-body">${nl2br(data.terms || 'Payment: Full Advance')}</div><div class="invoice-box-title">Bank & Payment Details</div><div class="invoice-box-body">${nl2br(data.bankDetails || '-')}</div>${data.footerNote ? `<div class="invoice-box-body" style="border-top:1px solid #d9e6f2">${nl2br(data.footerNote)}</div>` : ''}</div>
+    <div class="invoice-box"><div class="invoice-box-title">Terms & Conditions</div><div class="invoice-box-body">${nl2br(data.terms || 'Payment: Full Advance')}</div><div class="invoice-box-title">Bank & Payment Details</div><div class="invoice-box-body">${nl2br(data.bankDetails || '-')}</div>${data.footerNote ? `<div class="invoice-box-body" style="border-top:1px solid #d9e6f2">${nl2br(data.footerNote)}</div>` : ''}${data.footerImageData ? `<img class="invoice-footer-image" src="${data.footerImageData}" alt="Invoice footer"/>` : ''}</div>
     <div class="invoice-image-box"><div class="invoice-scan-wrap"><div style="flex:1"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">Scan To Pay</div>${currentInvoiceDraft.qrData ? `<img class="invoice-qr-img" src="${currentInvoiceDraft.qrData}" alt="QR"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload QR</div>'}</div><div class="invoice-signature-area" style="flex:1.2"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">For ${escapeHtml(data.issuerName || 'Company')}</div>${currentInvoiceDraft.signatureData ? `<img class="invoice-signature-img" src="${currentInvoiceDraft.signatureData}" alt="Signature"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload Signature</div>'}<div class="invoice-signature-label">${escapeHtml(data.signatureLabel)}</div></div></div></div>
   </div>`;
+  fitInvoicePreview();
 }
 function saveInvoiceDraft(){
   const data=getInvoiceFormData();
@@ -1523,11 +1536,24 @@ function handleInvoiceImageUpload(event,type){
   const reader=new FileReader();
   reader.onload=()=>{
     currentInvoiceDraft=currentInvoiceDraft || {};
+    if(type==='header') currentInvoiceDraft.headerData=reader.result;
+    if(type==='footerImage') currentInvoiceDraft.footerImageData=reader.result;
     if(type==='signature') currentInvoiceDraft.signatureData=reader.result;
     if(type==='qr') currentInvoiceDraft.qrData=reader.result;
     syncInvoicePreview();
   };
   reader.readAsDataURL(file);
+}
+function fitInvoicePreview(){
+  const wrap=document.getElementById('invoicePreviewWrap');
+  const stage=document.getElementById('invoicePreviewStage');
+  const sheet=document.getElementById('invoicePreview');
+  if(!wrap || !stage || !sheet) return;
+  const naturalWidth=794;
+  const naturalHeight=sheet.offsetHeight || 1123;
+  const scale=Math.min(1, Math.max(0.58, (wrap.clientWidth - 8) / naturalWidth));
+  sheet.style.transform=`scale(${scale})`;
+  stage.style.height=`${naturalHeight * scale}px`;
 }
 async function downloadInvoicePdf(){
   const preview=document.getElementById('invoicePreview');
@@ -1545,6 +1571,7 @@ async function downloadInvoicePdf(){
   pdf.save(`${fileName}.pdf`);
   showToast('PDF downloaded');
 }
+window.addEventListener('resize', fitInvoicePreview);
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ RENDER ALL ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function renderAll(){

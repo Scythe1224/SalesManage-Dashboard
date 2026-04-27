@@ -654,8 +654,11 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   font-family:'Nunito',sans-serif;font-size:13px;outline:none;
 }
 .invoice-mini-input,.invoice-input{height:38px;padding:0 12px}
+.invoice-color-input{
+  width:100%;height:38px;padding:4px;border:1px solid #d6e3f1;border-radius:10px;background:#fff;cursor:pointer;
+}
 .invoice-textarea{min-height:78px;padding:10px 12px;resize:vertical}
-.invoice-mini-input:focus,.invoice-input:focus,.invoice-textarea:focus{border-color:var(--ocrm-blue);box-shadow:0 0 0 3px rgba(29,111,229,.1)}
+.invoice-mini-input:focus,.invoice-input:focus,.invoice-textarea:focus,.invoice-color-input:focus{border-color:var(--ocrm-blue);box-shadow:0 0 0 3px rgba(29,111,229,.1)}
 .invoice-editor-body{
   display:grid;grid-template-columns:minmax(360px,520px) minmax(420px,1fr);gap:18px;
   padding:18px 20px 20px;flex:1;min-height:0;overflow:auto;align-items:start;
@@ -672,9 +675,10 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-form-grid.two{grid-template-columns:1fr 1fr}
 .invoice-field{display:flex;flex-direction:column;gap:6px}
 .invoice-item-row{
-  display:grid;grid-template-columns:minmax(0,1.8fr) 88px 112px 112px 32px;gap:8px;align-items:end;
+  display:grid;grid-template-columns:minmax(0,2.7fr) 76px 110px 110px 36px;gap:8px;align-items:start;
   padding:10px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fbff;margin-bottom:8px;
 }
+.invoice-item-row .invoice-textarea{min-height:96px}
 .invoice-remove-btn{
   width:32px;height:38px;border:none;border-radius:10px;background:#fee2e2;color:#b91c1c;
   font-weight:900;cursor:pointer;
@@ -688,10 +692,15 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
   flex:1;min-height:0;overflow:auto;background:linear-gradient(180deg,#edf5ff,#f8fbff);
   border:1px solid #dbe8f7;border-radius:16px;padding:18px;
 }
-.invoice-preview-sheet{
-  width:794px;min-height:1123px;margin:0 auto;background:#fff;border-radius:6px;
-  box-shadow:0 20px 40px rgba(15,23,42,.12);padding:36px 34px;color:#111827;
+.invoice-preview-stage{
+  position:relative;width:100%;min-height:0;
 }
+.invoice-preview-sheet{
+  width:794px;min-height:1123px;background:#fff;border-radius:6px;
+  box-shadow:0 20px 40px rgba(15,23,42,.12);padding:36px 34px;color:#111827;
+  position:absolute;left:0;top:0;transform-origin:top left;
+}
+.invoice-uploaded-banner{width:100%;max-height:120px;object-fit:contain;display:block;margin-bottom:16px;border-radius:4px}
 .invoice-brand{
   display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-bottom:18px;border-bottom:2px solid #e5eef8;
 }
@@ -741,8 +750,9 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-qr-img,.invoice-signature-img{max-width:100%;max-height:120px;object-fit:contain}
 .invoice-signature-area{text-align:center}
 .invoice-signature-label{font-size:12px;font-weight:900;color:#1d4ed8;margin-top:8px}
+.invoice-footer-image{width:100%;max-height:120px;object-fit:contain;display:block;margin-top:18px;border-radius:4px}
 
 @media (max-width: 1100px){
   .invoice-editor-body{grid-template-columns:1fr}
-  .invoice-preview-sheet{width:min(794px,100%)}
+  .invoice-item-row{grid-template-columns:minmax(0,1fr) 1fr 1fr 1fr 36px}
 }
