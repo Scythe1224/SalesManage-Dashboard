@@ -1766,6 +1766,7 @@ function openSavedInvoiceById(invoiceId){
   closeSavedInvoicesModal();
   closeYearInvoicesModal();
   loadInvoiceDraft(invoice);
+  document.getElementById('invoiceEditorBackdrop')?.classList.add('open');
 }
 function editSavedInvoiceById(invoiceId){
   if(!currentUser?.isAdmin){
