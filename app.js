@@ -1754,10 +1754,12 @@ function renderInvoiceItems(items){
   const rows=(items && items.length ? items : [{ id:`item-${Date.now()}`, description:'', qty:1, rate:0, amount:0 }]);
   wrap.innerHTML=rows.map((item,index)=>`<div class="invoice-item-row">
     <label class="invoice-field invoice-field-description"><span>Description</span><input class="invoice-input invoice-description-input" type="text" value="${escapeHtml(item.description || '')}" data-item-field="description" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
-    <label class="invoice-field"><span>Qty</span><input class="invoice-input" type="number" min="0" step="1" value="${item.qty ?? 1}" data-item-field="qty" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
-    <label class="invoice-field"><span>Rate</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.rate ?? 0}" data-item-field="rate" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
-    <label class="invoice-field"><span>Amount</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.amount ?? 0}" data-item-field="amount" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
-    <button class="invoice-remove-btn" type="button" onclick="removeInvoiceItem(${index})">X</button>
+    <div class="invoice-item-meta">
+      <label class="invoice-field"><span>Qty</span><input class="invoice-input" type="number" min="0" step="1" value="${item.qty ?? 1}" data-item-field="qty" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
+      <label class="invoice-field"><span>Rate</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.rate ?? 0}" data-item-field="rate" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
+      <label class="invoice-field"><span>Amount</span><input class="invoice-input" type="number" min="0" step="0.01" value="${item.amount ?? 0}" data-item-field="amount" data-item-index="${index}" oninput="syncInvoicePreview()"/></label>
+      <button class="invoice-remove-btn" type="button" onclick="removeInvoiceItem(${index})">X</button>
+    </div>
   </div>`).join('');
 }
 function collectInvoiceItems(){
