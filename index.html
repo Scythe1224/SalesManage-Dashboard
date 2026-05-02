@@ -81,6 +81,11 @@
         Proforma Invoice
         <span class="flyout-arrow">></span>
       </div>
+      <div class="flyout-item" id="clientsInvoiceHistoryItem" onclick="openPiHistoryFromSidebar()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4h18v16H3z"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M8 14h8"/><path d="M8 18h5"/></svg>
+        PI History
+        <span class="flyout-arrow">></span>
+      </div>
     </div>
   </div>
 
@@ -880,7 +885,7 @@
       </div>
       <div class="invoice-editor-actions">
         <button class="password-btn" type="button" onclick="createAnotherInvoiceDraft()">New Invoice</button>
-        <button class="password-btn" type="button" onclick="openSavedInvoicesModal()">Saved Invoices</button>
+        <button class="password-btn" type="button" onclick="openSavedInvoicesModal()">PI History</button>
         <button class="password-btn" type="button" onclick="saveInvoiceDraft()">Save Invoice</button>
         <button class="logout-btn" type="button" onclick="downloadInvoicePdf()">Download PDF</button>
         <button class="modal-close" type="button" onclick="closeInvoiceEditor()">X</button>
@@ -1034,20 +1039,42 @@
   <div class="invoice-history-modal" onclick="event.stopPropagation()">
     <div class="add-modal-hdr" style="background:linear-gradient(135deg,#163e96,#23b7d9)">
       <div>
-        <div class="add-modal-title">Invoice History</div>
-        <div style="font-size:11px;opacity:0.82;margin-top:2px">Find saved PIs by year, client, and invoice number.</div>
+        <div class="add-modal-title">PI History</div>
+        <div style="font-size:11px;opacity:0.82;margin-top:2px">Choose a year to open its saved PI invoices.</div>
       </div>
       <button class="modal-close" style="margin-left:auto" onclick="closeSavedInvoicesModal()">X</button>
     </div>
     <div class="invoice-history-body">
       <div class="invoice-history-toolbar">
-        <div class="invoice-history-title">Saved Proforma Invoices</div>
+        <div class="invoice-history-title">Year Folders</div>
         <div class="search-box" style="width:260px">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;color:#94a3b8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="savedInvoicesSearch" placeholder="Search PI no., company, recipient..." oninput="renderSavedInvoicesList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
+        <input type="text" id="savedInvoicesSearch" placeholder="Search year, PI no., client..." oninput="renderSavedInvoicesList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
       </div>
       </div>
       <div id="savedInvoicesList" class="invoice-history-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="yearInvoicesBackdrop" onclick="closeYearInvoicesModal()">
+  <div class="invoice-history-modal" onclick="event.stopPropagation()">
+    <div class="add-modal-hdr" style="background:linear-gradient(135deg,#163e96,#23b7d9)">
+      <div>
+        <div class="add-modal-title" id="yearInvoicesTitle">PI History</div>
+        <div style="font-size:11px;opacity:0.82;margin-top:2px">Saved invoices for the selected year.</div>
+      </div>
+      <button class="modal-close" style="margin-left:auto" onclick="closeYearInvoicesModal()">X</button>
+    </div>
+    <div class="invoice-history-body">
+      <div class="invoice-history-toolbar">
+        <div class="invoice-history-title">Saved PI Invoices</div>
+        <div class="search-box" style="width:260px">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;color:#94a3b8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="yearInvoicesSearch" placeholder="Search PI no., client..." oninput="renderYearInvoicesList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
+        </div>
+      </div>
+      <div id="yearInvoicesList" class="invoice-history-list"></div>
     </div>
   </div>
 </div>

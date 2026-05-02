@@ -60,6 +60,7 @@ let currentInvoiceId=null;
 let currentInvoiceDraft=null;
 let currentInvoiceCompanySettingsId=null;
 let currentInvoiceCompanySettingsDraft=null;
+let currentInvoiceHistoryYear='';
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ HELPERS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function normalizeClient(client){
@@ -743,7 +744,8 @@ function applyPermissionVisibility(){
     clientsAddItem: userHasPermission('clients.add'),
     clientsStatusItem: userHasPermission('clients.status'),
     clientsDealItem: userHasPermission('clients.deal'),
-    clientsInvoiceItem: userHasPermission('clients.invoice')
+    clientsInvoiceItem: userHasPermission('clients.invoice'),
+    clientsInvoiceHistoryItem: userHasPermission('clients.invoice')
   };
   Object.entries(map).forEach(([id, visible])=>{
     const element=document.getElementById(id);
@@ -826,6 +828,14 @@ function openProformaInvoiceFromSidebar(){
   showPage('clients', document.getElementById('clientsNavIcon'));
   window.setTimeout(()=>{
     openInvoiceBrowser();
+  }, 60);
+}
+function openPiHistoryFromSidebar(){
+  if(!requirePermission('clients.invoice')) return;
+  closeClientsFlyout();
+  showPage('clients', document.getElementById('clientsNavIcon'));
+  window.setTimeout(()=>{
+    openSavedInvoicesModal();
   }, 60);
 }
 
@@ -1630,11 +1640,24 @@ function deleteInvoiceCompanySettings(){
   showToast('Company deleted');
 }
 function openSavedInvoicesModal(){
+  currentInvoiceHistoryYear='';
   renderSavedInvoicesList();
   document.getElementById('savedInvoicesBackdrop')?.classList.add('open');
 }
 function closeSavedInvoicesModal(){
   document.getElementById('savedInvoicesBackdrop')?.classList.remove('open');
+}
+function openYearInvoicesModal(yearKey){
+  currentInvoiceHistoryYear=yearKey;
+  const title=document.getElementById('yearInvoicesTitle');
+  if(title) title.textContent=`PI History - ${yearKey}`;
+  const search=document.getElementById('yearInvoicesSearch');
+  if(search) search.value='';
+  renderYearInvoicesList();
+  document.getElementById('yearInvoicesBackdrop')?.classList.add('open');
+}
+function closeYearInvoicesModal(){
+  document.getElementById('yearInvoicesBackdrop')?.classList.remove('open');
 }
 function renderSavedInvoicesList(){
   const list=document.getElementById('savedInvoicesList');
@@ -1660,64 +1683,129 @@ function renderSavedInvoicesList(){
   const sortedYears=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
   list.innerHTML=sortedYears.map(yearKey=>{
     const yearInvoices=groups[yearKey];
-    return `<section class="invoice-history-group">
-      <div class="invoice-history-group-hdr">
-        <div class="invoice-history-folder">${escapeHtml(yearKey)} Saved Invoices</div>
-        <span class="invoice-history-folder-badge">${yearInvoices.length} invoice${yearInvoices.length===1?'':'s'}</span>
-      </div>
-      <table class="invoice-history-table">
-        <thead>
-          <tr>
-            <th>Invoice No.</th>
-            <th>Date</th>
-            <th>Client</th>
-            <th>Taxable</th>
-            <th>Tax</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${yearInvoices.map(invoice=>{
-            const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
-            return `<tr>
-              <td><span class="invoice-history-pill">${escapeHtml(invoice.invoiceNo || invoice.id)}</span></td>
-              <td>${escapeHtml(fmtDate(invoice.invoiceDate))}</td>
-              <td><div class="invoice-history-client">${escapeHtml(invoice.recipientName || '-')}</div><div class="invoice-company-meta">${escapeHtml(company?.name || 'Company')}</div></td>
-              <td>${formatCurrency(invoice.subtotal || 0)}</td>
-              <td>${formatCurrency(invoice.gstAmount || 0)}</td>
-              <td><strong>${formatCurrency(invoice.total || 0)}</strong></td>
-              <td><span class="invoice-history-status">Saved</span></td>
-              <td>
-                <div class="invoice-history-actions">
-                  <button type="button" class="invoice-history-btn view" onclick="openSavedInvoiceById('${invoice.id}')">View</button>
-                  <button type="button" class="invoice-history-btn download" onclick="downloadSavedInvoiceById('${invoice.id}')">Download</button>
-                  <button type="button" class="invoice-history-btn edit" onclick="editSavedInvoiceById('${invoice.id}')">Edit</button>
-                </div>
-              </td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </section>`;
+    return `<button type="button" class="invoice-history-year-card" onclick="openYearInvoicesModal('${yearKey}')">
+      <span class="invoice-history-year-left">
+        <span class="invoice-history-year-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h5l2 2h11v8a2 2 0 0 1-2 2H3z"/><path d="M3 7V5a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v2"/></svg>
+        </span>
+        <span class="invoice-history-year-copy">
+          <span class="invoice-history-year-title">${escapeHtml(yearKey)}</span>
+          <span class="invoice-history-year-meta">${yearInvoices.length} saved PI invoice${yearInvoices.length===1?'':'s'}</span>
+        </span>
+      </span>
+      <span class="invoice-history-folder-badge">Open</span>
+    </button>`;
   }).join('');
+}
+function renderYearInvoicesList(){
+  const list=document.getElementById('yearInvoicesList');
+  if(!list) return;
+  const query=(document.getElementById('yearInvoicesSearch')?.value || '').trim().toLowerCase();
+  const invoices=getStoredInvoices()
+    .filter(invoice=>(invoice.invoiceYearLabel || getDefaultInvoiceYearLabel(invoice.invoiceDate))===currentInvoiceHistoryYear)
+    .sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0))
+    .filter(invoice=>{
+      if(!query) return true;
+      const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
+      return [invoice.invoiceNo, company?.name, invoice.recipientName, invoice.product]
+        .some(value=>String(value || '').toLowerCase().includes(query));
+    });
+  if(!invoices.length){
+    list.innerHTML='<div class="invoice-empty-state">No saved PI invoices found for this year.</div>';
+    return;
+  }
+  list.innerHTML=`<section class="invoice-history-group">
+    <div class="invoice-history-group-hdr">
+      <div class="invoice-history-folder">${escapeHtml(currentInvoiceHistoryYear)} Saved Invoices</div>
+      <span class="invoice-history-folder-badge">${invoices.length} invoice${invoices.length===1?'':'s'}</span>
+    </div>
+    <table class="invoice-history-table">
+      <thead>
+        <tr>
+          <th>Invoice No.</th>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Taxable</th>
+          <th>Tax</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${invoices.map(invoice=>{
+          const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
+          const adminActions=currentUser?.isAdmin ? `
+            <button type="button" class="invoice-history-btn edit" onclick="editSavedInvoiceById('${invoice.id}')">Edit</button>
+            <button type="button" class="invoice-history-btn delete" onclick="deleteSavedInvoiceById('${invoice.id}')">Delete</button>
+          ` : '';
+          return `<tr>
+            <td><span class="invoice-history-pill">${escapeHtml(invoice.invoiceNo || invoice.id)}</span></td>
+            <td>${escapeHtml(fmtDate(invoice.invoiceDate))}</td>
+            <td><div class="invoice-history-client">${escapeHtml(invoice.recipientName || '-')}</div><div class="invoice-company-meta">${escapeHtml(company?.name || 'Company')}</div></td>
+            <td>${formatCurrency(invoice.subtotal || 0)}</td>
+            <td>${formatCurrency(invoice.gstAmount || 0)}</td>
+            <td><strong>${formatCurrency(invoice.total || 0)}</strong></td>
+            <td><span class="invoice-history-status">Saved</span></td>
+            <td>
+              <div class="invoice-history-actions">
+                <button type="button" class="invoice-history-btn view" onclick="openSavedInvoiceById('${invoice.id}')">View</button>
+                <button type="button" class="invoice-history-btn download" onclick="downloadSavedInvoiceById('${invoice.id}')">Download</button>
+                ${adminActions}
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </section>`;
 }
 function openSavedInvoiceById(invoiceId){
   const invoice=getStoredInvoices().find(item=>item.id===invoiceId);
   if(!invoice) return;
   closeSavedInvoicesModal();
+  closeYearInvoicesModal();
   loadInvoiceDraft(invoice);
 }
 function editSavedInvoiceById(invoiceId){
+  if(!currentUser?.isAdmin){
+    showToast('Only admin can edit saved PI invoices');
+    return;
+  }
   openSavedInvoiceById(invoiceId);
 }
 async function downloadSavedInvoiceById(invoiceId){
   const invoice=getStoredInvoices().find(item=>item.id===invoiceId);
   if(!invoice) return;
   closeSavedInvoicesModal();
+  closeYearInvoicesModal();
   loadInvoiceDraft(invoice);
   await downloadInvoicePdf();
+}
+function deleteSavedInvoiceById(invoiceId){
+  if(!currentUser?.isAdmin){
+    showToast('Only admin can delete saved PI invoices');
+    return;
+  }
+  const password=prompt('Enter admin password to delete this PI invoice:');
+  if(password===null) return;
+  if(password!==getActivePassword()){
+    showToast('Incorrect password');
+    return;
+  }
+  const invoices=getStoredInvoices();
+  const invoice=invoices.find(item=>item.id===invoiceId);
+  if(!invoice) return;
+  const remaining=invoices.filter(item=>item.id!==invoiceId);
+  setStoredInvoices(remaining);
+  if(currentInvoiceId===invoiceId){
+    currentInvoiceId=null;
+    currentInvoiceDraft=null;
+  }
+  populateInvoiceSwitcher('', '');
+  renderSavedInvoicesList();
+  renderYearInvoicesList();
+  showToast(`${invoice.invoiceNo || 'PI invoice'} deleted`);
 }
 
 function openInvoiceBrowser(){
@@ -1946,6 +2034,10 @@ function saveInvoiceDraft(){
   if(!data.items.length){ showToast('Add at least one description row'); return false; }
   const invoices=getStoredInvoices();
   const index=invoices.findIndex(item=>item.id===data.id);
+  if(index>=0 && !currentUser?.isAdmin){
+    showToast('Only admin can modify saved PI invoices');
+    return false;
+  }
   if(index>=0) invoices[index]=data; else invoices.push(data);
   setStoredInvoices(invoices);
   const company=getInvoiceCompanyById(data.companyId);
@@ -2030,6 +2122,7 @@ document.addEventListener('keydown',e=>{
     closeInvoiceEditor();
     closeInvoiceCompanySettings();
     closeSavedInvoicesModal();
+    closeYearInvoicesModal();
     closePasswordModal();
     closeUserManagerModal();
     closeClientsFlyout();

@@ -830,6 +830,19 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-history-group{
   border:1px solid #dfeaf5;border-radius:14px;background:#f8fbff;overflow:hidden;
 }
+.invoice-history-year-card{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;
+  border:1px solid #dfeaf5;border-radius:14px;background:#f8fbff;cursor:pointer;
+  transition:border-color .15s ease,background .15s ease,transform .15s ease;
+}
+.invoice-history-year-card:hover{border-color:var(--ocrm-blue);background:#eef6ff;transform:translateY(-1px)}
+.invoice-history-year-left{display:flex;align-items:center;gap:12px;min-width:0}
+.invoice-history-year-icon{
+  width:42px;height:42px;border-radius:12px;background:#dbeafe;color:#163e96;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+.invoice-history-year-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.invoice-history-year-title{font-size:16px;font-weight:900;color:#16324a}
+.invoice-history-year-meta{font-size:12px;color:#64748b}
 .invoice-history-group-hdr{
   display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;
   background:#eef6ff;border-bottom:1px solid #dfeaf5;
@@ -862,6 +875,7 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .invoice-history-btn.view{background:#4caf50;color:#fff}
 .invoice-history-btn.download{background:#0f4cbd;color:#fff}
 .invoice-history-btn.edit{background:#eef6ff;color:#16324a;border:1px solid #d9e6f2}
+.invoice-history-btn.delete{background:#fee2e2;color:#b91c1c}
 
 @media (max-width: 1100px){
   .invoice-editor-body{grid-template-columns:1fr}
