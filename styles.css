@@ -804,6 +804,10 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 }
 .invoice-company-asset-preview img{max-width:100%;max-height:92px;object-fit:contain;display:block}
 .invoice-company-form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.invoice-empty-state{
+  border:1px dashed #c5d7eb;border-radius:12px;background:#f8fbff;padding:24px 16px;text-align:center;
+  color:#64748b;font-size:12px;font-weight:700;
+}
 
 @media (max-width: 1100px){
   .invoice-editor-body{grid-template-columns:1fr}

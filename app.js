@@ -164,6 +164,9 @@ function getDefaultInvoiceCompanies(){
     issuerAddress:'2nd Floor CYB 5, Office No. 201, Dream Heights, ITI Road, RIICO Heavy Industrial Area, Jodhpur, Rajasthan, 342003',
     bankDetails:'Payee Name: Intellidata Tech Solutions Pvt. Ltd.\nBank Account Number: 016705013444\nBank Name: ICICI Bank\nBranch Name: Jaljog Circle, Residency Road\nIFSC Code: ICIC0000167',
     signatureLabel:'Authorised Signatory',
+    invoicePrefix:'ITSPL',
+    invoiceYearLabel:'25-26',
+    nextSerial:1,
     tableColor:'#1d6fe5',
     headerData:'',
     footerImageData:'',
@@ -176,6 +179,9 @@ function getDefaultInvoiceCompanies(){
     issuerAddress:'',
     bankDetails:'',
     signatureLabel:'Authorised Signatory',
+    invoicePrefix:'RTPL',
+    invoiceYearLabel:'25-26',
+    nextSerial:2,
     tableColor:'#14b8a6',
     headerData:'',
     footerImageData:'',
@@ -228,6 +234,34 @@ function inferInvoiceCompanyId(invoice){
   if(issuer.includes('reliable')) return 'reliablesoft';
   return 'intellidata';
 }
+function padInvoiceSerial(value){
+  return String(Math.max(1, Number(value || 1))).padStart(3,'0');
+}
+function escapeRegex(value){
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+}
+function getDefaultInvoiceYearLabel(dateValue=''){
+  const baseDate=dateValue ? new Date(dateValue) : new Date();
+  if(Number.isNaN(baseDate.getTime())) return '25-26';
+  const year=baseDate.getFullYear();
+  const month=baseDate.getMonth();
+  const startYear=month >= 3 ? year : year - 1;
+  const endYear=startYear + 1;
+  return `${String(startYear).slice(-2)}-${String(endYear).slice(-2)}`;
+}
+function buildInvoiceNumber(company, dateValue=''){
+  const prefix=(company?.invoicePrefix || 'PI').trim();
+  const yearLabel=(company?.invoiceYearLabel || getDefaultInvoiceYearLabel(dateValue)).trim();
+  const serial=padInvoiceSerial(company?.nextSerial || 1);
+  return `${prefix}/${serial}/${yearLabel}`;
+}
+function extractInvoiceSerial(invoiceNo, company){
+  const prefix=(company?.invoicePrefix || '').trim();
+  const yearLabel=(company?.invoiceYearLabel || '').trim();
+  const pattern=new RegExp(`^${escapeRegex(prefix)}\\/(\\d+)\\/${escapeRegex(yearLabel)}$`,'i');
+  const match=String(invoiceNo || '').trim().match(pattern);
+  return match ? Number(match[1]) : 0;
+}
 function getInvoiceCompanyPreset(companyId, product='CNMS Onnet'){
   const company=getInvoiceCompanyById(companyId) || getStoredInvoiceCompanies()[0];
   const fallbackAccent=getThemeMeta(product).accent;
@@ -238,6 +272,9 @@ function getInvoiceCompanyPreset(companyId, product='CNMS Onnet'){
     issuerAddress:company?.issuerAddress || '',
     bankDetails:company?.bankDetails || '',
     signatureLabel:company?.signatureLabel || 'Authorised Signatory',
+    invoicePrefix:company?.invoicePrefix || 'PI',
+    invoiceYearLabel:company?.invoiceYearLabel || getDefaultInvoiceYearLabel(),
+    nextSerial:Number(company?.nextSerial || 1),
     tableColor:company?.tableColor || fallbackAccent,
     headerData:company?.headerData || '',
     footerImageData:company?.footerImageData || '',
@@ -261,18 +298,15 @@ function getInvoiceTitle(client){
 }
 function createDefaultInvoice(client){
   const now=new Date();
-  const year=String(now.getFullYear()).slice(-2);
-  const month=String(now.getMonth()+1).padStart(2,'0');
   const product=client?.product || 'CNMS Onnet';
   const opid=client?.opid || '';
-  const count=getStoredInvoices().length + 1;
   const companyDefaults=getInvoiceCompanyPreset(client?.companyId || 'intellidata', product);
   return {
     id:`inv-${Date.now()}`,
     opid,
     product,
     companyId:companyDefaults.companyId,
-    invoiceNo:`PI/${month}-${year}/${count}`,
+    invoiceNo:buildInvoiceNumber(companyDefaults, now.toISOString().split('T')[0]),
     invoiceDate:now.toISOString().split('T')[0],
     issuerTitle:'Issued By',
     issuerName:companyDefaults.issuerName,
@@ -287,6 +321,8 @@ function createDefaultInvoice(client){
     bankTitle:'Bank & Payment Details',
     bankDetails:companyDefaults.bankDetails,
     signatureLabel:companyDefaults.signatureLabel,
+    invoicePrefix:companyDefaults.invoicePrefix,
+    invoiceYearLabel:companyDefaults.invoiceYearLabel,
     items:[{
       id:`item-${Date.now()}`,
       description:`${product} onboarding`,
@@ -1410,11 +1446,15 @@ function applyInvoiceCompanySettingsToForm(companyId, preserveInvoiceMeta=true){
   const issuerAddress=document.getElementById('inv-issuer-address');
   const bank=document.getElementById('inv-bank');
   const signatureLabel=document.getElementById('inv-signature-label');
+  const invoiceNo=document.getElementById('inv-no');
+  const invoiceDate=document.getElementById('inv-date');
+  const isSavedInvoice=!!getStoredInvoices().find(item=>item.id===currentInvoiceId);
   if(issuerName) issuerName.value=preset.issuerName;
   if(issuerGstin) issuerGstin.value=preset.issuerGstin;
   if(issuerAddress) issuerAddress.value=preset.issuerAddress;
   if(bank) bank.value=preset.bankDetails;
   if(signatureLabel) signatureLabel.value=preset.signatureLabel;
+  if(invoiceNo && !isSavedInvoice) invoiceNo.value=buildInvoiceNumber(preset, invoiceDate?.value || '');
   currentInvoiceDraft={
     ...currentInvoiceDraft,
     ...preset,
@@ -1423,7 +1463,9 @@ function applyInvoiceCompanySettingsToForm(companyId, preserveInvoiceMeta=true){
     issuerGstin:preset.issuerGstin,
     issuerAddress:preset.issuerAddress,
     bankDetails:preset.bankDetails,
-    signatureLabel:preset.signatureLabel
+    signatureLabel:preset.signatureLabel,
+    invoicePrefix:preset.invoicePrefix,
+    invoiceYearLabel:preset.invoiceYearLabel
   };
   const select=document.getElementById('invoiceCompanySelect');
   if(select) select.value=preset.companyId;
@@ -1471,6 +1513,9 @@ function loadInvoiceCompanySettingsForm(companyId){
   document.getElementById('invoiceCompanyName').value=company.name || '';
   document.getElementById('invoiceCompanyIssuerName').value=company.issuerName || '';
   document.getElementById('invoiceCompanyGstin').value=company.issuerGstin || '';
+  document.getElementById('invoiceCompanyPiPrefix').value=company.invoicePrefix || 'PI';
+  document.getElementById('invoiceCompanyFyLabel').value=company.invoiceYearLabel || getDefaultInvoiceYearLabel();
+  document.getElementById('invoiceCompanyNextSerial').value=Number(company.nextSerial || 1);
   document.getElementById('invoiceCompanyAddress').value=company.issuerAddress || '';
   document.getElementById('invoiceCompanyBank').value=company.bankDetails || '';
   document.getElementById('invoiceCompanySignatureLabel').value=company.signatureLabel || 'Authorised Signatory';
@@ -1487,6 +1532,9 @@ function startNewInvoiceCompany(){
     name:'',
     issuerName:'',
     issuerGstin:'',
+    invoicePrefix:'PI',
+    invoiceYearLabel:getDefaultInvoiceYearLabel(),
+    nextSerial:1,
     issuerAddress:'',
     bankDetails:'',
     signatureLabel:'Authorised Signatory',
@@ -1498,6 +1546,9 @@ function startNewInvoiceCompany(){
   document.getElementById('invoiceCompanyName').value='';
   document.getElementById('invoiceCompanyIssuerName').value='';
   document.getElementById('invoiceCompanyGstin').value='';
+  document.getElementById('invoiceCompanyPiPrefix').value='PI';
+  document.getElementById('invoiceCompanyFyLabel').value=getDefaultInvoiceYearLabel();
+  document.getElementById('invoiceCompanyNextSerial').value='1';
   document.getElementById('invoiceCompanyAddress').value='';
   document.getElementById('invoiceCompanyBank').value='';
   document.getElementById('invoiceCompanySignatureLabel').value='Authorised Signatory';
@@ -1533,6 +1584,9 @@ function saveInvoiceCompanySettings(){
     name,
     issuerName:document.getElementById('invoiceCompanyIssuerName')?.value.trim() || name,
     issuerGstin:document.getElementById('invoiceCompanyGstin')?.value.trim() || '',
+    invoicePrefix:document.getElementById('invoiceCompanyPiPrefix')?.value.trim() || 'PI',
+    invoiceYearLabel:document.getElementById('invoiceCompanyFyLabel')?.value.trim() || getDefaultInvoiceYearLabel(),
+    nextSerial:Math.max(1, Number(document.getElementById('invoiceCompanyNextSerial')?.value || 1)),
     issuerAddress:document.getElementById('invoiceCompanyAddress')?.value.trim() || '',
     bankDetails:document.getElementById('invoiceCompanyBank')?.value.trim() || '',
     signatureLabel:document.getElementById('invoiceCompanySignatureLabel')?.value.trim() || 'Authorised Signatory',
@@ -1574,6 +1628,42 @@ function deleteInvoiceCompanySettings(){
   }
   loadInvoiceCompanySettingsForm(fallbackId);
   showToast('Company deleted');
+}
+function openSavedInvoicesModal(){
+  renderSavedInvoicesList();
+  document.getElementById('savedInvoicesBackdrop')?.classList.add('open');
+}
+function closeSavedInvoicesModal(){
+  document.getElementById('savedInvoicesBackdrop')?.classList.remove('open');
+}
+function renderSavedInvoicesList(){
+  const list=document.getElementById('savedInvoicesList');
+  if(!list) return;
+  const query=(document.getElementById('savedInvoicesSearch')?.value || '').trim().toLowerCase();
+  const invoices=getStoredInvoices()
+    .sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0))
+    .filter(invoice=>{
+      if(!query) return true;
+      const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
+      return [invoice.invoiceNo, company?.name, invoice.recipientName, invoice.product]
+        .some(value=>String(value || '').toLowerCase().includes(query));
+    });
+  list.innerHTML=invoices.length ? invoices.map(invoice=>{
+    const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
+    return `<button type="button" class="invoice-company-list-item" onclick="openSavedInvoiceById('${invoice.id}')">
+      <span class="invoice-company-swatch" style="background:${escapeHtml(invoice.tableColor || company?.tableColor || '#1d6fe5')}"></span>
+      <span class="invoice-company-copy">
+        <span class="invoice-company-name">${escapeHtml(invoice.invoiceNo || invoice.id)}</span>
+        <span class="invoice-company-meta">${escapeHtml(company?.name || 'Company')} | ${escapeHtml(invoice.recipientName || '-')} | ${escapeHtml(fmtDate(invoice.invoiceDate))}</span>
+      </span>
+    </button>`;
+  }).join('') : '<div class="invoice-empty-state">No saved invoices found.</div>';
+}
+function openSavedInvoiceById(invoiceId){
+  const invoice=getStoredInvoices().find(item=>item.id===invoiceId);
+  if(!invoice) return;
+  closeSavedInvoicesModal();
+  loadInvoiceDraft(invoice);
 }
 
 function openInvoiceBrowser(){
@@ -1725,6 +1815,8 @@ function getInvoiceFormData(){
     bankDetails:document.getElementById('inv-bank').value.trim(),
     footerNote:document.getElementById('inv-footer-note').value.trim(),
     signatureLabel:document.getElementById('inv-signature-label').value.trim() || 'Authorised Signatory',
+    invoicePrefix:currentInvoiceDraft?.invoicePrefix || getInvoiceCompanyPreset(document.getElementById('invoiceCompanySelect')?.value || 'intellidata', product).invoicePrefix,
+    invoiceYearLabel:currentInvoiceDraft?.invoiceYearLabel || getInvoiceCompanyPreset(document.getElementById('invoiceCompanySelect')?.value || 'intellidata', product).invoiceYearLabel,
     headerData:currentInvoiceDraft?.headerData || '',
     footerImageData:currentInvoiceDraft?.footerImageData || '',
     signatureData:currentInvoiceDraft?.signatureData || '',
@@ -1800,6 +1892,18 @@ function saveInvoiceDraft(){
   const index=invoices.findIndex(item=>item.id===data.id);
   if(index>=0) invoices[index]=data; else invoices.push(data);
   setStoredInvoices(invoices);
+  const company=getInvoiceCompanyById(data.companyId);
+  const serial=extractInvoiceSerial(data.invoiceNo, company);
+  if(company && serial){
+    const companies=getStoredInvoiceCompanies();
+    const companyIndex=companies.findIndex(item=>item.id===company.id);
+    if(companyIndex>=0 && Number(companies[companyIndex].nextSerial || 1) <= serial){
+      companies[companyIndex]={ ...companies[companyIndex], nextSerial: serial + 1 };
+      setStoredInvoiceCompanies(companies);
+      if(currentInvoiceCompanySettingsId===company.id) loadInvoiceCompanySettingsForm(company.id);
+      populateInvoiceCompanyOptions(data.companyId);
+    }
+  }
   currentInvoiceId=data.id;
   currentInvoiceDraft=data;
   populateInvoiceSwitcher(data.opid, data.id);
@@ -1866,6 +1970,7 @@ document.addEventListener('keydown',e=>{
     closeInvoiceBrowser();
     closeInvoiceEditor();
     closeInvoiceCompanySettings();
+    closeSavedInvoicesModal();
     closePasswordModal();
     closeUserManagerModal();
     closeClientsFlyout();

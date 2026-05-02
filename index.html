@@ -880,6 +880,7 @@
       </div>
       <div class="invoice-editor-actions">
         <button class="password-btn" type="button" onclick="createAnotherInvoiceDraft()">New Invoice</button>
+        <button class="password-btn" type="button" onclick="openSavedInvoicesModal()">Saved Invoices</button>
         <button class="password-btn" type="button" onclick="saveInvoiceDraft()">Save Invoice</button>
         <button class="logout-btn" type="button" onclick="downloadInvoicePdf()">Download PDF</button>
         <button class="modal-close" type="button" onclick="closeInvoiceEditor()">X</button>
@@ -992,6 +993,9 @@
             <label class="invoice-field"><span>Table Header Color</span><input id="invoiceCompanyTableColor" class="invoice-color-input" type="color" value="#1d6fe5"/></label>
             <label class="invoice-field"><span>Issuer Name</span><input id="invoiceCompanyIssuerName" class="invoice-input" type="text"/></label>
             <label class="invoice-field"><span>GSTIN</span><input id="invoiceCompanyGstin" class="invoice-input" type="text"/></label>
+            <label class="invoice-field"><span>PI Prefix</span><input id="invoiceCompanyPiPrefix" class="invoice-input" type="text" placeholder="ITSPL"/></label>
+            <label class="invoice-field"><span>Financial Year Label</span><input id="invoiceCompanyFyLabel" class="invoice-input" type="text" placeholder="25-26"/></label>
+            <label class="invoice-field"><span>Next PI Serial</span><input id="invoiceCompanyNextSerial" class="invoice-input" type="number" min="1" step="1" value="1"/></label>
             <label class="invoice-field" style="grid-column:1 / -1"><span>Address</span><textarea id="invoiceCompanyAddress" class="invoice-textarea"></textarea></label>
             <label class="invoice-field" style="grid-column:1 / -1"><span>Bank Details</span><textarea id="invoiceCompanyBank" class="invoice-textarea"></textarea></label>
             <label class="invoice-field"><span>Signature Label</span><input id="invoiceCompanySignatureLabel" class="invoice-input" type="text"/></label>
@@ -1022,6 +1026,25 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="savedInvoicesBackdrop" onclick="closeSavedInvoicesModal()">
+  <div class="add-modal" style="max-width:760px" onclick="event.stopPropagation()">
+    <div class="add-modal-hdr" style="background:linear-gradient(135deg,#163e96,#23b7d9)">
+      <div>
+        <div class="add-modal-title">Saved Invoices</div>
+        <div style="font-size:11px;opacity:0.82;margin-top:2px">Open any previously saved proforma invoice.</div>
+      </div>
+      <button class="modal-close" style="margin-left:auto" onclick="closeSavedInvoicesModal()">X</button>
+    </div>
+    <div class="add-modal-body" style="padding:14px 16px">
+      <div class="search-box" style="margin-bottom:12px;width:100%">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;color:#94a3b8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="savedInvoicesSearch" placeholder="Search PI no., company, recipient..." oninput="renderSavedInvoicesList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
+      </div>
+      <div id="savedInvoicesList" style="display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto"></div>
     </div>
   </div>
 </div>
