@@ -1031,20 +1031,23 @@
 </div>
 
 <div class="backdrop" id="savedInvoicesBackdrop" onclick="closeSavedInvoicesModal()">
-  <div class="add-modal" style="max-width:760px" onclick="event.stopPropagation()">
+  <div class="invoice-history-modal" onclick="event.stopPropagation()">
     <div class="add-modal-hdr" style="background:linear-gradient(135deg,#163e96,#23b7d9)">
       <div>
-        <div class="add-modal-title">Saved Invoices</div>
-        <div style="font-size:11px;opacity:0.82;margin-top:2px">Open any previously saved proforma invoice.</div>
+        <div class="add-modal-title">Invoice History</div>
+        <div style="font-size:11px;opacity:0.82;margin-top:2px">Find saved PIs by year, client, and invoice number.</div>
       </div>
       <button class="modal-close" style="margin-left:auto" onclick="closeSavedInvoicesModal()">X</button>
     </div>
-    <div class="add-modal-body" style="padding:14px 16px">
-      <div class="search-box" style="margin-bottom:12px;width:100%">
+    <div class="invoice-history-body">
+      <div class="invoice-history-toolbar">
+        <div class="invoice-history-title">Saved Proforma Invoices</div>
+        <div class="search-box" style="width:260px">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px;color:#94a3b8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="savedInvoicesSearch" placeholder="Search PI no., company, recipient..." oninput="renderSavedInvoicesList()" style="border:none;background:transparent;outline:none;font-size:12px;color:#1e293b;width:100%;font-family:'Nunito',sans-serif"/>
       </div>
-      <div id="savedInvoicesList" style="display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto"></div>
+      </div>
+      <div id="savedInvoicesList" class="invoice-history-list"></div>
     </div>
   </div>
 </div>

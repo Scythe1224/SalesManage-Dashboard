@@ -1645,25 +1645,79 @@ function renderSavedInvoicesList(){
     .filter(invoice=>{
       if(!query) return true;
       const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
-      return [invoice.invoiceNo, company?.name, invoice.recipientName, invoice.product]
+      return [invoice.invoiceNo, company?.name, invoice.recipientName, invoice.product, invoice.invoiceYearLabel]
         .some(value=>String(value || '').toLowerCase().includes(query));
     });
-  list.innerHTML=invoices.length ? invoices.map(invoice=>{
-    const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
-    return `<button type="button" class="invoice-company-list-item" onclick="openSavedInvoiceById('${invoice.id}')">
-      <span class="invoice-company-swatch" style="background:${escapeHtml(invoice.tableColor || company?.tableColor || '#1d6fe5')}"></span>
-      <span class="invoice-company-copy">
-        <span class="invoice-company-name">${escapeHtml(invoice.invoiceNo || invoice.id)}</span>
-        <span class="invoice-company-meta">${escapeHtml(company?.name || 'Company')} | ${escapeHtml(invoice.recipientName || '-')} | ${escapeHtml(fmtDate(invoice.invoiceDate))}</span>
-      </span>
-    </button>`;
-  }).join('') : '<div class="invoice-empty-state">No saved invoices found.</div>';
+  if(!invoices.length){
+    list.innerHTML='<div class="invoice-empty-state">No saved invoices found.</div>';
+    return;
+  }
+  const groups=invoices.reduce((acc, invoice)=>{
+    const yearKey=invoice.invoiceYearLabel || getDefaultInvoiceYearLabel(invoice.invoiceDate);
+    (acc[yearKey]=acc[yearKey] || []).push(invoice);
+    return acc;
+  }, {});
+  const sortedYears=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+  list.innerHTML=sortedYears.map(yearKey=>{
+    const yearInvoices=groups[yearKey];
+    return `<section class="invoice-history-group">
+      <div class="invoice-history-group-hdr">
+        <div class="invoice-history-folder">${escapeHtml(yearKey)} Saved Invoices</div>
+        <span class="invoice-history-folder-badge">${yearInvoices.length} invoice${yearInvoices.length===1?'':'s'}</span>
+      </div>
+      <table class="invoice-history-table">
+        <thead>
+          <tr>
+            <th>Invoice No.</th>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Taxable</th>
+            <th>Tax</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${yearInvoices.map(invoice=>{
+            const company=getInvoiceCompanyById(inferInvoiceCompanyId(invoice));
+            return `<tr>
+              <td><span class="invoice-history-pill">${escapeHtml(invoice.invoiceNo || invoice.id)}</span></td>
+              <td>${escapeHtml(fmtDate(invoice.invoiceDate))}</td>
+              <td><div class="invoice-history-client">${escapeHtml(invoice.recipientName || '-')}</div><div class="invoice-company-meta">${escapeHtml(company?.name || 'Company')}</div></td>
+              <td>${formatCurrency(invoice.subtotal || 0)}</td>
+              <td>${formatCurrency(invoice.gstAmount || 0)}</td>
+              <td><strong>${formatCurrency(invoice.total || 0)}</strong></td>
+              <td><span class="invoice-history-status">Saved</span></td>
+              <td>
+                <div class="invoice-history-actions">
+                  <button type="button" class="invoice-history-btn view" onclick="openSavedInvoiceById('${invoice.id}')">View</button>
+                  <button type="button" class="invoice-history-btn download" onclick="downloadSavedInvoiceById('${invoice.id}')">Download</button>
+                  <button type="button" class="invoice-history-btn edit" onclick="editSavedInvoiceById('${invoice.id}')">Edit</button>
+                </div>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </section>`;
+  }).join('');
 }
 function openSavedInvoiceById(invoiceId){
   const invoice=getStoredInvoices().find(item=>item.id===invoiceId);
   if(!invoice) return;
   closeSavedInvoicesModal();
   loadInvoiceDraft(invoice);
+}
+function editSavedInvoiceById(invoiceId){
+  openSavedInvoiceById(invoiceId);
+}
+async function downloadSavedInvoiceById(invoiceId){
+  const invoice=getStoredInvoices().find(item=>item.id===invoiceId);
+  if(!invoice) return;
+  closeSavedInvoicesModal();
+  loadInvoiceDraft(invoice);
+  await downloadInvoicePdf();
 }
 
 function openInvoiceBrowser(){
@@ -1704,7 +1758,7 @@ function populateInvoiceSwitcher(opid, selectedId=''){
   const select=document.getElementById('invoiceSelect');
   if(!select) return;
   const invoices=getStoredInvoices().sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0));
-  select.innerHTML=`<option value="draft">New Draft</option>` + invoices.map(invoice=>`<option value="${invoice.id}" ${invoice.id===selectedId?'selected':''}>${invoice.invoiceNo || invoice.id} - ${fmtDate(invoice.invoiceDate)}</option>`).join('');
+  select.innerHTML=`<option value="draft">New Draft</option>` + invoices.map(invoice=>`<option value="${invoice.id}" ${invoice.id===selectedId?'selected':''}>${escapeHtml(invoice.invoiceNo || invoice.id)} - ${escapeHtml(invoice.recipientName || 'Client')} - ${fmtDate(invoice.invoiceDate)}</option>`).join('');
 }
 function loadSelectedInvoice(value){
   if(value==='draft'){
@@ -1949,7 +2003,10 @@ async function downloadInvoicePdf(){
   const width=pdf.internal.pageSize.getWidth();
   const height=(canvas.height * width) / canvas.width;
   pdf.addImage(image,'PNG',0,0,width,height);
-  const fileName=(currentInvoiceDraft?.invoiceNo || 'proforma-invoice').replace(/[\\/:*?"<>|]+/g,'-');
+  const fileLabel=[currentInvoiceDraft?.recipientName || 'Client', currentInvoiceDraft?.invoiceNo || 'proforma-invoice']
+    .join(' - ')
+    .replace(/[\\/:*?"<>|]+/g,'-');
+  const fileName=fileLabel;
   pdf.save(`${fileName}.pdf`);
   showToast('PDF downloaded');
 }
