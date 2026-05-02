@@ -973,6 +973,33 @@
   </div>
 </div>
 
+<div class="backdrop" id="invoicePreviewBackdrop" onclick="closeInvoicePreviewModal()">
+  <div class="invoice-preview-modal" onclick="event.stopPropagation()">
+    <div class="invoice-editor-hdr">
+      <div>
+        <div style="font-size:11px;opacity:0.82;margin-bottom:3px">Proforma Invoice Preview</div>
+        <div class="invoice-editor-title" id="invoicePreviewTitle">PI Preview</div>
+      </div>
+      <div class="invoice-editor-actions">
+        <button class="logout-btn" type="button" onclick="downloadPreviewInvoice()">Download PDF</button>
+        <button class="password-btn" type="button" id="previewEditBtn" onclick="editPreviewInvoice()" hidden>Edit Invoice</button>
+        <button class="modal-close" type="button" onclick="closeInvoicePreviewModal()">X</button>
+      </div>
+    </div>
+    <div class="invoice-preview-body">
+      <div class="invoice-preview-toolbar">
+        <span>Preview</span>
+        <span id="invoicePreviewMeta"></span>
+      </div>
+      <div class="invoice-preview-wrap" id="invoicePreviewModalWrap">
+        <div class="invoice-preview-stage" id="invoicePreviewModalStage">
+          <div class="invoice-preview-sheet" id="invoicePreviewModalSheet"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="backdrop" id="invoiceCompanySettingsBackdrop" onclick="closeInvoiceCompanySettings()">
   <div class="invoice-company-modal" onclick="event.stopPropagation()">
     <div class="invoice-company-hdr">

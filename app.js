@@ -61,6 +61,7 @@ let currentInvoiceDraft=null;
 let currentInvoiceCompanySettingsId=null;
 let currentInvoiceCompanySettingsDraft=null;
 let currentInvoiceHistoryYear='';
+let currentPreviewInvoiceId=null;
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ HELPERS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function normalizeClient(client){
@@ -1765,23 +1766,73 @@ function openSavedInvoiceById(invoiceId){
   if(!invoice) return;
   closeSavedInvoicesModal();
   closeYearInvoicesModal();
-  loadInvoiceDraft(invoice);
-  document.getElementById('invoiceEditorBackdrop')?.classList.add('open');
+  openInvoicePreviewModal(invoice);
 }
 function editSavedInvoiceById(invoiceId){
   if(!currentUser?.isAdmin){
     showToast('Only admin can edit saved PI invoices');
     return;
   }
-  openSavedInvoiceById(invoiceId);
-}
-async function downloadSavedInvoiceById(invoiceId){
   const invoice=getStoredInvoices().find(item=>item.id===invoiceId);
   if(!invoice) return;
   closeSavedInvoicesModal();
   closeYearInvoicesModal();
   loadInvoiceDraft(invoice);
-  await downloadInvoicePdf();
+  document.getElementById('invoiceEditorBackdrop')?.classList.add('open');
+}
+async function downloadSavedInvoiceById(invoiceId){
+  const invoice=getStoredInvoices().find(item=>item.id===invoiceId);
+  if(!invoice) return;
+  openInvoicePreviewModal(invoice);
+  await downloadPreviewInvoice();
+}
+function openInvoicePreviewModal(invoice){
+  currentPreviewInvoiceId=invoice.id || null;
+  const sheet=document.getElementById('invoicePreviewModalSheet');
+  if(!sheet) return;
+  sheet.innerHTML=buildInvoicePreviewHtml(invoice);
+  const title=document.getElementById('invoicePreviewTitle');
+  const meta=document.getElementById('invoicePreviewMeta');
+  const editBtn=document.getElementById('previewEditBtn');
+  if(title) title.textContent=invoice.invoiceNo || 'PI Preview';
+  if(meta) meta.textContent=`${invoice.recipientName || 'Client'} - ${fmtDate(invoice.invoiceDate)}`;
+  if(editBtn) editBtn.hidden=!currentUser?.isAdmin;
+  document.getElementById('invoicePreviewBackdrop')?.classList.add('open');
+  fitInvoicePreview('invoicePreviewModalWrap','invoicePreviewModalStage','invoicePreviewModalSheet');
+}
+function closeInvoicePreviewModal(){
+  document.getElementById('invoicePreviewBackdrop')?.classList.remove('open');
+  currentPreviewInvoiceId=null;
+}
+function editPreviewInvoice(){
+  if(!currentUser?.isAdmin){
+    showToast('Only admin can edit saved PI invoices');
+    return;
+  }
+  const invoice=getStoredInvoices().find(item=>item.id===currentPreviewInvoiceId);
+  if(!invoice) return;
+  closeInvoicePreviewModal();
+  loadInvoiceDraft(invoice);
+  document.getElementById('invoiceEditorBackdrop')?.classList.add('open');
+}
+async function downloadPreviewInvoice(){
+  const invoice=getStoredInvoices().find(item=>item.id===currentPreviewInvoiceId);
+  if(!invoice) return;
+  const preview=document.getElementById('invoicePreviewModalSheet');
+  if(!preview) return;
+  if(typeof html2canvas==='undefined' || !window.jspdf?.jsPDF){ window.print(); return; }
+  const canvas=await html2canvas(preview,{ scale:2, useCORS:true, backgroundColor:'#ffffff' });
+  const image=canvas.toDataURL('image/png');
+  const { jsPDF } = window.jspdf;
+  const pdf=new jsPDF('p','pt','a4');
+  const width=pdf.internal.pageSize.getWidth();
+  const height=(canvas.height * width) / canvas.width;
+  pdf.addImage(image,'PNG',0,0,width,height);
+  const fileLabel=[invoice.recipientName || 'Client', invoice.invoiceNo || 'proforma-invoice']
+    .join(' - ')
+    .replace(/[\\/:*?"<>|]+/g,'-');
+  pdf.save(`${fileLabel}.pdf`);
+  showToast('PDF downloaded');
 }
 function deleteSavedInvoiceById(invoiceId){
   if(!currentUser?.isAdmin){
@@ -1991,17 +2042,13 @@ function amountInWords(amount){
   if(num) parts.push(threeDigits(num));
   return `${parts.join(' ').trim()} Only`;
 }
-function syncInvoicePreview(){
-  const preview=document.getElementById('invoicePreview');
-  if(!preview) return;
-  const data=getInvoiceFormData();
-  currentInvoiceDraft={...currentInvoiceDraft,...data};
+function buildInvoicePreviewHtml(data){
   const accent=data.tableColor || data.accent || getThemeMeta(data.product).accent;
   const tableColor=data.tableColor || accent;
   const brandMarkup=data.headerData
     ? `<img class="invoice-brand-banner" src="${data.headerData}" alt="Invoice header"/>`
     : `<img class="invoice-brand-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/><div class="invoice-brand-copy"><h1 style="color:${accent}">OCRM</h1><p>${escapeHtml(getInvoiceTitle({ product:data.product }))}</p></div>`;
-  preview.innerHTML=`<div class="invoice-page-main">
+  return `<div class="invoice-page-main">
   <div class="invoice-brand">
     <div class="invoice-brand-left">
       ${brandMarkup}
@@ -2014,7 +2061,7 @@ function syncInvoicePreview(){
     <div class="invoice-meta-card"><h3>Dated: ${escapeHtml(fmtDate(data.invoiceDate))}</h3><div class="meta-copy"><b>Proforma Invoice No.:</b> ${escapeHtml(data.invoiceNo || '-')}</div><div class="meta-copy"><b>Issuer GSTIN No.:</b> ${escapeHtml(data.issuerGstin || '-')}</div><div class="meta-copy"><b>Recipient GSTIN No.:</b> ${escapeHtml(data.recipientGstin || '-')}</div></div>
   </div>
   <table class="invoice-line-table"><thead><tr><th style="background:${tableColor}">Description</th><th style="background:${tableColor};width:82px">Qty</th><th style="background:${tableColor};width:112px">Rate</th><th style="background:${tableColor};width:132px">Amount</th></tr></thead><tbody>
-  ${data.items.length ? data.items.map(item=>`<tr><td>${escapeHtml(item.description)}</td><td class="num">${escapeHtml(item.qty)}</td><td class="num">${formatCurrency(item.rate)}</td><td class="num">${formatCurrency(item.amount)}</td></tr>`).join('') : '<tr><td colspan="4">Add description rows from the left panel.</td></tr>'}
+  ${data.items.length ? data.items.map(item=>`<tr><td>${escapeHtml(item.description)}</td><td class="num">${escapeHtml(item.qty)}</td><td class="num">${formatCurrency(item.rate)}</td><td class="num">${formatCurrency(item.amount)}</td></tr>`).join('') : '<tr><td colspan="4">No items added.</td></tr>'}
   </tbody></table>
   <div class="invoice-summary">
     <div class="invoice-box"><div class="invoice-box-title">Amount Chargeable (in words)</div><div class="invoice-box-body">${escapeHtml(amountInWords(data.total))}${data.notes ? `<br><br>${escapeHtml(data.notes)}` : ''}</div></div>
@@ -2022,11 +2069,18 @@ function syncInvoicePreview(){
   </div>
   <div class="invoice-footer-grid">
     <div class="invoice-box"><div class="invoice-box-title">Terms & Conditions</div><div class="invoice-box-body">${nl2br(data.terms || 'Payment: Full Advance')}</div><div class="invoice-box-title">Bank & Payment Details</div><div class="invoice-box-body">${nl2br(data.bankDetails || '-')}</div></div>
-    <div class="invoice-image-box"><div class="invoice-scan-wrap"><div style="flex:1"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">Scan To Pay</div>${currentInvoiceDraft.qrData ? `<img class="invoice-qr-img" src="${currentInvoiceDraft.qrData}" alt="QR"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload QR</div>'}</div><div class="invoice-signature-area" style="flex:1.2"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">For ${escapeHtml(data.issuerName || 'Company')}</div>${currentInvoiceDraft.signatureData ? `<img class="invoice-signature-img" src="${currentInvoiceDraft.signatureData}" alt="Signature"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">Upload Signature</div>'}<div class="invoice-signature-label">${escapeHtml(data.signatureLabel)}</div></div></div></div>
+    <div class="invoice-image-box"><div class="invoice-scan-wrap"><div style="flex:1"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">Scan To Pay</div>${data.qrData ? `<img class="invoice-qr-img" src="${data.qrData}" alt="QR"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">No QR</div>'}</div><div class="invoice-signature-area" style="flex:1.2"><div style="font-size:12px;font-weight:800;color:#16324a;margin-bottom:8px">For ${escapeHtml(data.issuerName || 'Company')}</div>${data.signatureData ? `<img class="invoice-signature-img" src="${data.signatureData}" alt="Signature"/>` : '<div style="height:120px;border:1px dashed #cbd5e1;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px">No Signature</div>'}<div class="invoice-signature-label">${escapeHtml(data.signatureLabel)}</div></div></div></div>
   </div>
   </div>
   <div class="invoice-page-footer">${data.footerNote ? `<div class="invoice-page-footer-note">${nl2br(data.footerNote)}</div>` : ''}${data.footerImageData ? `<img class="invoice-page-footer-image" src="${data.footerImageData}" alt="Invoice footer"/>` : ''}</div>`;
-  fitInvoicePreview();
+}
+function syncInvoicePreview(){
+  const preview=document.getElementById('invoicePreview');
+  if(!preview) return;
+  const data=getInvoiceFormData();
+  currentInvoiceDraft={...currentInvoiceDraft,...data};
+  preview.innerHTML=buildInvoicePreviewHtml(data);
+  fitInvoicePreview('invoicePreviewWrap','invoicePreviewStage','invoicePreview');
 }
 function saveInvoiceDraft(){
   const data=getInvoiceFormData();
@@ -2073,10 +2127,10 @@ function handleInvoiceImageUpload(event,type){
   };
   reader.readAsDataURL(file);
 }
-function fitInvoicePreview(){
-  const wrap=document.getElementById('invoicePreviewWrap');
-  const stage=document.getElementById('invoicePreviewStage');
-  const sheet=document.getElementById('invoicePreview');
+function fitInvoicePreview(wrapId='invoicePreviewWrap', stageId='invoicePreviewStage', sheetId='invoicePreview'){
+  const wrap=document.getElementById(wrapId);
+  const stage=document.getElementById(stageId);
+  const sheet=document.getElementById(sheetId);
   if(!wrap || !stage || !sheet) return;
   const naturalWidth=794;
   const naturalHeight=sheet.offsetHeight || 1123;
@@ -2121,6 +2175,7 @@ document.addEventListener('keydown',e=>{
     closeEditDealForm();
     closeInvoiceBrowser();
     closeInvoiceEditor();
+    closeInvoicePreviewModal();
     closeInvoiceCompanySettings();
     closeSavedInvoicesModal();
     closeYearInvoicesModal();
