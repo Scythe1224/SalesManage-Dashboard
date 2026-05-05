@@ -1263,6 +1263,24 @@
   </div>
 </div>
 
+<div class="backdrop" id="quotationPreviewBackdrop" onclick="closeQuotationPreviewModal()">
+  <div class="quotation-detail-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Quotation Preview</div>
+        <div class="add-modal-title" id="quotationPreviewTitle">View Quotation</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationPreviewModal()">X</button>
+    </div>
+    <div class="quotation-modal-body">
+      <iframe class="quotation-preview-embed" id="quotationPreviewFrame"></iframe>
+      <div class="quotation-builder-actions" id="quotationPreviewActions">
+        <button class="btn-cancel" type="button" onclick="closeQuotationPreviewModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="app.js"></script>
