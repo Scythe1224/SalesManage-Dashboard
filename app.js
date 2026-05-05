@@ -39,6 +39,7 @@ const PERMISSION_OPTIONS = [
   { key:'clients.status', label:'Update Status', help:'Change client deployment status' },
   { key:'clients.deal', label:'Client Deal', help:'Edit client pricing and contract details' },
   { key:'clients.invoice', label:'Proforma Invoice', help:'Create and download proforma invoices' },
+  { key:'quotation.request', label:'Quotation', help:'Request quotations and review approvals' },
   { key:'clients.delete', label:'Delete Client', help:'Delete client entries' },
   { key:'billing', label:'Billing', help:'Access billing summary' },
   { key:'reports', label:'Reports', help:'Access reports page' },
@@ -47,6 +48,17 @@ const PERMISSION_OPTIONS = [
 const DEFAULT_USER_PERMISSIONS = ['dashboard'];
 const INVOICE_STORAGE_KEY = 'intellidata-dashboard-proforma-invoices';
 const INVOICE_COMPANY_STORAGE_KEY = 'intellidata-dashboard-invoice-companies';
+const QUOTATION_STORAGE_KEY = 'salesmanage-quotation-requests';
+const QUOTATION_FIELD_STORAGE_KEY = 'salesmanage-quotation-fields';
+const QUOTATION_STATUSES = [
+  'Pending with Admin',
+  'Quotation Uploaded',
+  'Sent for Sales Approval',
+  'Correction Requested',
+  'Revised Quotation Sent',
+  'Approved by Sales',
+  'Cancelled'
+];
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ STATE ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 let currentTab='all', clientStatusFilter='all', clientSort='opid';
@@ -62,6 +74,14 @@ let currentInvoiceCompanySettingsId=null;
 let currentInvoiceCompanySettingsDraft=null;
 let currentInvoiceHistoryYear='';
 let currentPreviewInvoiceId=null;
+let currentQuotationRequestId=null;
+let currentQuotationFieldEditingId=null;
+let currentQuotationUploadRequestId=null;
+let currentQuotationCorrectionRequestId=null;
+let currentQuotationSearch='';
+let currentQuotationStatusFilter='all';
+let currentQuotationSalesFilter='all';
+let currentQuotationDateFilter='';
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ HELPERS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function normalizeClient(client){
@@ -405,9 +425,13 @@ function userHasPermission(permissionKey, user=currentUser){
 function hasAnyClientAccess(user=currentUser){
   return ['clients.view','clients.add','clients.status','clients.deal','clients.invoice','clients.delete'].some(key=>userHasPermission(key, user));
 }
+function hasQuotationAccess(user=currentUser){
+  return !!user && (user.isAdmin || userHasPermission('quotation.request', user));
+}
 function getFirstAccessiblePage(user=currentUser){
   if(userHasPermission('dashboard', user)) return 'dashboard';
   if(hasAnyClientAccess(user)) return 'clients';
+  if(hasQuotationAccess(user)) return 'quotation';
   if(userHasPermission('billing', user)) return 'billing';
   if(userHasPermission('reports', user)) return 'reports';
   if(userHasPermission('guide', user)) return 'github';
@@ -454,6 +478,7 @@ function setDashboardAccess(isAuthenticated, userId=''){
 function initializeLogin(){
   ensureSeedUsers();
   ensureSeedInvoiceCompanies();
+  ensureSeedQuotationFields();
   const loginForm=document.getElementById('loginForm');
   const loginUserId=document.getElementById('loginUserId');
   const loginPassword=document.getElementById('loginPassword');
@@ -738,6 +763,7 @@ function applyPermissionVisibility(){
   const map = {
     navDashboard: userHasPermission('dashboard'),
     clientsFlyoutWrap: hasAnyClientAccess(),
+    navQuotation: hasQuotationAccess(),
     navBilling: userHasPermission('billing'),
     navReports: userHasPermission('reports'),
     navGuide: userHasPermission('guide'),
@@ -757,6 +783,7 @@ function setActivePage(id){
   const navMap = {
     dashboard: document.getElementById('navDashboard'),
     clients: document.getElementById('clientsNavIcon'),
+    quotation: document.getElementById('navQuotation'),
     billing: document.getElementById('navBilling'),
     reports: document.getElementById('navReports'),
     github: document.getElementById('navGuide')
@@ -786,12 +813,17 @@ function showPage(id,el){
   const pagePermissionMap = {
     dashboard:'dashboard',
     clients:'clients.view',
+    quotation:'quotation.request',
     billing:'billing',
     reports:'reports',
     github:'guide'
   };
   const requiredPermission=pagePermissionMap[id];
-  if(requiredPermission && !userHasPermission(requiredPermission) && !(id==='clients' && hasAnyClientAccess())){
+  const hasAccess = !requiredPermission
+    || userHasPermission(requiredPermission)
+    || (id==='clients' && hasAnyClientAccess())
+    || (id==='quotation' && hasQuotationAccess());
+  if(!hasAccess){
     showToast('Access denied');
     return;
   }
@@ -800,6 +832,7 @@ function showPage(id,el){
   document.querySelectorAll('.nav-icon').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
   if(id==='clients') renderClientsTable();
+  if(id==='quotation') renderQuotationPage();
   if(id==='billing') renderBillingPage();
 }
 function showSubTab(el){
@@ -2160,10 +2193,204 @@ async function downloadInvoicePdf(){
 window.addEventListener('resize', fitInvoicePreview);
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ RENDER ALL ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+function getDefaultQuotationFields(){
+  return [
+    { id:'qf-client-name', label:'Client Name', type:'text', required:true, placeholder:'Enter client name', options:[], order:1 },
+    { id:'qf-contact-person', label:'Contact Person', type:'text', required:true, placeholder:'Enter contact person', options:[], order:2 },
+    { id:'qf-email', label:'Client Email', type:'email', required:false, placeholder:'Enter email address', options:[], order:3 },
+    { id:'qf-product', label:'Product', type:'dropdown', required:true, placeholder:'Select product', options:['CNMS Onnet','NetManazer','IPTV'], order:4 },
+    { id:'qf-qty', label:'Required Quantity', type:'number', required:true, placeholder:'Enter quantity', options:[], order:5 },
+    { id:'qf-target-date', label:'Expected Closure Date', type:'date', required:false, placeholder:'', options:[], order:6 },
+    { id:'qf-scope', label:'Requirement Summary', type:'textarea', required:true, placeholder:'Enter quotation scope and pricing notes', options:[], order:7 }
+  ];
+}
+function getStoredQuotationFields(){
+  try{
+    const raw=localStorage.getItem(QUOTATION_FIELD_STORAGE_KEY);
+    const parsed=raw ? JSON.parse(raw) : [];
+    if(!Array.isArray(parsed) || !parsed.length) return getDefaultQuotationFields();
+    return parsed.map((field,index)=>({
+      id:field.id || `qf-${Date.now()}-${index}`,
+      label:field.label || `Field ${index + 1}`,
+      type:field.type || 'text',
+      required:!!field.required,
+      placeholder:field.placeholder || '',
+      options:Array.isArray(field.options) ? field.options : [],
+      order:Number(field.order || index + 1)
+    })).sort((a,b)=>a.order-b.order);
+  }catch(_err){
+    return getDefaultQuotationFields();
+  }
+}
+function setStoredQuotationFields(fields){
+  try{
+    localStorage.setItem(QUOTATION_FIELD_STORAGE_KEY, JSON.stringify(fields));
+  }catch(_err){
+    showToast('Quotation form fields could not be saved');
+  }
+}
+function ensureSeedQuotationFields(){
+  const fields=getStoredQuotationFields();
+  setStoredQuotationFields(fields);
+}
+function makeQuotationFieldId(label='field'){
+  const base=String(label).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') || `field-${Date.now()}`;
+  let candidate=`qf-${base}`;
+  let i=2;
+  const fields=getStoredQuotationFields();
+  while(fields.some(field=>field.id===candidate && field.id!==currentQuotationFieldEditingId)){
+    candidate=`qf-${base}-${i++}`;
+  }
+  return candidate;
+}
+function getStoredQuotationRequests(){
+  try{
+    const raw=localStorage.getItem(QUOTATION_STORAGE_KEY);
+    const parsed=raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(_err){
+    return [];
+  }
+}
+function setStoredQuotationRequests(requests){
+  try{
+    localStorage.setItem(QUOTATION_STORAGE_KEY, JSON.stringify(requests));
+  }catch(_err){
+    showToast('Quotation requests could not be saved');
+  }
+}
+function getNextQuotationRequestId(){
+  const requests=getStoredQuotationRequests();
+  const seq=requests.reduce((best,request)=>Math.max(best, Number(request.seq || 0)), 0) + 1;
+  return { seq, requestId:`QT-${String(seq).padStart(4,'0')}` };
+}
+function quotationStatusClass(status=''){
+  if(status==='Pending with Admin' || status==='Quotation Uploaded') return 'pending';
+  if(status==='Sent for Sales Approval' || status==='Revised Quotation Sent') return 'sent';
+  if(status==='Correction Requested') return 'correction';
+  if(status==='Approved by Sales') return 'approved';
+  if(status==='Cancelled') return 'cancelled';
+  return '';
+}
+function formatDateTime(value){
+  if(!value) return '-';
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString('en-IN',{ day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function getQuotationClientName(request){
+  const fields=getStoredQuotationFields();
+  const clientField=fields.find(field=>/client/i.test(field.label) && /name/i.test(field.label));
+  const value=clientField ? request?.values?.[clientField.id] : '';
+  return String(value || request?.clientName || '-').trim() || '-';
+}
+function readFileAsDataUrl(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(new Error('read-failed'));
+    reader.readAsDataURL(file);
+  });
+}
+function getQuotationRequestsForCurrentUser(){
+  const requests=getStoredQuotationRequests().sort((a,b)=>new Date(b.updatedAt || b.createdAt || 0)-new Date(a.updatedAt || a.createdAt || 0));
+  if(currentUser?.isAdmin) return requests;
+  return requests.filter(request=>normalizeUserId(request.salesUserId)===normalizeUserId(currentUser?.userId));
+}
+function getQuotationNotificationCounts(){
+  const requests=getStoredQuotationRequests();
+  const adminCount=requests.filter(request=>request.adminUnread).length;
+  const salesCount=requests.filter(request=>Array.isArray(request.salesUnreadFor) && request.salesUnreadFor.includes(normalizeUserId(currentUser?.userId))).length;
+  return { adminCount, salesCount, total:currentUser?.isAdmin ? adminCount : salesCount };
+}
+function updateQuotationNotifications(){
+  const counts=getQuotationNotificationCounts();
+  const navBadge=document.getElementById('quotationNavBadge');
+  const topBadge=document.getElementById('topNotificationCount');
+  if(navBadge){
+    navBadge.hidden=!counts.total;
+    navBadge.textContent=String(counts.total || 0);
+  }
+  if(topBadge){
+    topBadge.hidden=!counts.total;
+    topBadge.textContent=String(counts.total || 0);
+  }
+}
+function getUniqueQuotationSalesPeople(){
+  return Array.from(new Set(getStoredQuotationRequests().map(request=>request.salesPerson).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+}
+function filterQuotationRequests(requests){
+  return requests.filter(request=>{
+    const clientName=getQuotationClientName(request).toLowerCase();
+    const matchesSearch=!currentQuotationSearch || clientName.includes(currentQuotationSearch.toLowerCase());
+    const matchesStatus=currentQuotationStatusFilter==='all' || request.status===currentQuotationStatusFilter;
+    const matchesSales=currentQuotationSalesFilter==='all' || request.salesPerson===currentQuotationSalesFilter;
+    const matchesDate=!currentQuotationDateFilter || String(request.createdAt || '').slice(0,10)===currentQuotationDateFilter;
+    return matchesSearch && matchesStatus && matchesSales && matchesDate;
+  });
+}
+function setQuotationFilterValue(key, value){
+  if(key==='search') currentQuotationSearch=value;
+  if(key==='status') currentQuotationStatusFilter=value;
+  if(key==='sales') currentQuotationSalesFilter=value;
+  if(key==='date') currentQuotationDateFilter=value;
+  renderQuotationPage();
+}
+function resetQuotationFilters(){
+  currentQuotationSearch='';
+  currentQuotationStatusFilter='all';
+  currentQuotationSalesFilter='all';
+  currentQuotationDateFilter='';
+  renderQuotationPage();
+}
+function setQuotationRequestsAndRefresh(requests){
+  setStoredQuotationRequests(requests);
+  updateQuotationNotifications();
+  if(document.getElementById('page-quotation')?.classList.contains('active-page')) renderQuotationPage();
+}
+function createQuotationHistoryEntry(status, note=''){
+  return { at:new Date().toISOString(), by:currentUser?.userId || 'System', status, note };
+}
+function renderQuotationPage(){
+  const root=document.getElementById('quotationPageRoot');
+  if(!root) return;
+  const allRequests=getQuotationRequestsForCurrentUser();
+  const filtered=filterQuotationRequests(allRequests);
+  const counts={ total:allRequests.length, pending:allRequests.filter(request=>['Pending with Admin','Quotation Uploaded'].includes(request.status)).length, sent:allRequests.filter(request=>['Sent for Sales Approval','Revised Quotation Sent'].includes(request.status)).length, approved:allRequests.filter(request=>request.status==='Approved by Sales').length };
+  const salesOptions=getUniqueQuotationSalesPeople();
+  root.innerHTML=`<div class="quotation-shell"><section class="quotation-hero"><div class="quotation-hero-copy"><h2>Quotation</h2><p>${currentUser?.isAdmin ? 'Manage quotation requests, upload PDFs, and drive the approval loop.' : 'Request quotations and review prepared PDFs before they go to clients.'}</p></div><div class="quotation-hero-actions">${hasQuotationAccess() && !currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationRequestModal()">Request Quotation</button>` : ''}${currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationFieldBuilderModal()">Form Builder</button>` : ''}</div></section><section class="quotation-stats"><div class="quotation-stat-card"><div class="quotation-stat-label">Total Requests</div><div class="quotation-stat-value">${counts.total}</div><div class="quotation-stat-note">All visible quotation requests</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Pending</div><div class="quotation-stat-value">${counts.pending}</div><div class="quotation-stat-note">Waiting on admin work</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Awaiting Sales</div><div class="quotation-stat-value">${counts.sent}</div><div class="quotation-stat-note">Ready for approval or correction</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Approved</div><div class="quotation-stat-value">${counts.approved}</div><div class="quotation-stat-note">Approved by sales users</div></div></section><section class="table-card"><div class="table-toolbar"><div class="table-toolbar-title">${currentUser?.isAdmin ? 'Quotation Requests' : 'My Quotation Requests'}</div></div><div class="quotation-modal-body" style="padding-top:0"><div class="quotation-toolbar"><div class="quotation-filter-field"><label for="quotationSearch">Search Client</label><input id="quotationSearch" class="invoice-input" type="text" value="${escapeHtml(currentQuotationSearch)}" placeholder="Search by client name" oninput="setQuotationFilterValue('search', this.value)"/></div><div class="quotation-filter-field"><label for="quotationStatusFilter">Status</label><select id="quotationStatusFilter" class="invoice-input" onchange="setQuotationFilterValue('status', this.value)"><option value="all">All Statuses</option>${QUOTATION_STATUSES.map(status=>`<option value="${escapeHtml(status)}" ${currentQuotationStatusFilter===status?'selected':''}>${escapeHtml(status)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationSalesFilter">Sales Person</label><select id="quotationSalesFilter" class="invoice-input" onchange="setQuotationFilterValue('sales', this.value)"><option value="all">All Sales Users</option>${salesOptions.map(name=>`<option value="${escapeHtml(name)}" ${currentQuotationSalesFilter===name?'selected':''}>${escapeHtml(name)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationDateFilter">Date</label><input id="quotationDateFilter" class="invoice-input" type="date" value="${escapeHtml(currentQuotationDateFilter)}" onchange="setQuotationFilterValue('date', this.value)"/></div><div class="quotation-filter-field" style="justify-content:flex-end"><label>&nbsp;</label><button class="quotation-action-btn secondary" type="button" onclick="resetQuotationFilters()">Clear Filters</button></div></div>${filtered.length ? `<div style="overflow-x:auto;margin-top:16px"><table class="quotation-page-table"><thead><tr><th>Request ID</th><th>Sales Person</th><th>Client Name</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(request=>`<tr><td><strong>${escapeHtml(request.requestId)}</strong></td><td>${escapeHtml(request.salesPerson || '-')}</td><td>${escapeHtml(getQuotationClientName(request))}</td><td>${escapeHtml(fmtDate(request.createdAt))}</td><td><span class="quotation-chip ${quotationStatusClass(request.status)}">${escapeHtml(request.status)}</span></td><td><div class="quotation-actions"><button class="quotation-action-btn secondary" type="button" onclick="openQuotationDetailModal('${request.id}')">View</button>${currentUser?.isAdmin ? `<button class="quotation-action-btn primary" type="button" onclick="openQuotationUploadModal('${request.id}')">Upload PDF</button>` : ''}${currentUser?.isAdmin ? `<button class="quotation-action-btn secondary" type="button" onclick="markQuotationCancelled('${request.id}')">Cancel</button>` : ''}</div></td></tr>`).join('')}</tbody></table></div>` : `<div class="quotation-empty">No quotation requests match the selected filters.</div>`}</div></section></div>`;
+  updateQuotationNotifications();
+}
+function renderQuotationFieldControl(field, value=''){ const safeLabel=escapeHtml(field.label); const safePlaceholder=escapeHtml(field.placeholder || ''); const required=field.required ? 'required' : ''; if(field.type==='textarea') return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><textarea class="invoice-textarea" data-field-id="${field.id}" placeholder="${safePlaceholder}" ${required}>${escapeHtml(value)}</textarea></div>`; if(field.type==='dropdown') return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><select class="invoice-input" data-field-id="${field.id}" ${required}><option value="">Select ${safeLabel}</option>${(field.options || []).map(option=>`<option value="${escapeHtml(option)}" ${String(value)===String(option)?'selected':''}>${escapeHtml(option)}</option>`).join('')}</select></div>`; if(field.type==='file') return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><input class="invoice-input" data-field-id="${field.id}" type="file" ${required}/></div>`; const type=field.type==='number' ? 'number' : field.type==='email' ? 'email' : field.type==='date' ? 'date' : 'text'; return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><input class="invoice-input" data-field-id="${field.id}" type="${type}" value="${escapeHtml(value)}" placeholder="${safePlaceholder}" ${required}/></div>`; }
+function openQuotationRequestModal(){ if(!hasQuotationAccess() || currentUser?.isAdmin) return; const form=document.getElementById('quotationRequestForm'); if(!form) return; form.innerHTML=`${getStoredQuotationFields().map(field=>renderQuotationFieldControl(field)).join('')}<div class="quotation-builder-actions"><button class="btn-cancel" type="button" onclick="closeQuotationRequestModal()">Cancel</button><button class="btn-save" type="button" onclick="submitQuotationRequest()">Submit Request</button></div>`; document.getElementById('quotationRequestTitle').textContent='Request Quotation'; document.getElementById('quotationRequestBackdrop')?.classList.add('open'); }
+function closeQuotationRequestModal(){ document.getElementById('quotationRequestBackdrop')?.classList.remove('open'); }
+async function submitQuotationRequest(){ const fields=getStoredQuotationFields(); const form=document.getElementById('quotationRequestForm'); if(!form) return; const values={}; for(const field of fields){ const control=form.querySelector(`[data-field-id="${field.id}"]`); if(!control) continue; if(field.type==='file'){ const file=control.files?.[0]; if(field.required && !file){ showToast(`${field.label} is required`); return; } if(file) values[field.id]={ name:file.name, dataUrl:await readFileAsDataUrl(file) }; }else{ const raw=String(control.value || '').trim(); if(field.required && !raw){ showToast(`${field.label} is required`); control.focus(); return; } if(field.type==='email' && raw && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)){ showToast(`Enter a valid email for ${field.label}`); control.focus(); return; } values[field.id]=raw; } } const next=getNextQuotationRequestId(); const now=new Date().toISOString(); const request={ id:`quotation-${Date.now()}`, seq:next.seq, requestId:next.requestId, salesUserId:currentUser.userId, salesPerson:currentUser.userId, clientName:getQuotationClientName({ values }), createdAt:now, updatedAt:now, status:'Pending with Admin', values, quotationPdfData:'', quotationPdfName:'', quotationPdfUploadedAt:'', correctionHistory:[], history:[createQuotationHistoryEntry('Pending with Admin','Quotation request submitted')], adminUnread:true, salesUnreadFor:[] }; const requests=getStoredQuotationRequests(); requests.unshift(request); setQuotationRequestsAndRefresh(requests); closeQuotationRequestModal(); showToast('Quotation request submitted'); }
+function openQuotationFieldBuilderModal(){ if(!currentUser?.isAdmin) return; renderQuotationFieldList(); resetQuotationFieldForm(); document.getElementById('quotationFieldBackdrop')?.classList.add('open'); }
+function closeQuotationFieldBuilderModal(){ document.getElementById('quotationFieldBackdrop')?.classList.remove('open'); }
+function renderQuotationFieldList(){ const list=document.getElementById('quotationFieldList'); if(!list) return; const fields=getStoredQuotationFields(); list.innerHTML=fields.map((field,index)=>`<div class="quotation-field-card"><div class="quotation-field-order">${index + 1}</div><div class="quotation-field-copy"><strong>${escapeHtml(field.label)}</strong><span>${escapeHtml(field.type)}${field.required ? ' • required' : ''}</span></div><div class="quotation-field-card-actions"><button class="quotation-mini-btn" type="button" onclick="moveQuotationField('${field.id}', -1)">Up</button><button class="quotation-mini-btn" type="button" onclick="moveQuotationField('${field.id}', 1)">Down</button><button class="quotation-mini-btn" type="button" onclick="editQuotationField('${field.id}')">Edit</button><button class="quotation-mini-btn delete" type="button" onclick="deleteQuotationField('${field.id}')">Delete</button></div></div>`).join(''); }
+function startQuotationFieldCreate(){ currentQuotationFieldEditingId=null; resetQuotationFieldForm(); }
+function resetQuotationFieldForm(){ currentQuotationFieldEditingId=null; const title=document.getElementById('quotationFieldFormTitle'); if(title) title.textContent='New Field'; ['quotationFieldLabel','quotationFieldPlaceholder','quotationFieldOptions'].forEach(id=>{ const element=document.getElementById(id); if(element) element.value=''; }); const type=document.getElementById('quotationFieldType'); const required=document.getElementById('quotationFieldRequired'); if(type) type.value='text'; if(required) required.checked=false; handleQuotationFieldTypeChange(); }
+function handleQuotationFieldTypeChange(){ const type=document.getElementById('quotationFieldType')?.value || 'text'; const wrap=document.getElementById('quotationFieldOptionsWrap'); if(wrap) wrap.hidden=type!=='dropdown'; }
+function editQuotationField(fieldId){ const field=getStoredQuotationFields().find(item=>item.id===fieldId); if(!field) return; currentQuotationFieldEditingId=field.id; document.getElementById('quotationFieldFormTitle').textContent='Edit Field'; document.getElementById('quotationFieldLabel').value=field.label; document.getElementById('quotationFieldType').value=field.type; document.getElementById('quotationFieldPlaceholder').value=field.placeholder || ''; document.getElementById('quotationFieldRequired').checked=!!field.required; document.getElementById('quotationFieldOptions').value=(field.options || []).join('\n'); handleQuotationFieldTypeChange(); }
+function saveQuotationFieldDefinition(){ const label=document.getElementById('quotationFieldLabel')?.value.trim(); const type=document.getElementById('quotationFieldType')?.value || 'text'; const placeholder=document.getElementById('quotationFieldPlaceholder')?.value || ''; const required=!!document.getElementById('quotationFieldRequired')?.checked; const optionsRaw=document.getElementById('quotationFieldOptions')?.value || ''; if(!label){ showToast('Field label is required'); return; } const options=type==='dropdown' ? optionsRaw.split('\n').map(option=>option.trim()).filter(Boolean) : []; if(type==='dropdown' && !options.length){ showToast('Add at least one dropdown option'); return; } const fields=getStoredQuotationFields(); const field={ id:currentQuotationFieldEditingId || makeQuotationFieldId(label), label, type, required, placeholder, options, order:currentQuotationFieldEditingId ? (fields.find(item=>item.id===currentQuotationFieldEditingId)?.order || fields.length + 1) : fields.length + 1 }; const nextFields=currentQuotationFieldEditingId ? fields.map(item=>item.id===currentQuotationFieldEditingId ? field : item) : [...fields, field]; setStoredQuotationFields(nextFields.sort((a,b)=>a.order-b.order).map((item,index)=>({ ...item, order:index + 1 }))); renderQuotationFieldList(); resetQuotationFieldForm(); showToast('Quotation form updated'); }
+function moveQuotationField(fieldId, direction){ const fields=getStoredQuotationFields(); const index=fields.findIndex(field=>field.id===fieldId); const target=index + direction; if(index<0 || target<0 || target>=fields.length) return; const clone=[...fields]; [clone[index], clone[target]]=[clone[target], clone[index]]; setStoredQuotationFields(clone.map((field,idx)=>({ ...field, order:idx + 1 }))); renderQuotationFieldList(); }
+function deleteQuotationField(fieldId){ const fields=getStoredQuotationFields(); if(fields.length===1){ showToast('At least one field is required'); return; } const next=fields.filter(field=>field.id!==fieldId).map((field,index)=>({ ...field, order:index + 1 })); setStoredQuotationFields(next); if(currentQuotationFieldEditingId===fieldId) resetQuotationFieldForm(); renderQuotationFieldList(); showToast('Field deleted'); }
+function openQuotationDetailModal(requestId){ const requests=getStoredQuotationRequests(); const request=requests.find(item=>item.id===requestId); if(!request) return; currentQuotationRequestId=requestId; if(currentUser?.isAdmin) request.adminUnread=false; else request.salesUnreadFor=(request.salesUnreadFor || []).filter(userId=>userId!==normalizeUserId(currentUser?.userId)); setQuotationRequestsAndRefresh(requests); const body=document.getElementById('quotationDetailBody'); const title=document.getElementById('quotationDetailTitle'); if(title) title.textContent=`${request.requestId} • ${getQuotationClientName(request)}`; if(body){ const fields=getStoredQuotationFields(); body.innerHTML=`<div class="quotation-request-meta"><div class="quotation-meta-card"><div class="k">Request ID</div><div class="v">${escapeHtml(request.requestId)}</div></div><div class="quotation-meta-card"><div class="k">Sales Person</div><div class="v">${escapeHtml(request.salesPerson)}</div></div><div class="quotation-meta-card"><div class="k">Submitted</div><div class="v">${escapeHtml(formatDateTime(request.createdAt))}</div></div><div class="quotation-meta-card"><div class="k">Status</div><div class="v"><span class="quotation-chip ${quotationStatusClass(request.status)}">${escapeHtml(request.status)}</span></div></div></div><div class="quotation-detail-grid"><div class="quotation-detail-card"><div class="quotation-section-title" style="margin-bottom:10px">Request Details</div><div class="quotation-request-values">${fields.map(field=>{ const raw=request.values?.[field.id]; const value=field.type==='file' ? (raw?.name ? `<span class="quotation-file-pill">${escapeHtml(raw.name)}</span>` : '-') : nl2br(raw || '-'); return `<div class="quotation-request-value ${field.type==='textarea' ? 'full' : ''}"><div class="k">${escapeHtml(field.label)}</div><div class="v">${value}</div></div>`; }).join('')}</div><div class="quotation-section-title" style="margin:18px 0 10px">Correction History</div><div class="quotation-history">${request.correctionHistory?.length ? request.correctionHistory.map(item=>`<div class="quotation-history-item"><div class="top"><span>${escapeHtml(item.by)}</span><span>${escapeHtml(formatDateTime(item.at))}</span></div><div class="body">${nl2br(item.remarks)}</div></div>`).join('') : '<div class="quotation-empty" style="padding:18px">No correction remarks yet.</div>'}</div></div><div class="quotation-detail-card"><div class="quotation-section-title" style="margin-bottom:10px">Quotation PDF</div>${request.quotationPdfData ? `<iframe class="quotation-preview-embed" src="${request.quotationPdfData}"></iframe>` : '<div class="quotation-empty">No quotation PDF uploaded yet.</div>'}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">${currentUser?.isAdmin ? `<button class="quotation-action-btn primary" type="button" onclick="openQuotationUploadModal('${request.id}')">${request.quotationPdfData ? 'Upload Revised PDF' : 'Upload PDF'}</button>` : ''}${!currentUser?.isAdmin && ['Sent for Sales Approval','Revised Quotation Sent'].includes(request.status) ? `<button class="quotation-action-btn primary" type="button" onclick="approveQuotationRequest('${request.id}')">Approve Quotation</button><button class="quotation-action-btn warn" type="button" onclick="openQuotationCorrectionModal('${request.id}')">Request Correction</button>` : ''}</div>${!currentUser?.isAdmin && request.quotationPdfData ? `<div class="quotation-empty" style="padding:14px 0 0;text-align:left">Quotation has been prepared. Please approve or request correction.</div>` : ''}<div class="quotation-section-title" style="margin:18px 0 10px">Activity</div><div class="quotation-history">${(request.history || []).slice().reverse().map(item=>`<div class="quotation-history-item"><div class="top"><span>${escapeHtml(item.status)}</span><span>${escapeHtml(formatDateTime(item.at))}</span></div><div class="body">${nl2br(item.note || item.by)}</div></div>`).join('')}</div></div></div>`; } document.getElementById('quotationDetailBackdrop')?.classList.add('open'); }
+function closeQuotationDetailModal(){ document.getElementById('quotationDetailBackdrop')?.classList.remove('open'); }
+function openQuotationUploadModal(requestId){ if(!currentUser?.isAdmin) return; currentQuotationUploadRequestId=requestId; const file=document.getElementById('quotationPdfFile'); const note=document.getElementById('quotationUploadNote'); if(file) file.value=''; if(note) note.value=''; document.getElementById('quotationUploadBackdrop')?.classList.add('open'); }
+function closeQuotationUploadModal(){ document.getElementById('quotationUploadBackdrop')?.classList.remove('open'); }
+async function saveQuotationPdfUpload(){ if(!currentUser?.isAdmin || !currentQuotationUploadRequestId) return; const fileInput=document.getElementById('quotationPdfFile'); const note=document.getElementById('quotationUploadNote')?.value.trim() || ''; const file=fileInput?.files?.[0]; if(!file){ showToast('Select a quotation PDF to upload'); return; } if(file.type && file.type!=='application/pdf'){ showToast('Please upload a PDF file'); return; } const pdfData=await readFileAsDataUrl(file); const requests=getStoredQuotationRequests().map(request=>{ if(request.id!==currentQuotationUploadRequestId) return request; const nextStatus='Quotation Uploaded'; return { ...request, quotationPdfData:pdfData, quotationPdfName:file.name, quotationPdfUploadedAt:new Date().toISOString(), status:nextStatus, updatedAt:new Date().toISOString(), history:[...(request.history || []), createQuotationHistoryEntry(nextStatus, note || `${file.name} uploaded`)], adminUnread:false }; }); setQuotationRequestsAndRefresh(requests); closeQuotationUploadModal(); if(document.getElementById('quotationDetailBackdrop')?.classList.contains('open') && currentQuotationRequestId) openQuotationDetailModal(currentQuotationRequestId); showToast('Quotation PDF uploaded'); }
+function sendQuotationForApproval(){ if(!currentUser?.isAdmin || !currentQuotationUploadRequestId) return; let blocked=false; const requests=getStoredQuotationRequests().map(request=>{ if(request.id!==currentQuotationUploadRequestId) return request; if(!request.quotationPdfData){ blocked=true; return request; } const nextStatus=request.status==='Correction Requested' ? 'Revised Quotation Sent' : 'Sent for Sales Approval'; return { ...request, status:nextStatus, updatedAt:new Date().toISOString(), adminUnread:false, salesUnreadFor:[normalizeUserId(request.salesUserId)], history:[...(request.history || []), createQuotationHistoryEntry(nextStatus,'Quotation shared with sales for approval')] }; }); if(blocked){ showToast('Upload the quotation PDF first'); return; } setQuotationRequestsAndRefresh(requests); closeQuotationUploadModal(); if(document.getElementById('quotationDetailBackdrop')?.classList.contains('open') && currentQuotationRequestId) openQuotationDetailModal(currentQuotationRequestId); showToast('Quotation sent for sales approval'); }
+function openQuotationCorrectionModal(requestId){ currentQuotationCorrectionRequestId=requestId; const remarks=document.getElementById('quotationCorrectionRemarks'); if(remarks) remarks.value=''; document.getElementById('quotationCorrectionBackdrop')?.classList.add('open'); }
+function closeQuotationCorrectionModal(){ document.getElementById('quotationCorrectionBackdrop')?.classList.remove('open'); }
+function submitQuotationCorrection(){ if(!currentQuotationCorrectionRequestId) return; const remarks=document.getElementById('quotationCorrectionRemarks')?.value.trim() || ''; if(!remarks){ showToast('Enter correction remarks'); return; } const now=new Date().toISOString(); const requests=getStoredQuotationRequests().map(request=>{ if(request.id!==currentQuotationCorrectionRequestId) return request; return { ...request, status:'Correction Requested', updatedAt:now, adminUnread:true, salesUnreadFor:[], correctionHistory:[...(request.correctionHistory || []), { at:now, by:currentUser?.userId || 'Sales', remarks }], history:[...(request.history || []), createQuotationHistoryEntry('Correction Requested', remarks)] }; }); setQuotationRequestsAndRefresh(requests); closeQuotationCorrectionModal(); if(document.getElementById('quotationDetailBackdrop')?.classList.contains('open') && currentQuotationRequestId) openQuotationDetailModal(currentQuotationRequestId); showToast('Correction requested'); }
+function approveQuotationRequest(requestId){ const requests=getStoredQuotationRequests().map(request=>{ if(request.id!==requestId) return request; return { ...request, status:'Approved by Sales', updatedAt:new Date().toISOString(), adminUnread:true, salesUnreadFor:[], history:[...(request.history || []), createQuotationHistoryEntry('Approved by Sales','Sales approved the quotation')] }; }); setQuotationRequestsAndRefresh(requests); if(document.getElementById('quotationDetailBackdrop')?.classList.contains('open') && currentQuotationRequestId) openQuotationDetailModal(currentQuotationRequestId); showToast('Quotation approved'); }
+function markQuotationCancelled(requestId){ if(!currentUser?.isAdmin) return; const requests=getStoredQuotationRequests().map(request=>{ if(request.id!==requestId) return request; return { ...request, status:'Cancelled', updatedAt:new Date().toISOString(), history:[...(request.history || []), createQuotationHistoryEntry('Cancelled','Request cancelled by admin')] }; }); setQuotationRequestsAndRefresh(requests); if(document.getElementById('quotationDetailBackdrop')?.classList.contains('open') && currentQuotationRequestId) openQuotationDetailModal(currentQuotationRequestId); showToast('Quotation request cancelled'); }
 function renderAll(){
   updateKPI();
   renderBarChart();
   renderDonut();
+  updateQuotationNotifications();
 }
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
@@ -2179,6 +2406,11 @@ document.addEventListener('keydown',e=>{
     closeInvoiceCompanySettings();
     closeSavedInvoicesModal();
     closeYearInvoicesModal();
+    closeQuotationRequestModal();
+    closeQuotationFieldBuilderModal();
+    closeQuotationDetailModal();
+    closeQuotationUploadModal();
+    closeQuotationCorrectionModal();
     closePasswordModal();
     closeUserManagerModal();
     closeClientsFlyout();

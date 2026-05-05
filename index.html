@@ -94,6 +94,12 @@
     <span class="nav-tooltip">Billing</span>
   </div>
 
+  <div class="nav-icon" id="navQuotation" onclick="showPage('quotation',this)" title="">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>
+    <span class="nav-badge" id="quotationNavBadge" hidden>0</span>
+    <span class="nav-tooltip">Quotation</span>
+  </div>
+
   <div class="nav-icon" id="navReports" onclick="showPage('reports',this)" title="">
     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     <span class="nav-tooltip">Reports</span>
@@ -137,8 +143,9 @@
       <button class="icon-btn" onclick="renderAll()" title="Refresh">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       </button>
-      <button class="icon-btn" title="Notifications">
+      <button class="icon-btn notification-btn" title="Notifications">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notification-count" id="topNotificationCount" hidden>0</span>
       </button>
       <button class="password-btn" id="manageUsersBtn" type="button" onclick="openUserManagerModal()">Create User</button>
       <button class="password-btn" id="viewUsersBtn" type="button" onclick="openUserListModal()">View Users</button>
@@ -301,6 +308,10 @@
       </div>
     </div>
   </div><!-- /page-clients -->
+
+  <div id="page-quotation" class="page">
+    <div id="quotationPageRoot"></div>
+  </div><!-- /page-quotation -->
 
   <!-- ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚Â -->
   <!-- PAGE: BILLING                           -->
@@ -1102,6 +1113,143 @@
         </div>
       </div>
       <div id="yearInvoicesList" class="invoice-history-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="quotationRequestBackdrop" onclick="closeQuotationRequestModal()">
+  <div class="quotation-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Sales Quotation</div>
+        <div class="add-modal-title" id="quotationRequestTitle">Request Quotation</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationRequestModal()">X</button>
+    </div>
+    <div class="quotation-modal-body">
+      <form id="quotationRequestForm" class="quotation-form-stack"></form>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="quotationFieldBackdrop" onclick="closeQuotationFieldBuilderModal()">
+  <div class="quotation-builder-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Admin Control</div>
+        <div class="add-modal-title">Quotation Form Builder</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationFieldBuilderModal()">X</button>
+    </div>
+    <div class="quotation-builder-body">
+      <div class="quotation-builder-list-col">
+        <div class="quotation-builder-toolbar">
+          <div class="quotation-section-title">Current Fields</div>
+          <button class="password-btn" type="button" onclick="startQuotationFieldCreate()">Add Field</button>
+        </div>
+        <div id="quotationFieldList" class="quotation-field-list"></div>
+      </div>
+      <div class="quotation-builder-form-col">
+        <div class="quotation-section-title" id="quotationFieldFormTitle">New Field</div>
+        <div class="quotation-form-grid two">
+          <div class="quotation-field">
+            <label for="quotationFieldLabel">Field Label</label>
+            <input id="quotationFieldLabel" class="invoice-input" type="text" placeholder="Enter field label"/>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationFieldType">Field Type</label>
+            <select id="quotationFieldType" class="invoice-input" onchange="handleQuotationFieldTypeChange()">
+              <option value="text">Text</option>
+              <option value="number">Number</option>
+              <option value="email">Email</option>
+              <option value="date">Date</option>
+              <option value="dropdown">Dropdown</option>
+              <option value="textarea">Textarea</option>
+              <option value="file">File Upload</option>
+            </select>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationFieldPlaceholder">Placeholder</label>
+            <input id="quotationFieldPlaceholder" class="invoice-input" type="text" placeholder="Placeholder text"/>
+          </div>
+          <div class="quotation-field">
+            <label class="quotation-check">
+              <input id="quotationFieldRequired" type="checkbox"/>
+              <span>Required field</span>
+            </label>
+          </div>
+        </div>
+        <div class="quotation-field" id="quotationFieldOptionsWrap" hidden>
+          <label for="quotationFieldOptions">Dropdown Options</label>
+          <textarea id="quotationFieldOptions" class="invoice-textarea" placeholder="Enter one option per line"></textarea>
+        </div>
+        <div class="quotation-builder-actions">
+          <button class="btn-cancel" type="button" onclick="resetQuotationFieldForm()">Reset</button>
+          <button class="btn-save" type="button" onclick="saveQuotationFieldDefinition()">Save Field</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="quotationDetailBackdrop" onclick="closeQuotationDetailModal()">
+  <div class="quotation-detail-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Quotation Request</div>
+        <div class="add-modal-title" id="quotationDetailTitle">Request Details</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationDetailModal()">X</button>
+    </div>
+    <div class="quotation-detail-body" id="quotationDetailBody"></div>
+  </div>
+</div>
+
+<div class="backdrop" id="quotationUploadBackdrop" onclick="closeQuotationUploadModal()">
+  <div class="quotation-upload-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Admin Action</div>
+        <div class="add-modal-title">Upload Quotation PDF</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationUploadModal()">X</button>
+    </div>
+    <div class="quotation-modal-body">
+      <div class="quotation-field">
+        <label for="quotationPdfFile">Quotation PDF</label>
+        <input id="quotationPdfFile" class="invoice-input" type="file" accept="application/pdf"/>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationUploadNote">Internal Note</label>
+        <textarea id="quotationUploadNote" class="invoice-textarea" placeholder="Optional note for this upload"></textarea>
+      </div>
+      <div class="quotation-builder-actions">
+        <button class="btn-cancel" type="button" onclick="closeQuotationUploadModal()">Cancel</button>
+        <button class="btn-save" type="button" onclick="saveQuotationPdfUpload()">Upload PDF</button>
+        <button class="password-btn" type="button" onclick="sendQuotationForApproval()">Send for Approval</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="quotationCorrectionBackdrop" onclick="closeQuotationCorrectionModal()">
+  <div class="quotation-upload-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Sales Action</div>
+        <div class="add-modal-title">Request Correction</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationCorrectionModal()">X</button>
+    </div>
+    <div class="quotation-modal-body">
+      <div class="quotation-field">
+        <label for="quotationCorrectionRemarks">Correction Remarks</label>
+        <textarea id="quotationCorrectionRemarks" class="invoice-textarea" placeholder="Enter the corrections needed"></textarea>
+      </div>
+      <div class="quotation-builder-actions">
+        <button class="btn-cancel" type="button" onclick="closeQuotationCorrectionModal()">Cancel</button>
+        <button class="btn-save" type="button" onclick="submitQuotationCorrection()">Submit Remarks</button>
+      </div>
     </div>
   </div>
 </div>
