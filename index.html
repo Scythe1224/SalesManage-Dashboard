@@ -12,7 +12,7 @@
 <div class="login-shell" id="loginShell">
   <div class="login-panel">
     <div class="login-brand">
-      <img class="login-brand-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/>
+      <img class="login-brand-logo" id="loginBrandLogo" src="assets/ocrm-logo.png" alt="Dashboard logo"/>
     </div>
 
     <form class="login-form" id="loginForm">
@@ -40,7 +40,7 @@
 <!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="logo-box">
-    <img class="sidebar-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/>
+    <img class="sidebar-logo" id="sidebarBrandLogo" src="assets/ocrm-logo.png" alt="Dashboard logo"/>
   </div>
 
   <div class="nav-icon active" id="navDashboard" onclick="showPage('dashboard',this)" title="">
@@ -119,7 +119,7 @@
   <!-- TOPBAR -->
   <header class="topbar">
     <div class="topbar-brand">
-      <img class="brand-logo" src="assets/ocrm-logo.png" alt="OCRM logo"/>
+      <img class="brand-logo" id="topbarBrandLogo" src="assets/ocrm-logo.png" alt="Dashboard logo"/>
     </div>
     <div class="topbar-divider"></div>
     <div class="prod-tabs">
@@ -146,6 +146,9 @@
       <button class="icon-btn notification-btn" title="Notifications">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="notification-count" id="topNotificationCount" hidden>0</span>
+      </button>
+      <button class="icon-btn" id="logoSettingsBtn" type="button" onclick="openBrandSettingsModal()" title="Dashboard Branding" hidden>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
       <button class="password-btn" id="manageUsersBtn" type="button" onclick="openUserManagerModal()">Create User</button>
       <button class="password-btn" id="viewUsersBtn" type="button" onclick="openUserListModal()">View Users</button>
@@ -864,6 +867,34 @@
     <div style="padding:0 20px 16px;display:flex;gap:10px;justify-content:flex-end">
       <button class="btn-cancel" onclick="closeEditDealForm()">Cancel</button>
       <button class="btn-submit" style="background:linear-gradient(135deg,#7c3aed,#a855f7)" onclick="applyEditDeal()">Save Deal Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="brandSettingsBackdrop" onclick="closeBrandSettingsModal()">
+  <div class="password-modal" onclick="event.stopPropagation()">
+    <div class="password-modal-hdr" style="background:linear-gradient(135deg,#163e96,#23b7d9)">
+      <div>
+        <div class="quotation-modal-eyebrow">Master Key</div>
+        <div class="add-modal-title">Dashboard Branding</div>
+      </div>
+      <button class="modal-close" style="margin-left:auto" onclick="closeBrandSettingsModal()">X</button>
+    </div>
+    <div class="add-modal-body">
+      <div class="quotation-field">
+        <label>Current Logo</label>
+        <div class="brand-settings-preview">
+          <img id="brandSettingsPreview" src="assets/ocrm-logo.png" alt="Dashboard logo preview"/>
+        </div>
+      </div>
+      <div class="quotation-field">
+        <label for="brandLogoInput">Upload New Logo</label>
+        <input id="brandLogoInput" class="invoice-input" type="file" accept="image/*"/>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
+        <button class="btn-cancel" type="button" onclick="resetDashboardLogo()">Reset Default</button>
+        <button class="btn-save" type="button" onclick="saveDashboardLogo()">Save Logo</button>
+      </div>
     </div>
   </div>
 </div>

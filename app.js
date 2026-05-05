@@ -30,6 +30,7 @@ const AUTH_CONFIG = {
   userId: 'kunal',
   password: 'Reli@123'
 };
+const DASHBOARD_LOGO_STORAGE_KEY = 'salesmanage-dashboard-logo';
 const AUTH_SESSION_KEY = 'intellidata-dashboard-auth-user';
 const AUTH_USERS_KEY = 'intellidata-dashboard-users';
 const PERMISSION_OPTIONS = [
@@ -442,6 +443,9 @@ function hasAnyClientAccess(user=currentUser){
 function hasQuotationAccess(user=currentUser){
   return !!user && (user.isAdmin || userHasPermission('quotation.request', user));
 }
+function isMasterUser(user=currentUser){
+  return !!user && !!user.isAdmin && normalizeUserId(user.userId)===normalizeUserId(AUTH_CONFIG.userId);
+}
 function getFirstAccessiblePage(user=currentUser){
   if(userHasPermission('dashboard', user)) return 'dashboard';
   if(hasAnyClientAccess(user)) return 'clients';
@@ -458,6 +462,31 @@ function getStoredAuthUser(){
   }catch(_err){
     return null;
   }
+}
+function getDefaultDashboardLogo(){
+  return 'assets/ocrm-logo.png';
+}
+function getStoredDashboardLogo(){
+  try{
+    return localStorage.getItem(DASHBOARD_LOGO_STORAGE_KEY) || getDefaultDashboardLogo();
+  }catch(_err){
+    return getDefaultDashboardLogo();
+  }
+}
+function setStoredDashboardLogo(src){
+  try{
+    if(src) localStorage.setItem(DASHBOARD_LOGO_STORAGE_KEY, src);
+    else localStorage.removeItem(DASHBOARD_LOGO_STORAGE_KEY);
+  }catch(_err){
+    showToast('Dashboard logo could not be saved');
+  }
+}
+function applyDashboardBranding(){
+  const logoSrc=getStoredDashboardLogo();
+  ['loginBrandLogo','sidebarBrandLogo','topbarBrandLogo','brandSettingsPreview'].forEach(id=>{
+    const img=document.getElementById(id);
+    if(img) img.src=logoSrc;
+  });
 }
 function getActivePassword(){
   return currentUser?.password || AUTH_CONFIG.password;
@@ -483,17 +512,20 @@ function setDashboardAccess(isAuthenticated, userId=''){
   const loginError=document.getElementById('loginError');
   const sessionUserChip=document.getElementById('sessionUserChip');
   const manageUsersBtn=document.getElementById('manageUsersBtn');
+  const logoSettingsBtn=document.getElementById('logoSettingsBtn');
   if(loginShell) loginShell.hidden=isAuthenticated;
   if(dashboardApp) dashboardApp.hidden=!isAuthenticated;
   if(loginError) loginError.hidden=true;
   if(sessionUserChip) sessionUserChip.textContent=`User: ${currentUser?.userId || userId || AUTH_CONFIG.userId}`;
   if(manageUsersBtn) manageUsersBtn.hidden=!(currentUser && currentUser.isAdmin);
+  if(logoSettingsBtn) logoSettingsBtn.hidden=!isMasterUser();
   if(isAuthenticated) applyPermissionVisibility();
 }
 function initializeLogin(){
   ensureSeedUsers();
   ensureSeedInvoiceCompanies();
   ensureSeedQuotationFields();
+  applyDashboardBranding();
   const loginForm=document.getElementById('loginForm');
   const loginUserId=document.getElementById('loginUserId');
   const loginPassword=document.getElementById('loginPassword');
@@ -536,6 +568,7 @@ function logoutDashboard(){
   setStoredAuthUser('');
   currentUser=null;
   setDashboardAccess(false);
+  closeBrandSettingsModal();
   closePasswordModal();
   closeUserManagerModal();
   closeClientsFlyout();
@@ -562,6 +595,39 @@ function openPasswordModal(){
 function closePasswordModal(){
   const backdrop=document.getElementById('passwordBackdrop');
   if(backdrop) backdrop.classList.remove('open');
+}
+function openBrandSettingsModal(){
+  if(!isMasterUser()){
+    showToast('Access denied');
+    return;
+  }
+  const input=document.getElementById('brandLogoInput');
+  if(input) input.value='';
+  applyDashboardBranding();
+  document.getElementById('brandSettingsBackdrop')?.classList.add('open');
+}
+function closeBrandSettingsModal(){
+  document.getElementById('brandSettingsBackdrop')?.classList.remove('open');
+}
+async function saveDashboardLogo(){
+  if(!isMasterUser()) return;
+  const file=document.getElementById('brandLogoInput')?.files?.[0];
+  if(!file){
+    showToast('Choose a logo image first');
+    return;
+  }
+  const dataUrl=await readFileAsDataUrl(file);
+  setStoredDashboardLogo(dataUrl);
+  applyDashboardBranding();
+  closeBrandSettingsModal();
+  showToast('Dashboard logo updated');
+}
+function resetDashboardLogo(){
+  if(!isMasterUser()) return;
+  setStoredDashboardLogo('');
+  applyDashboardBranding();
+  closeBrandSettingsModal();
+  showToast('Dashboard logo reset');
 }
 function changeDashboardPassword(){
   const currentPasswordInput=document.getElementById('currentPasswordInput');
@@ -2448,6 +2514,7 @@ document.addEventListener('keydown',e=>{
     closeQuotationUploadModal();
     closeQuotationCorrectionModal();
     closeQuotationPreviewModal();
+    closeBrandSettingsModal();
     closePasswordModal();
     closeUserManagerModal();
     closeClientsFlyout();
