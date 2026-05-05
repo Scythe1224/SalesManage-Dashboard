@@ -1217,6 +1217,14 @@
     </div>
     <div class="quotation-modal-body">
       <div class="quotation-field">
+        <label for="quotationApprovalUser">Send To Sales User</label>
+        <select id="quotationApprovalUser" class="invoice-input"></select>
+      </div>
+      <div class="quotation-field" id="quotationExistingPdfWrap" hidden>
+        <label>Current Uploaded PDF</label>
+        <div class="quotation-file-pill" id="quotationExistingPdfName">No file</div>
+      </div>
+      <div class="quotation-field">
         <label for="quotationPdfFile">Quotation PDF</label>
         <input id="quotationPdfFile" class="invoice-input" type="file" accept="application/pdf"/>
       </div>
