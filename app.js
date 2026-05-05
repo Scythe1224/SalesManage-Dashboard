@@ -477,6 +477,7 @@ function setStoredDashboardLogo(src){
   try{
     if(src) localStorage.setItem(DASHBOARD_LOGO_STORAGE_KEY, src);
     else localStorage.removeItem(DASHBOARD_LOGO_STORAGE_KEY);
+    window.__dashboardLogoSrc = src || getDefaultDashboardLogo();
   }catch(_err){
     showToast('Dashboard logo could not be saved');
   }

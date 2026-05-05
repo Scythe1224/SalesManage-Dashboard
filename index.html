@@ -4,6 +4,15 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Sales Manage - Client Onboarding Dashboard</title>
+<script>
+  window.__dashboardLogoDefault='assets/ocrm-logo.png';
+  window.__dashboardLogoPlaceholder='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  try{
+    window.__dashboardLogoSrc=localStorage.getItem('salesmanage-dashboard-logo') || window.__dashboardLogoDefault;
+  }catch(_err){
+    window.__dashboardLogoSrc=window.__dashboardLogoDefault;
+  }
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 </head>
@@ -12,7 +21,8 @@
 <div class="login-shell" id="loginShell">
   <div class="login-panel">
     <div class="login-brand">
-      <img class="login-brand-logo" id="loginBrandLogo" src="assets/ocrm-logo.png" alt="Dashboard logo"/>
+      <img class="login-brand-logo" id="loginBrandLogo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Dashboard logo"/>
+      <script>document.getElementById('loginBrandLogo').src=window.__dashboardLogoSrc || window.__dashboardLogoDefault;</script>
     </div>
 
     <form class="login-form" id="loginForm">
@@ -40,7 +50,8 @@
 <!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="logo-box">
-    <img class="sidebar-logo" id="sidebarBrandLogo" src="assets/ocrm-logo.png" alt="Dashboard logo"/>
+    <img class="sidebar-logo" id="sidebarBrandLogo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Dashboard logo"/>
+    <script>document.getElementById('sidebarBrandLogo').src=window.__dashboardLogoSrc || window.__dashboardLogoDefault;</script>
   </div>
 
   <div class="nav-icon active" id="navDashboard" onclick="showPage('dashboard',this)" title="">
@@ -119,7 +130,8 @@
   <!-- TOPBAR -->
   <header class="topbar">
     <div class="topbar-brand">
-      <img class="brand-logo" id="topbarBrandLogo" src="assets/ocrm-logo.png" alt="Dashboard logo"/>
+      <img class="brand-logo" id="topbarBrandLogo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Dashboard logo"/>
+      <script>document.getElementById('topbarBrandLogo').src=window.__dashboardLogoSrc || window.__dashboardLogoDefault;</script>
     </div>
     <div class="topbar-divider"></div>
     <div class="prod-tabs">
@@ -884,7 +896,8 @@
       <div class="quotation-field">
         <label>Current Logo</label>
         <div class="brand-settings-preview">
-          <img id="brandSettingsPreview" src="assets/ocrm-logo.png" alt="Dashboard logo preview"/>
+          <img id="brandSettingsPreview" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Dashboard logo preview"/>
+          <script>document.getElementById('brandSettingsPreview').src=window.__dashboardLogoSrc || window.__dashboardLogoDefault;</script>
         </div>
       </div>
       <div class="quotation-field">
