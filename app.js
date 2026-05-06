@@ -32,6 +32,7 @@ const AUTH_CONFIG = {
 };
 const DASHBOARD_LOGO_STORAGE_KEY = 'salesmanage-dashboard-logo';
 const AUTH_SESSION_KEY = 'intellidata-dashboard-auth-user';
+const AUTH_PERSIST_KEY = 'salesmanage-dashboard-auth-user';
 const AUTH_USERS_KEY = 'intellidata-dashboard-users';
 const PERMISSION_OPTIONS = [
   { key:'dashboard', label:'Dashboard', help:'Overview page and charts' },
@@ -461,9 +462,15 @@ function getFirstAccessiblePage(user=currentUser){
 
 function getStoredAuthUser(){
   try{
-    return sessionStorage.getItem(AUTH_SESSION_KEY);
+    return sessionStorage.getItem(AUTH_SESSION_KEY)
+      || localStorage.getItem(AUTH_PERSIST_KEY)
+      || null;
   }catch(_err){
-    return null;
+    try{
+      return localStorage.getItem(AUTH_PERSIST_KEY);
+    }catch(_innerErr){
+      return null;
+    }
   }
 }
 function getDefaultDashboardLogo(){
@@ -504,12 +511,38 @@ function setActivePassword(password){
 function setStoredAuthUser(userId){
   try{
     const matchedUser=userId ? getUserById(userId) : null;
-    if(matchedUser) sessionStorage.setItem(AUTH_SESSION_KEY, matchedUser.userId);
-    else sessionStorage.removeItem(AUTH_SESSION_KEY);
+    if(matchedUser){
+      sessionStorage.setItem(AUTH_SESSION_KEY, matchedUser.userId);
+      localStorage.setItem(AUTH_PERSIST_KEY, matchedUser.userId);
+    }else{
+      sessionStorage.removeItem(AUTH_SESSION_KEY);
+      localStorage.removeItem(AUTH_PERSIST_KEY);
+    }
   }catch(_err){
-    // local preview can block storage in some cases
+    try{
+      if(userId) localStorage.setItem(AUTH_PERSIST_KEY, userId);
+      else localStorage.removeItem(AUTH_PERSIST_KEY);
+    }catch(_innerErr){
+      // local preview can block storage in some cases
+    }
   }
 }
+function completeDashboardLogin(userId, options={}){
+  const matchedUser=getUserById(userId);
+  if(!matchedUser) return false;
+  currentUser=matchedUser;
+  setStoredAuthUser(matchedUser.userId);
+  setDashboardAccess(true, matchedUser.userId);
+  setActivePage(getFirstAccessiblePage(matchedUser));
+  if(options.resetForm){
+    document.getElementById('loginForm')?.reset?.();
+  }
+  if(options.toast){
+    showToast(options.toast);
+  }
+  return false;
+}
+window.completeDashboardLogin=completeDashboardLogin;
 function setDashboardAccess(isAuthenticated, userId=''){
   const loginShell=document.getElementById('loginShell');
   const dashboardApp=document.getElementById('dashboardApp');
@@ -520,6 +553,9 @@ function setDashboardAccess(isAuthenticated, userId=''){
   if(loginShell) loginShell.hidden=isAuthenticated;
   if(dashboardApp) dashboardApp.hidden=!isAuthenticated;
   if(loginError) loginError.hidden=true;
+  if(!isAuthenticated){
+    document.querySelectorAll('.page').forEach(page=>page.classList.remove('active-page'));
+  }
   if(sessionUserChip) sessionUserChip.textContent=`User: ${currentUser?.userId || userId || AUTH_CONFIG.userId}`;
   if(manageUsersBtn) manageUsersBtn.hidden=!(currentUser && currentUser.isAdmin);
   if(logoSettingsBtn) logoSettingsBtn.hidden=!isMasterUser();
@@ -534,13 +570,10 @@ function initializeLogin(){
   const loginForm=document.getElementById('loginForm');
   const loginUserId=document.getElementById('loginUserId');
   const loginPassword=document.getElementById('loginPassword');
-  const loginError=document.getElementById('loginError');
   const storedUser=getStoredAuthUser();
 
   if(storedUser && getUserById(storedUser)){
-    currentUser=getUserById(storedUser);
-    setDashboardAccess(true, storedUser);
-    setActivePage(getFirstAccessiblePage());
+    completeDashboardLogin(storedUser);
   }else{
     currentUser=null;
     setDashboardAccess(false);
@@ -575,13 +608,7 @@ function handleLoginSubmit(event){
     if(loginPassword) loginPassword.focus();
     return false;
   }
-  currentUser=matchedUser;
-  setStoredAuthUser(matchedUser.userId);
-  setDashboardAccess(true, matchedUser.userId);
-  loginForm?.reset?.();
-  setActivePage(getFirstAccessiblePage());
-  showToast('Login successful');
-  return false;
+  return completeDashboardLogin(matchedUser.userId, { resetForm:true, toast:'Login successful' });
 }
 function logoutDashboard(){
   setStoredAuthUser('');
