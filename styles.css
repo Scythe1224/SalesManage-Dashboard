@@ -947,7 +947,6 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .quotation-section-title{font-size:12px;font-weight:900;color:#16324a;text-transform:uppercase;letter-spacing:.8px}
 .quotation-field-list{display:flex;flex-direction:column;gap:10px;overflow:auto}
 .quotation-field-card{border:1px solid #dbe6f4;border-radius:12px;background:#fff;padding:12px;display:flex;align-items:flex-start;gap:10px}
-.quotation-field-card.active-mail-template{border-color:#1d6fe5;box-shadow:0 0 0 2px rgba(29,111,229,.12)}
 .quotation-field-order{width:28px;height:28px;border-radius:9px;background:#eef6ff;color:#1d4ed8;font-size:12px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 .quotation-field-copy{flex:1;min-width:0}
 .quotation-field-copy strong{display:block;font-size:13px;color:#0f172a}
