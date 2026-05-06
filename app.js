@@ -582,9 +582,6 @@ function initializeLogin(){
   if(storedUser && getUserById(storedUser)){
     completeDashboardLogin(getUserById(storedUser));
   }else{
-    if(storedUser){
-      setStoredAuthUser('');
-    }
     currentUser=null;
     setDashboardAccess(false);
     if(loginUserId) loginUserId.focus();
