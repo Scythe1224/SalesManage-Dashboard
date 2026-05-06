@@ -929,12 +929,13 @@ td{padding:10px 14px;font-size:12px;color:#334155;vertical-align:middle}
 .quotation-action-btn.warn{background:#fee2e2;color:#b91c1c}
 .quotation-empty{padding:36px 20px;text-align:center;color:#64748b;font-size:13px}
 .quotation-modal,.quotation-detail-modal,.quotation-builder-modal,.quotation-upload-modal{background:#fff;border-radius:16px;box-shadow:0 30px 80px rgba(15,23,42,.24);width:min(1120px,calc(100vw - 40px));max-height:calc(100vh - 40px);overflow:hidden;transform:scale(.96);transition:.18s ease}
-.quotation-detail-modal{width:min(980px,calc(100vw - 40px))}
+.quotation-detail-modal{width:min(980px,calc(100vw - 40px));display:flex;flex-direction:column}
 .quotation-upload-modal{width:min(620px,calc(100vw - 40px))}
 .backdrop.open .quotation-modal,.backdrop.open .quotation-detail-modal,.backdrop.open .quotation-builder-modal,.backdrop.open .quotation-upload-modal{transform:scale(1)}
 .quotation-modal-hdr{padding:18px 20px;background:linear-gradient(135deg,#163e96,#23b7d9);color:#fff;display:flex;align-items:flex-start;gap:16px}
 .quotation-modal-eyebrow{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.8)}
 .quotation-modal-body{padding:18px 20px;overflow:auto;max-height:calc(100vh - 150px)}
+.quotation-detail-body{padding:18px 20px;overflow:auto;max-height:calc(100vh - 150px);flex:1;min-height:0}
 .quotation-form-stack{display:flex;flex-direction:column;gap:14px}
 .quotation-form-grid{display:grid;grid-template-columns:1fr;gap:12px}
 .quotation-form-grid.two{grid-template-columns:1fr 1fr}
