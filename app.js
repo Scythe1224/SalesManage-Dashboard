@@ -407,7 +407,11 @@ function getStoredUsers(){
     if(!raw) return getDefaultUsers();
     const parsed=JSON.parse(raw);
     const users=Array.isArray(parsed) ? parsed.map(normalizeStoredUser).filter(user=>user?.userId) : [];
-    return users.length ? users : getDefaultUsers();
+    if(!users.length) return getDefaultUsers();
+    if(!users.some(user=>normalizeUserId(user.userId)===normalizeUserId(AUTH_CONFIG.userId))){
+      return [getDefaultUsers()[0], ...users];
+    }
+    return users;
   }catch(_err){
     return getDefaultUsers();
   }
@@ -434,7 +438,8 @@ function normalizeUserId(value){
 }
 function getUserById(userId){
   const normalized=normalizeUserId(userId);
-  return getStoredUsers().find(user=>normalizeUserId(user.userId)===normalized) || null;
+  return getStoredUsers().find(user=>normalizeUserId(user.userId)===normalized)
+    || (normalized===normalizeUserId(AUTH_CONFIG.userId) ? getDefaultUsers()[0] : null);
 }
 function userHasPermission(permissionKey, user=currentUser){
   if(!user) return false;
@@ -527,8 +532,10 @@ function setStoredAuthUser(userId){
     }
   }
 }
-function completeDashboardLogin(userId, options={}){
-  const matchedUser=getUserById(userId);
+function completeDashboardLogin(userOrId, options={}){
+  const matchedUser=typeof userOrId==='string'
+    ? getUserById(userOrId)
+    : normalizeStoredUser(userOrId);
   if(!matchedUser) return false;
   currentUser=matchedUser;
   setStoredAuthUser(matchedUser.userId);
@@ -573,7 +580,7 @@ function initializeLogin(){
   const storedUser=getStoredAuthUser();
 
   if(storedUser && getUserById(storedUser)){
-    completeDashboardLogin(storedUser);
+    completeDashboardLogin(getUserById(storedUser));
   }else{
     currentUser=null;
     setDashboardAccess(false);
@@ -608,7 +615,7 @@ function handleLoginSubmit(event){
     if(loginPassword) loginPassword.focus();
     return false;
   }
-  return completeDashboardLogin(matchedUser.userId, { resetForm:true, toast:'Login successful' });
+  return completeDashboardLogin(matchedUser, { resetForm:true, toast:'Login successful' });
 }
 function logoutDashboard(){
   setStoredAuthUser('');
