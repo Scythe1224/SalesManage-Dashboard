@@ -12,17 +12,6 @@
   window.__authPersistKey='salesmanage-dashboard-auth-user';
   window.__authUsersKey='intellidata-dashboard-users';
   try{
-    window.__initialAuthUser=sessionStorage.getItem(window.__authSessionKey)
-      || localStorage.getItem(window.__authPersistKey)
-      || '';
-  }catch(_err){
-    try{
-      window.__initialAuthUser=localStorage.getItem(window.__authPersistKey) || '';
-    }catch(_innerErr){
-      window.__initialAuthUser='';
-    }
-  }
-  try{
     window.__dashboardLogoSrc=localStorage.getItem('salesmanage-dashboard-logo') || window.__dashboardLogoDefault;
   }catch(_err){
     window.__dashboardLogoSrc=window.__dashboardLogoDefault;
@@ -88,10 +77,6 @@
     window.location.reload();
     return false;
   };
-  window.triggerDashboardLogin=function(event){
-    if(event && typeof event.preventDefault==='function') event.preventDefault();
-    return window.handleLoginSubmit ? window.handleLoginSubmit(event) : false;
-  };
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
@@ -105,7 +90,7 @@
       <script>document.getElementById('loginBrandLogo').src=window.__dashboardLogoSrc || window.__dashboardLogoDefault;</script>
     </div>
 
-    <form class="login-form" id="loginForm" onsubmit="return triggerDashboardLogin(event)">
+    <form class="login-form" id="loginForm" onsubmit="return handleLoginSubmit(event)">
       <div class="login-title">Sign In</div>
       <div class="login-copy">Enter your user ID and password to access the dashboard.</div>
 
@@ -120,20 +105,12 @@
       </div>
 
       <div class="login-error" id="loginError" hidden>Invalid user ID or password.</div>
-      <button class="login-submit" type="button" onclick="return triggerDashboardLogin(event)">Login to Dashboard</button>
+      <button class="login-submit" type="submit">Login to Dashboard</button>
     </form>
   </div>
 </div>
 
 <div class="app" id="dashboardApp" hidden>
-<script>
-  if(window.__initialAuthUser){
-    const loginShell=document.getElementById('loginShell');
-    const dashboardApp=document.getElementById('dashboardApp');
-    if(loginShell) loginShell.hidden=true;
-    if(dashboardApp) dashboardApp.hidden=false;
-  }
-</script>
 
 <!-- SIDEBAR -->
 <nav class="sidebar">
