@@ -1325,8 +1325,159 @@
   </div>
 </div>
 
+<div class="backdrop" id="quotationMailSettingsBackdrop" onclick="closeQuotationMailSettingsModal()">
+  <div class="quotation-builder-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Admin Control</div>
+        <div class="add-modal-title">Mail Settings</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationMailSettingsModal()">X</button>
+    </div>
+    <div class="quotation-builder-body">
+      <div class="quotation-builder-list-col">
+        <div class="quotation-builder-toolbar">
+          <div class="quotation-section-title">Mail Templates</div>
+          <button class="password-btn" type="button" onclick="addQuotationMailTemplate()">Add Template</button>
+        </div>
+        <div id="quotationMailTemplateList" class="quotation-field-list"></div>
+      </div>
+      <div class="quotation-builder-form-col">
+        <div class="quotation-section-title" style="margin-bottom:12px">Azure Mail Integration</div>
+        <div class="quotation-form-grid two">
+          <div class="quotation-field">
+            <label for="quotationMailClientId">Client ID</label>
+            <input id="quotationMailClientId" class="invoice-input" type="text" placeholder="Enter application client ID"/>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationMailTenantId">Tenant ID</label>
+            <input id="quotationMailTenantId" class="invoice-input" type="text" placeholder="Enter tenant ID"/>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationMailClientSecret">Client Secret</label>
+            <input id="quotationMailClientSecret" class="invoice-input" type="password" placeholder="Stored for backend/future reference"/>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationMailRedirectUri">Redirect URI</label>
+            <input id="quotationMailRedirectUri" class="invoice-input" type="text" placeholder="Optional. Leave blank to use current page URL"/>
+          </div>
+        </div>
+        <div class="quotation-empty" style="padding:10px 0 18px;text-align:left">
+          Browser send uses Microsoft sign-in with delegated permissions. The client secret is kept only as a saved reference for future backend integration.
+        </div>
+        <div class="quotation-section-title" style="margin-bottom:12px">Template Editor</div>
+        <div class="quotation-form-grid two">
+          <div class="quotation-field">
+            <label for="quotationMailTemplateSelect">Selected Template</label>
+            <select id="quotationMailTemplateSelect" class="invoice-input" onchange="handleQuotationMailTemplateSelectionChange()"></select>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationMailTemplateName">Template Name</label>
+            <input id="quotationMailTemplateName" class="invoice-input" type="text" placeholder="Enter template name"/>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationMailToMode">To Source</label>
+            <select id="quotationMailToMode" class="invoice-input" onchange="handleQuotationMailRecipientModeChange()">
+              <option value="request">Fetch from Request Email</option>
+              <option value="fixed">Fixed Email</option>
+              <option value="variable">Ask While Sending</option>
+            </select>
+          </div>
+          <div class="quotation-field" id="quotationMailToFieldWrap">
+            <label for="quotationMailToField">Request Email Field</label>
+            <select id="quotationMailToField" class="invoice-input"></select>
+          </div>
+          <div class="quotation-field" id="quotationMailToFixedWrap" hidden>
+            <label for="quotationMailToFixed">Fixed To Email</label>
+            <input id="quotationMailToFixed" class="invoice-input" type="text" placeholder="Enter fixed To email"/>
+          </div>
+          <div class="quotation-field">
+            <label for="quotationMailCcMode">CC Source</label>
+            <select id="quotationMailCcMode" class="invoice-input" onchange="handleQuotationMailRecipientModeChange()">
+              <option value="none">No CC</option>
+              <option value="fixed">Fixed CC</option>
+              <option value="variable">Ask While Sending</option>
+              <option value="request">Fetch from Request Email</option>
+            </select>
+          </div>
+          <div class="quotation-field" id="quotationMailCcFieldWrap" hidden>
+            <label for="quotationMailCcField">Request Email Field for CC</label>
+            <select id="quotationMailCcField" class="invoice-input"></select>
+          </div>
+          <div class="quotation-field" id="quotationMailCcFixedWrap" hidden>
+            <label for="quotationMailCcFixed">Fixed CC Emails</label>
+            <input id="quotationMailCcFixed" class="invoice-input" type="text" placeholder="Enter comma-separated CC emails"/>
+          </div>
+        </div>
+        <div class="quotation-field" style="margin-top:12px">
+          <label for="quotationMailTemplateSubject">Mail Subject</label>
+          <input id="quotationMailTemplateSubject" class="invoice-input" type="text" placeholder="Use variables like {{client_name}} or {{request_id}}"/>
+        </div>
+        <div class="quotation-field" style="margin-top:12px">
+          <label for="quotationMailTemplateBody">Mail Body</label>
+          <textarea id="quotationMailTemplateBody" class="invoice-textarea" style="min-height:220px" placeholder="Use variables like {{client_name}}, {{request_id}}, {{sender_name}}"></textarea>
+        </div>
+        <div class="quotation-builder-actions">
+          <button class="quotation-mini-btn delete" type="button" onclick="deleteQuotationMailTemplate()">Delete Template</button>
+          <button class="btn-cancel" type="button" onclick="closeQuotationMailSettingsModal()">Close</button>
+          <button class="btn-save" type="button" onclick="saveQuotationMailSettings()">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="quotationSendMailBackdrop" onclick="closeQuotationSendMailModal()">
+  <div class="quotation-upload-modal" style="width:min(760px,calc(100vw - 40px))" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Admin Action</div>
+        <div class="add-modal-title" id="quotationSendMailTitle">Send Quotation Mail</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationSendMailModal()">X</button>
+    </div>
+    <div class="quotation-modal-body">
+      <div class="quotation-form-grid two">
+        <div class="quotation-field">
+          <label for="quotationSendMailTemplate">Mail Template</label>
+          <select id="quotationSendMailTemplate" class="invoice-input" onchange="renderQuotationSendMailDraft()"></select>
+        </div>
+        <div class="quotation-field">
+          <label>Attachment</label>
+          <div class="quotation-file-pill" id="quotationSendMailAttachmentName">Quotation PDF</div>
+        </div>
+      </div>
+      <div id="quotationSendMailVariableFields" class="quotation-form-grid two" style="margin-top:14px"></div>
+      <div class="quotation-field" style="margin-top:14px">
+        <label for="quotationSendMailTo">To</label>
+        <input id="quotationSendMailTo" class="invoice-input" type="text" placeholder="Recipient email" oninput="renderQuotationSendMailDraft(false)"/>
+      </div>
+      <div class="quotation-field" style="margin-top:14px">
+        <label for="quotationSendMailCc">CC</label>
+        <input id="quotationSendMailCc" class="invoice-input" type="text" placeholder="Comma-separated CC emails" oninput="renderQuotationSendMailDraft(false)"/>
+      </div>
+      <div class="quotation-field" style="margin-top:14px">
+        <label for="quotationSendMailSubject">Subject</label>
+        <input id="quotationSendMailSubject" class="invoice-input" type="text"/>
+      </div>
+      <div class="quotation-field" style="margin-top:14px">
+        <label for="quotationSendMailBody">Mail Body</label>
+        <textarea id="quotationSendMailBody" class="invoice-textarea" style="min-height:220px"></textarea>
+      </div>
+      <div class="quotation-empty" style="padding:12px 0 0;text-align:left">
+        Sign-in will use Microsoft Entra delegated access and send the mail from the signed-in Microsoft account.
+      </div>
+      <div class="quotation-builder-actions">
+        <button class="btn-cancel" type="button" onclick="closeQuotationSendMailModal()">Cancel</button>
+        <button class="btn-save" type="button" onclick="sendQuotationMail()">Send Mail</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://alcdn.msauth.net/browser/2.39.0/js/msal-browser.min.js"></script>
 <script src="app.js"></script>
 
 </body>
