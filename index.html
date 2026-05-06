@@ -7,11 +7,84 @@
 <script>
   window.__dashboardLogoDefault='assets/ocrm-logo.png';
   window.__dashboardLogoPlaceholder='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+  window.__authConfig={ userId:'kunal', password:'Reli@123' };
+  window.__authSessionKey='intellidata-dashboard-auth-user';
+  window.__authUsersKey='intellidata-dashboard-users';
   try{
     window.__dashboardLogoSrc=localStorage.getItem('salesmanage-dashboard-logo') || window.__dashboardLogoDefault;
   }catch(_err){
     window.__dashboardLogoSrc=window.__dashboardLogoDefault;
   }
+  window.__normalizeUserId=function(value){
+    return String(value || '').trim().toLowerCase();
+  };
+  window.__getDefaultUsers=function(){
+    return [{
+      userId:window.__authConfig.userId,
+      password:window.__authConfig.password,
+      isAdmin:true,
+      permissions:[]
+    }];
+  };
+  window.__getStoredUsers=function(){
+    try{
+      const raw=localStorage.getItem(window.__authUsersKey);
+      const parsed=raw ? JSON.parse(raw) : [];
+      if(Array.isArray(parsed) && parsed.length) return parsed;
+    }catch(_err){}
+    return window.__getDefaultUsers();
+  };
+  window.__setStoredUsers=function(users){
+    try{
+      localStorage.setItem(window.__authUsersKey, JSON.stringify(users));
+    }catch(_err){}
+  };
+  window.handleLoginSubmit=function(event){
+    if(event && typeof event.preventDefault==='function') event.preventDefault();
+    const loginUserId=document.getElementById('loginUserId');
+    const loginPassword=document.getElementById('loginPassword');
+    const loginError=document.getElementById('loginError');
+    const userId=(loginUserId && loginUserId.value || '').trim();
+    const password=loginPassword && loginPassword.value || '';
+    let users=window.__getStoredUsers();
+    let matchedUser=users.find(user=>window.__normalizeUserId(user.userId)===window.__normalizeUserId(userId));
+    if(!matchedUser && window.__normalizeUserId(userId)===window.__normalizeUserId(window.__authConfig.userId) && password===window.__authConfig.password){
+      if(!users.some(user=>window.__normalizeUserId(user.userId)===window.__normalizeUserId(window.__authConfig.userId))){
+        users.unshift(window.__getDefaultUsers()[0]);
+        window.__setStoredUsers(users);
+      }
+      matchedUser=users.find(user=>window.__normalizeUserId(user.userId)===window.__normalizeUserId(window.__authConfig.userId)) || window.__getDefaultUsers()[0];
+    }
+    if(!matchedUser || matchedUser.password!==password){
+      if(loginError) loginError.hidden=false;
+      if(loginPassword){
+        loginPassword.value='';
+        loginPassword.focus();
+      }
+      return false;
+    }
+    try{
+      sessionStorage.setItem(window.__authSessionKey, matchedUser.userId);
+    }catch(_err){}
+    if(loginError) loginError.hidden=true;
+    if(typeof window.setStoredAuthUser==='function' && typeof window.setDashboardAccess==='function'){
+      try{
+        window.currentUser=matchedUser;
+        window.setStoredAuthUser(matchedUser.userId);
+        window.setDashboardAccess(true, matchedUser.userId);
+        if(typeof window.setActivePage==='function' && typeof window.getFirstAccessiblePage==='function'){
+          window.setActivePage(window.getFirstAccessiblePage(matchedUser));
+        }
+        return false;
+      }catch(_err){}
+    }
+    const loginShell=document.getElementById('loginShell');
+    const dashboardApp=document.getElementById('dashboardApp');
+    if(loginShell) loginShell.hidden=true;
+    if(dashboardApp) dashboardApp.hidden=false;
+    setTimeout(function(){ window.location.reload(); }, 50);
+    return false;
+  };
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
