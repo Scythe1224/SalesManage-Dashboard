@@ -2956,9 +2956,5 @@ document.addEventListener('keydown',e=>{
     closeClientsFlyout();
   }
 });
+renderAll();
 initializeLogin();
-try{
-  renderAll();
-}catch(_err){
-  console.error('Dashboard bootstrap render failed', _err);
-}
