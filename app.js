@@ -552,7 +552,15 @@ function initializeLogin(){
       event.preventDefault();
       const userId=(loginUserId?.value || '').trim();
       const password=loginPassword?.value || '';
-      const matchedUser=getUserById(userId);
+      let matchedUser=getUserById(userId);
+      if(!matchedUser && normalizeUserId(userId)===normalizeUserId(AUTH_CONFIG.userId) && password===AUTH_CONFIG.password){
+        const users=getStoredUsers();
+        if(!users.some(user=>normalizeUserId(user.userId)===normalizeUserId(AUTH_CONFIG.userId))){
+          users.unshift(getDefaultUsers()[0]);
+          setStoredUsers(users);
+        }
+        matchedUser=getUserById(AUTH_CONFIG.userId) || getDefaultUsers()[0];
+      }
       if(!matchedUser || matchedUser.password!==password){
         if(loginError) loginError.hidden=false;
         if(loginPassword) loginPassword.value='';
