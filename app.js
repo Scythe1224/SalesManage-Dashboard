@@ -2397,7 +2397,7 @@ function canCurrentUserApproveQuotation(request){
   if(!request || currentUser?.isAdmin) return false;
   const currentId=normalizeUserId(currentUser?.userId);
   const approvalId=normalizeUserId(request.approvalSalesUserId || request.salesUserId || '');
-  return !!currentId && currentId===approvalId && ['Sent for Sales Approval','Revised Quotation Sent'].includes(request.status);
+  return !!currentId && currentId===approvalId && ['Quotation Uploaded','Sent for Sales Approval','Revised Quotation Sent'].includes(request.status);
 }
 function getQuotationNotificationCounts(){
   const requests=getStoredQuotationRequests();
