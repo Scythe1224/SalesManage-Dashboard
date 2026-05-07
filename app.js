@@ -86,6 +86,7 @@ let currentQuotationSearch='';
 let currentQuotationStatusFilter='all';
 let currentQuotationSalesFilter='all';
 let currentQuotationDateFilter='';
+let msalLibraryPromise=null;
 
 // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ HELPERS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 function normalizeClient(client){
@@ -2415,6 +2416,56 @@ function getQuotationMailContext(request){
     quotation_status:request?.status || ''
   };
 }
+function loadScriptOnce(src){
+  return new Promise((resolve,reject)=>{
+    const existing=Array.from(document.querySelectorAll('script')).find(script=>script.src===src);
+    if(existing){
+      if(window.msal?.PublicClientApplication){
+        resolve();
+        return;
+      }
+      existing.addEventListener('load', ()=>resolve(), { once:true });
+      existing.addEventListener('error', ()=>reject(new Error(`Script failed: ${src}`)), { once:true });
+      return;
+    }
+    const script=document.createElement('script');
+    script.src=src;
+    script.async=true;
+    script.onload=()=>resolve();
+    script.onerror=()=>reject(new Error(`Script failed: ${src}`));
+    document.head.appendChild(script);
+  });
+}
+async function ensureMsalLibrary(){
+  if(window.msal?.PublicClientApplication) return;
+  if(msalLibraryPromise){
+    await msalLibraryPromise;
+    return;
+  }
+  const sources=[
+    'https://alcdn.msauth.net/browser/4.18.0/js/msal-browser.min.js',
+    'https://cdn.jsdelivr.net/npm/@azure/msal-browser@4.18.0/lib/msal-browser.min.js'
+  ];
+  msalLibraryPromise=(async()=>{
+    let lastError=null;
+    for(const src of sources){
+      try{
+        await loadScriptOnce(src);
+        if(window.msal?.PublicClientApplication) return;
+      }catch(err){
+        lastError=err;
+      }
+    }
+    throw lastError || new Error('Microsoft sign-in library could not be loaded');
+  })();
+  try{
+    await msalLibraryPromise;
+  }finally{
+    if(!window.msal?.PublicClientApplication){
+      msalLibraryPromise=null;
+    }
+  }
+}
 function openQuotationMailSettingsModal(){
   if(!currentUser?.isAdmin) return;
   const settings=getStoredQuotationMailSettings();
@@ -2500,10 +2551,6 @@ async function sendQuotationMailToClient(requestId=''){
     showToast('Subject and body are required');
     return;
   }
-  if(typeof window.msal==='undefined' || !window.msal.PublicClientApplication){
-    showToast('Microsoft sign-in library could not be loaded');
-    return;
-  }
   const msalConfig={
     auth:{
       clientId:settings.clientId,
@@ -2513,6 +2560,7 @@ async function sendQuotationMailToClient(requestId=''){
     cache:{ cacheLocation:'localStorage' }
   };
   try{
+    await ensureMsalLibrary();
     const msalApp=new window.msal.PublicClientApplication(msalConfig);
     if(msalApp.initialize) await msalApp.initialize();
     let account=msalApp.getAllAccounts?.()[0];
