@@ -2443,6 +2443,7 @@ async function ensureMsalLibrary(){
     return;
   }
   const sources=[
+    'assets/msal-browser.min.js',
     'https://alcdn.msauth.net/browser/4.18.0/js/msal-browser.min.js',
     'https://cdn.jsdelivr.net/npm/@azure/msal-browser@4.18.0/lib/msal-browser.min.js'
   ];
