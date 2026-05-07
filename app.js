@@ -2667,21 +2667,91 @@ function renderQuotationPage(){
   root.innerHTML=`<div class="quotation-shell"><section class="quotation-hero"><div class="quotation-hero-copy"><h2>Quotation</h2><p>${currentUser?.isAdmin ? 'Manage quotation requests, upload PDFs, and drive the approval loop.' : 'Request quotations and review prepared PDFs before they go to clients.'}</p></div><div class="quotation-hero-actions">${hasQuotationAccess() && !currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationRequestModal()">Request Quotation</button>` : ''}${currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationFieldBuilderModal()">Form Builder</button><button class="password-btn" type="button" onclick="openQuotationMailSettingsModal()">Mail Settings</button>` : ''}</div></section><section class="quotation-stats"><div class="quotation-stat-card"><div class="quotation-stat-label">Total Requests</div><div class="quotation-stat-value">${counts.total}</div><div class="quotation-stat-note">All visible quotation requests</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Pending</div><div class="quotation-stat-value">${counts.pending}</div><div class="quotation-stat-note">Waiting on admin work</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Awaiting Sales</div><div class="quotation-stat-value">${counts.sent}</div><div class="quotation-stat-note">Ready for approval or correction</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Approved</div><div class="quotation-stat-value">${counts.approved}</div><div class="quotation-stat-note">Approved by sales users</div></div></section><section class="table-card"><div class="table-toolbar"><div class="table-toolbar-title">${currentUser?.isAdmin ? 'Quotation Requests' : 'My Quotation Requests'}</div></div><div class="quotation-modal-body" style="padding-top:0"><div class="quotation-toolbar"><div class="quotation-filter-field"><label for="quotationSearch">Search Client</label><input id="quotationSearch" class="invoice-input" type="text" value="${escapeHtml(currentQuotationSearch)}" placeholder="Search by client name" oninput="setQuotationFilterValue('search', this.value)"/></div><div class="quotation-filter-field"><label for="quotationStatusFilter">Status</label><select id="quotationStatusFilter" class="invoice-input" onchange="setQuotationFilterValue('status', this.value)"><option value="all">All Statuses</option>${QUOTATION_STATUSES.map(status=>`<option value="${escapeHtml(status)}" ${currentQuotationStatusFilter===status?'selected':''}>${escapeHtml(status)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationSalesFilter">Sales Person</label><select id="quotationSalesFilter" class="invoice-input" onchange="setQuotationFilterValue('sales', this.value)"><option value="all">All Sales Users</option>${salesOptions.map(name=>`<option value="${escapeHtml(name)}" ${currentQuotationSalesFilter===name?'selected':''}>${escapeHtml(name)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationDateFilter">Date</label><input id="quotationDateFilter" class="invoice-input" type="date" value="${escapeHtml(currentQuotationDateFilter)}" onchange="setQuotationFilterValue('date', this.value)"/></div><div class="quotation-filter-field" style="justify-content:flex-end"><label>&nbsp;</label><button class="quotation-action-btn secondary" type="button" onclick="resetQuotationFilters()">Clear Filters</button></div></div>${filtered.length ? `<div style="overflow-x:auto;margin-top:16px"><table class="quotation-page-table"><thead><tr><th>Request ID</th><th>Sales Person</th><th>Client Name</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(request=>`<tr><td><strong>${escapeHtml(request.requestId)}</strong></td><td>${escapeHtml(request.salesPerson || '-')}</td><td>${escapeHtml(getQuotationClientName(request))}</td><td>${escapeHtml(fmtDate(request.createdAt))}</td><td><span class="quotation-chip ${quotationStatusClass(request.status)}">${escapeHtml(request.status)}</span></td><td><div class="quotation-actions"><button class="quotation-action-btn secondary" type="button" onclick="openQuotationDetailModal('${request.id}')">View</button>${currentUser?.isAdmin ? `<button class="quotation-action-btn primary" type="button" onclick="openQuotationUploadModal('${request.id}')">Upload PDF</button>` : ''}${currentUser?.isAdmin ? `<button class="quotation-action-btn secondary" type="button" onclick="markQuotationCancelled('${request.id}')">Cancel</button>` : ''}${currentUser?.isAdmin && isQuotationReadyForMail(request) ? `<button class="quotation-action-btn primary" type="button" onclick="sendQuotationMailToClient('${request.id}')">Send Mail to Client</button>` : ''}</div></td></tr>`).join('')}</tbody></table></div>` : `<div class="quotation-empty">No quotation requests match the selected filters.</div>`}</div></section></div>`;
   updateQuotationNotifications();
 }
-function sendQuotationMailToClient(requestId){
+async function sendQuotationMailToClient(requestId=''){
   if(!currentUser?.isAdmin) return;
-  const request=getStoredQuotationRequests().find(item=>item.id===requestId);
-  if(!request || !isQuotationReadyForMail(request)){
-    showToast('Quotation must be approved by sales first');
+  if(requestId){
+    openQuotationSendMailModal(requestId);
     return;
   }
-  const email=getQuotationClientEmail(request);
-  if(!email){
-    showToast('Client email is missing in the quotation request');
+  const request=getStoredQuotationRequests().find(item=>item.id===currentQuotationMailRequestId);
+  if(!request){
+    showToast('Quotation request not found');
     return;
   }
-  const subject=`Quotation ${request.requestId} - ${getQuotationClientName(request)}`;
-  const body=`Dear ${getQuotationClientName(request)},%0D%0A%0D%0APlease find your approved quotation attached/shared.%0D%0A%0D%0ARegards,%0D%0A${encodeURIComponent(currentUser?.userId || 'Admin')}`;
-  window.location.href=`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${body}`;
+  const settings=getStoredQuotationMailSettings();
+  const to=(document.getElementById('quotationSendTo')?.value || '').trim();
+  const cc=(document.getElementById('quotationSendCc')?.value || '').trim();
+  const subject=(document.getElementById('quotationSendSubject')?.value || '').trim();
+  const body=(document.getElementById('quotationSendBody')?.value || '').trim();
+  if(!to){
+    showToast('Client email is required');
+    return;
+  }
+  if(!subject || !body){
+    showToast('Subject and body are required');
+    return;
+  }
+  if(typeof window.msal==='undefined' || !window.msal.PublicClientApplication){
+    showToast('Microsoft sign-in library could not be loaded');
+    return;
+  }
+  const msalConfig={
+    auth:{
+      clientId:settings.clientId,
+      authority:`https://login.microsoftonline.com/${settings.tenantId}`,
+      redirectUri:settings.redirectUri || `${window.location.origin}${window.location.pathname}`
+    },
+    cache:{ cacheLocation:'localStorage' }
+  };
+  try{
+    const msalApp=new window.msal.PublicClientApplication(msalConfig);
+    if(msalApp.initialize) await msalApp.initialize();
+    let account=msalApp.getAllAccounts?.()[0];
+    if(!account){
+      const loginResponse=await msalApp.loginPopup({ scopes:['User.Read','Mail.Send'] });
+      account=loginResponse.account;
+    }
+    const tokenResponse=await msalApp.acquireTokenSilent({ account, scopes:['User.Read','Mail.Send'] }).catch(()=>msalApp.acquireTokenPopup({ scopes:['User.Read','Mail.Send'] }));
+    const attachmentBase64=String(request.quotationPdfData || '').split(',')[1] || '';
+    const payload={
+      message:{
+        subject,
+        body:{ contentType:'Text', content:body },
+        toRecipients:[{ emailAddress:{ address:to } }],
+        ccRecipients:cc ? cc.split(',').map(item=>item.trim()).filter(Boolean).map(address=>({ emailAddress:{ address } })) : [],
+        attachments:attachmentBase64 ? [{
+          '@odata.type':'#microsoft.graph.fileAttachment',
+          name:request.quotationPdfName || `${request.requestId}.pdf`,
+          contentType:'application/pdf',
+          contentBytes:attachmentBase64
+        }] : []
+      },
+      saveToSentItems:true
+    };
+    const response=await fetch('https://graph.microsoft.com/v1.0/me/sendMail',{
+      method:'POST',
+      headers:{
+        Authorization:`Bearer ${tokenResponse.accessToken}`,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(payload)
+    });
+    if(!response.ok){
+      const errorText=await response.text();
+      throw new Error(errorText || `Mail send failed with status ${response.status}`);
+    }
+    const requests=getStoredQuotationRequests().map(item=>item.id===request.id ? {
+      ...item,
+      updatedAt:new Date().toISOString(),
+      history:[...(item.history || []), createQuotationHistoryEntry('Mail Sent', `Quotation mail sent to ${to}${cc ? ` (cc: ${cc})` : ''}`)]
+    } : item);
+    setQuotationRequestsAndRefresh(requests);
+    closeQuotationSendMailModal();
+    if(document.getElementById('quotationDetailBackdrop')?.classList.contains('open') && currentQuotationRequestId) openQuotationDetailModal(currentQuotationRequestId);
+    showToast('Quotation mail sent successfully');
+  }catch(err){
+    showToast(`Mail send failed: ${String(err.message || err)}`);
+  }
 }
 function renderQuotationPricingRow(fieldId, row={}, index=0){ return `<div class="quotation-pricing-row" data-pricing-row="${fieldId}"><input class="invoice-input" type="text" data-pricing-slab="${fieldId}" value="${escapeHtml(row.slab || '')}" placeholder="Slab / Qty Range"/><input class="invoice-input" type="number" data-pricing-standard="${fieldId}" value="${escapeHtml(row.standardPrice || '')}" placeholder="Standard Price"/><input class="invoice-input" type="number" data-pricing-discounted="${fieldId}" value="${escapeHtml(row.discountedPrice || '')}" placeholder="Discounted Price"/><button class="quotation-mini-btn delete" type="button" onclick="removeQuotationPricingRow('${fieldId}', ${index})">X</button></div>`; }
 function renderQuotationFieldControl(field, value=''){ const safeLabel=escapeHtml(field.label); const safePlaceholder=escapeHtml(field.placeholder || ''); const required=field.required ? 'required' : ''; if(field.type==='textarea') return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><textarea class="invoice-textarea" data-field-id="${field.id}" placeholder="${safePlaceholder}" ${required}>${escapeHtml(value)}</textarea></div>`; if(field.type==='dropdown') return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><select class="invoice-input" data-field-id="${field.id}" ${required}><option value="">Select ${safeLabel}</option>${(field.options || []).map(option=>`<option value="${escapeHtml(option)}" ${String(value)===String(option)?'selected':''}>${escapeHtml(option)}</option>`).join('')}</select></div>`; if(field.type==='pricing'){ const rows=Array.isArray(value) && value.length ? value : [{ slab:'', standardPrice:'', discountedPrice:'' }]; return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><div class="quotation-pricing-rows" id="pricingRows-${field.id}">${rows.map((row,index)=>renderQuotationPricingRow(field.id,row,index)).join('')}</div><div class="quotation-builder-actions" style="justify-content:flex-start;margin-top:10px"><button class="quotation-mini-btn" type="button" onclick="addQuotationPricingRow('${field.id}')">Add Slab Row</button></div></div>`; } if(field.type==='file') return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><input class="invoice-input" data-field-id="${field.id}" type="file" ${required}/></div>`; const type=field.type==='number' ? 'number' : field.type==='email' ? 'email' : field.type==='date' ? 'date' : 'text'; return `<div class="quotation-field"><label>${safeLabel}${field.required ? ' *' : ''}</label><input class="invoice-input" data-field-id="${field.id}" type="${type}" value="${escapeHtml(value)}" placeholder="${safePlaceholder}" ${required}/></div>`; }
