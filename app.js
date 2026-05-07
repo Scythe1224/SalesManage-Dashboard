@@ -51,6 +51,7 @@ const INVOICE_STORAGE_KEY = 'intellidata-dashboard-proforma-invoices';
 const INVOICE_COMPANY_STORAGE_KEY = 'intellidata-dashboard-invoice-companies';
 const QUOTATION_STORAGE_KEY = 'salesmanage-quotation-requests';
 const QUOTATION_FIELD_STORAGE_KEY = 'salesmanage-quotation-fields';
+const QUOTATION_MAIL_SETTINGS_STORAGE_KEY = 'salesmanage-quotation-mail-settings';
 const QUOTATION_STATUSES = [
   'Pending with Admin',
   'Quotation Uploaded',
@@ -80,6 +81,7 @@ let currentQuotationFieldEditingId=null;
 let currentQuotationUploadRequestId=null;
 let currentQuotationCorrectionRequestId=null;
 let currentQuotationPreviewRequestId=null;
+let currentQuotationMailRequestId=null;
 let currentQuotationSearch='';
 let currentQuotationStatusFilter='all';
 let currentQuotationSalesFilter='all';
@@ -2337,6 +2339,35 @@ function getStoredQuotationRequests(){
     return [];
   }
 }
+function getDefaultQuotationMailSettings(){
+  return {
+    clientId:'',
+    tenantId:'',
+    redirectUri:`${window.location.origin}${window.location.pathname}`,
+    cc:'',
+    subjectTemplate:'Quotation {{request_id}} - {{client_name}}',
+    bodyTemplate:'Dear {{client_name}},\n\nPlease find attached your approved quotation.\n\nRegards,\n{{sender_name}}'
+  };
+}
+function getStoredQuotationMailSettings(){
+  try{
+    const raw=localStorage.getItem(QUOTATION_MAIL_SETTINGS_STORAGE_KEY);
+    const parsed=raw ? JSON.parse(raw) : {};
+    return { ...getDefaultQuotationMailSettings(), ...(parsed || {}) };
+  }catch(_err){
+    return getDefaultQuotationMailSettings();
+  }
+}
+function setStoredQuotationMailSettings(settings){
+  try{
+    localStorage.setItem(QUOTATION_MAIL_SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+  }catch(_err){
+    showToast('Mail settings could not be saved');
+  }
+}
+function resolveQuotationMailTemplate(template='', context={}){
+  return String(template || '').replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (_, key)=>String(context[key] ?? ''));
+}
 function setStoredQuotationRequests(requests){
   try{
     localStorage.setItem(QUOTATION_STORAGE_KEY, JSON.stringify(requests));
@@ -2374,6 +2405,162 @@ function getQuotationClientEmail(request){
   const emailField=fields.find(field=>/email/i.test(field.label) || field.type==='email');
   const value=emailField ? request?.values?.[emailField.id] : '';
   return String(value || '').trim();
+}
+function getQuotationMailContext(request){
+  return {
+    request_id:request?.requestId || '',
+    client_name:getQuotationClientName(request),
+    sender_name:currentUser?.userId || 'Admin',
+    sales_person:request?.salesPerson || '',
+    quotation_status:request?.status || ''
+  };
+}
+function openQuotationMailSettingsModal(){
+  if(!currentUser?.isAdmin) return;
+  const settings=getStoredQuotationMailSettings();
+  document.getElementById('quotationMailClientId').value=settings.clientId || '';
+  document.getElementById('quotationMailTenantId').value=settings.tenantId || '';
+  document.getElementById('quotationMailRedirectUri').value=settings.redirectUri || `${window.location.origin}${window.location.pathname}`;
+  document.getElementById('quotationMailCc').value=settings.cc || '';
+  document.getElementById('quotationMailSubjectTemplate').value=settings.subjectTemplate || '';
+  document.getElementById('quotationMailBodyTemplate').value=settings.bodyTemplate || '';
+  document.getElementById('quotationMailSettingsBackdrop')?.classList.add('open');
+}
+function closeQuotationMailSettingsModal(){
+  document.getElementById('quotationMailSettingsBackdrop')?.classList.remove('open');
+}
+function saveQuotationMailSettings(){
+  if(!currentUser?.isAdmin) return;
+  const settings={
+    clientId:(document.getElementById('quotationMailClientId')?.value || '').trim(),
+    tenantId:(document.getElementById('quotationMailTenantId')?.value || '').trim(),
+    redirectUri:(document.getElementById('quotationMailRedirectUri')?.value || '').trim() || `${window.location.origin}${window.location.pathname}`,
+    cc:(document.getElementById('quotationMailCc')?.value || '').trim(),
+    subjectTemplate:(document.getElementById('quotationMailSubjectTemplate')?.value || '').trim(),
+    bodyTemplate:(document.getElementById('quotationMailBodyTemplate')?.value || '').trim()
+  };
+  if(!settings.clientId || !settings.tenantId){
+    showToast('Client ID and Tenant ID are required');
+    return;
+  }
+  setStoredQuotationMailSettings(settings);
+  closeQuotationMailSettingsModal();
+  showToast('Mail settings saved');
+}
+function openQuotationSendMailModal(requestId){
+  if(!currentUser?.isAdmin) return;
+  const request=getStoredQuotationRequests().find(item=>item.id===requestId);
+  if(!request || !isQuotationReadyForMail(request)){
+    showToast('Quotation must be approved by sales first');
+    return;
+  }
+  if(!request.quotationPdfData){
+    showToast('Quotation PDF is missing');
+    return;
+  }
+  const settings=getStoredQuotationMailSettings();
+  if(!settings.clientId || !settings.tenantId){
+    showToast('Open Mail Settings and add Client ID and Tenant ID first');
+    openQuotationMailSettingsModal();
+    return;
+  }
+  currentQuotationMailRequestId=requestId;
+  const context=getQuotationMailContext(request);
+  document.getElementById('quotationSendTo').value=getQuotationClientEmail(request);
+  document.getElementById('quotationSendCc').value=settings.cc || '';
+  document.getElementById('quotationSendSubject').value=resolveQuotationMailTemplate(settings.subjectTemplate, context);
+  document.getElementById('quotationSendBody').value=resolveQuotationMailTemplate(settings.bodyTemplate, context);
+  document.getElementById('quotationSendMailBackdrop')?.classList.add('open');
+}
+function closeQuotationSendMailModal(){
+  currentQuotationMailRequestId=null;
+  document.getElementById('quotationSendMailBackdrop')?.classList.remove('open');
+}
+async function sendQuotationMailToClient(requestId=''){
+  if(!currentUser?.isAdmin) return;
+  if(requestId){
+    openQuotationSendMailModal(requestId);
+    return;
+  }
+  const request=getStoredQuotationRequests().find(item=>item.id===currentQuotationMailRequestId);
+  if(!request){
+    showToast('Quotation request not found');
+    return;
+  }
+  const settings=getStoredQuotationMailSettings();
+  const to=(document.getElementById('quotationSendTo')?.value || '').trim();
+  const cc=(document.getElementById('quotationSendCc')?.value || '').trim();
+  const subject=(document.getElementById('quotationSendSubject')?.value || '').trim();
+  const body=(document.getElementById('quotationSendBody')?.value || '').trim();
+  if(!to){
+    showToast('Client email is required');
+    return;
+  }
+  if(!subject || !body){
+    showToast('Subject and body are required');
+    return;
+  }
+  if(typeof window.msal==='undefined' || !window.msal.PublicClientApplication){
+    showToast('Microsoft sign-in library could not be loaded');
+    return;
+  }
+  const msalConfig={
+    auth:{
+      clientId:settings.clientId,
+      authority:`https://login.microsoftonline.com/${settings.tenantId}`,
+      redirectUri:settings.redirectUri || `${window.location.origin}${window.location.pathname}`
+    },
+    cache:{ cacheLocation:'localStorage' }
+  };
+  try{
+    const msalApp=new window.msal.PublicClientApplication(msalConfig);
+    if(msalApp.initialize) await msalApp.initialize();
+    let account=msalApp.getAllAccounts?.()[0];
+    if(!account){
+      const loginResponse=await msalApp.loginPopup({ scopes:['User.Read','Mail.Send'] });
+      account=loginResponse.account;
+    }
+    const tokenResponse=await msalApp.acquireTokenSilent({ account, scopes:['User.Read','Mail.Send'] }).catch(()=>msalApp.acquireTokenPopup({ scopes:['User.Read','Mail.Send'] }));
+    const attachmentBase64=String(request.quotationPdfData || '').split(',')[1] || '';
+    const payload={
+      message:{
+        subject,
+        body:{ contentType:'Text', content:body },
+        toRecipients:[{ emailAddress:{ address:to } }],
+        ccRecipients:cc ? cc.split(',').map(item=>item.trim()).filter(Boolean).map(address=>({ emailAddress:{ address } })) : [],
+        attachments:attachmentBase64 ? [{
+          '@odata.type':'#microsoft.graph.fileAttachment',
+          name:request.quotationPdfName || `${request.requestId}.pdf`,
+          contentType:'application/pdf',
+          contentBytes:attachmentBase64
+        }] : []
+      },
+      saveToSentItems:true
+    };
+    const response=await fetch('https://graph.microsoft.com/v1.0/me/sendMail',{
+      method:'POST',
+      headers:{
+        Authorization:`Bearer ${tokenResponse.accessToken}`,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(payload)
+    });
+    if(!response.ok){
+      const errorText=await response.text();
+      throw new Error(errorText || `Mail send failed with status ${response.status}`);
+    }
+    const requests=getStoredQuotationRequests().map(item=>item.id===request.id ? {
+      ...item,
+      updatedAt:new Date().toISOString(),
+      history:[...(item.history || []), createQuotationHistoryEntry('Mail Sent', `Quotation mail sent to ${to}${cc ? ` (cc: ${cc})` : ''}`)]
+    } : item);
+    setQuotationRequestsAndRefresh(requests);
+    closeQuotationSendMailModal();
+    if(document.getElementById('quotationDetailBackdrop')?.classList.contains('open') && currentQuotationRequestId) openQuotationDetailModal(currentQuotationRequestId);
+    showToast('Quotation mail sent successfully');
+  }catch(err){
+    showToast(`Mail send failed: ${String(err.message || err)}`);
+  }
 }
 function readFileAsDataUrl(file){
   return new Promise((resolve,reject)=>{
@@ -2477,7 +2664,7 @@ function renderQuotationPage(){
   const filtered=filterQuotationRequests(allRequests);
   const counts={ total:allRequests.length, pending:allRequests.filter(request=>['Pending with Admin','Quotation Uploaded'].includes(request.status)).length, sent:allRequests.filter(request=>['Sent for Sales Approval','Revised Quotation Sent'].includes(request.status)).length, approved:allRequests.filter(request=>request.status==='Approved by Sales').length };
   const salesOptions=getUniqueQuotationSalesPeople();
-  root.innerHTML=`<div class="quotation-shell"><section class="quotation-hero"><div class="quotation-hero-copy"><h2>Quotation</h2><p>${currentUser?.isAdmin ? 'Manage quotation requests, upload PDFs, and drive the approval loop.' : 'Request quotations and review prepared PDFs before they go to clients.'}</p></div><div class="quotation-hero-actions">${hasQuotationAccess() && !currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationRequestModal()">Request Quotation</button>` : ''}${currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationFieldBuilderModal()">Form Builder</button>` : ''}</div></section><section class="quotation-stats"><div class="quotation-stat-card"><div class="quotation-stat-label">Total Requests</div><div class="quotation-stat-value">${counts.total}</div><div class="quotation-stat-note">All visible quotation requests</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Pending</div><div class="quotation-stat-value">${counts.pending}</div><div class="quotation-stat-note">Waiting on admin work</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Awaiting Sales</div><div class="quotation-stat-value">${counts.sent}</div><div class="quotation-stat-note">Ready for approval or correction</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Approved</div><div class="quotation-stat-value">${counts.approved}</div><div class="quotation-stat-note">Approved by sales users</div></div></section><section class="table-card"><div class="table-toolbar"><div class="table-toolbar-title">${currentUser?.isAdmin ? 'Quotation Requests' : 'My Quotation Requests'}</div></div><div class="quotation-modal-body" style="padding-top:0"><div class="quotation-toolbar"><div class="quotation-filter-field"><label for="quotationSearch">Search Client</label><input id="quotationSearch" class="invoice-input" type="text" value="${escapeHtml(currentQuotationSearch)}" placeholder="Search by client name" oninput="setQuotationFilterValue('search', this.value)"/></div><div class="quotation-filter-field"><label for="quotationStatusFilter">Status</label><select id="quotationStatusFilter" class="invoice-input" onchange="setQuotationFilterValue('status', this.value)"><option value="all">All Statuses</option>${QUOTATION_STATUSES.map(status=>`<option value="${escapeHtml(status)}" ${currentQuotationStatusFilter===status?'selected':''}>${escapeHtml(status)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationSalesFilter">Sales Person</label><select id="quotationSalesFilter" class="invoice-input" onchange="setQuotationFilterValue('sales', this.value)"><option value="all">All Sales Users</option>${salesOptions.map(name=>`<option value="${escapeHtml(name)}" ${currentQuotationSalesFilter===name?'selected':''}>${escapeHtml(name)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationDateFilter">Date</label><input id="quotationDateFilter" class="invoice-input" type="date" value="${escapeHtml(currentQuotationDateFilter)}" onchange="setQuotationFilterValue('date', this.value)"/></div><div class="quotation-filter-field" style="justify-content:flex-end"><label>&nbsp;</label><button class="quotation-action-btn secondary" type="button" onclick="resetQuotationFilters()">Clear Filters</button></div></div>${filtered.length ? `<div style="overflow-x:auto;margin-top:16px"><table class="quotation-page-table"><thead><tr><th>Request ID</th><th>Sales Person</th><th>Client Name</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(request=>`<tr><td><strong>${escapeHtml(request.requestId)}</strong></td><td>${escapeHtml(request.salesPerson || '-')}</td><td>${escapeHtml(getQuotationClientName(request))}</td><td>${escapeHtml(fmtDate(request.createdAt))}</td><td><span class="quotation-chip ${quotationStatusClass(request.status)}">${escapeHtml(request.status)}</span></td><td><div class="quotation-actions"><button class="quotation-action-btn secondary" type="button" onclick="openQuotationDetailModal('${request.id}')">View</button>${currentUser?.isAdmin ? `<button class="quotation-action-btn primary" type="button" onclick="openQuotationUploadModal('${request.id}')">Upload PDF</button>` : ''}${currentUser?.isAdmin ? `<button class="quotation-action-btn secondary" type="button" onclick="markQuotationCancelled('${request.id}')">Cancel</button>` : ''}${currentUser?.isAdmin && isQuotationReadyForMail(request) ? `<button class="quotation-action-btn primary" type="button" onclick="sendQuotationMailToClient('${request.id}')">Send Mail to Client</button>` : ''}</div></td></tr>`).join('')}</tbody></table></div>` : `<div class="quotation-empty">No quotation requests match the selected filters.</div>`}</div></section></div>`;
+  root.innerHTML=`<div class="quotation-shell"><section class="quotation-hero"><div class="quotation-hero-copy"><h2>Quotation</h2><p>${currentUser?.isAdmin ? 'Manage quotation requests, upload PDFs, and drive the approval loop.' : 'Request quotations and review prepared PDFs before they go to clients.'}</p></div><div class="quotation-hero-actions">${hasQuotationAccess() && !currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationRequestModal()">Request Quotation</button>` : ''}${currentUser?.isAdmin ? `<button class="password-btn" type="button" onclick="openQuotationFieldBuilderModal()">Form Builder</button><button class="password-btn" type="button" onclick="openQuotationMailSettingsModal()">Mail Settings</button>` : ''}</div></section><section class="quotation-stats"><div class="quotation-stat-card"><div class="quotation-stat-label">Total Requests</div><div class="quotation-stat-value">${counts.total}</div><div class="quotation-stat-note">All visible quotation requests</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Pending</div><div class="quotation-stat-value">${counts.pending}</div><div class="quotation-stat-note">Waiting on admin work</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Awaiting Sales</div><div class="quotation-stat-value">${counts.sent}</div><div class="quotation-stat-note">Ready for approval or correction</div></div><div class="quotation-stat-card"><div class="quotation-stat-label">Approved</div><div class="quotation-stat-value">${counts.approved}</div><div class="quotation-stat-note">Approved by sales users</div></div></section><section class="table-card"><div class="table-toolbar"><div class="table-toolbar-title">${currentUser?.isAdmin ? 'Quotation Requests' : 'My Quotation Requests'}</div></div><div class="quotation-modal-body" style="padding-top:0"><div class="quotation-toolbar"><div class="quotation-filter-field"><label for="quotationSearch">Search Client</label><input id="quotationSearch" class="invoice-input" type="text" value="${escapeHtml(currentQuotationSearch)}" placeholder="Search by client name" oninput="setQuotationFilterValue('search', this.value)"/></div><div class="quotation-filter-field"><label for="quotationStatusFilter">Status</label><select id="quotationStatusFilter" class="invoice-input" onchange="setQuotationFilterValue('status', this.value)"><option value="all">All Statuses</option>${QUOTATION_STATUSES.map(status=>`<option value="${escapeHtml(status)}" ${currentQuotationStatusFilter===status?'selected':''}>${escapeHtml(status)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationSalesFilter">Sales Person</label><select id="quotationSalesFilter" class="invoice-input" onchange="setQuotationFilterValue('sales', this.value)"><option value="all">All Sales Users</option>${salesOptions.map(name=>`<option value="${escapeHtml(name)}" ${currentQuotationSalesFilter===name?'selected':''}>${escapeHtml(name)}</option>`).join('')}</select></div><div class="quotation-filter-field"><label for="quotationDateFilter">Date</label><input id="quotationDateFilter" class="invoice-input" type="date" value="${escapeHtml(currentQuotationDateFilter)}" onchange="setQuotationFilterValue('date', this.value)"/></div><div class="quotation-filter-field" style="justify-content:flex-end"><label>&nbsp;</label><button class="quotation-action-btn secondary" type="button" onclick="resetQuotationFilters()">Clear Filters</button></div></div>${filtered.length ? `<div style="overflow-x:auto;margin-top:16px"><table class="quotation-page-table"><thead><tr><th>Request ID</th><th>Sales Person</th><th>Client Name</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(request=>`<tr><td><strong>${escapeHtml(request.requestId)}</strong></td><td>${escapeHtml(request.salesPerson || '-')}</td><td>${escapeHtml(getQuotationClientName(request))}</td><td>${escapeHtml(fmtDate(request.createdAt))}</td><td><span class="quotation-chip ${quotationStatusClass(request.status)}">${escapeHtml(request.status)}</span></td><td><div class="quotation-actions"><button class="quotation-action-btn secondary" type="button" onclick="openQuotationDetailModal('${request.id}')">View</button>${currentUser?.isAdmin ? `<button class="quotation-action-btn primary" type="button" onclick="openQuotationUploadModal('${request.id}')">Upload PDF</button>` : ''}${currentUser?.isAdmin ? `<button class="quotation-action-btn secondary" type="button" onclick="markQuotationCancelled('${request.id}')">Cancel</button>` : ''}${currentUser?.isAdmin && isQuotationReadyForMail(request) ? `<button class="quotation-action-btn primary" type="button" onclick="sendQuotationMailToClient('${request.id}')">Send Mail to Client</button>` : ''}</div></td></tr>`).join('')}</tbody></table></div>` : `<div class="quotation-empty">No quotation requests match the selected filters.</div>`}</div></section></div>`;
   updateQuotationNotifications();
 }
 function sendQuotationMailToClient(requestId){
@@ -2564,6 +2751,8 @@ document.addEventListener('keydown',e=>{
     closeQuotationUploadModal();
     closeQuotationCorrectionModal();
     closeQuotationPreviewModal();
+    closeQuotationMailSettingsModal();
+    closeQuotationSendMailModal();
     closeBrandSettingsModal();
     closePasswordModal();
     closeUserManagerModal();

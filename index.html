@@ -1325,8 +1325,87 @@
   </div>
 </div>
 
+<div class="backdrop" id="quotationMailSettingsBackdrop" onclick="closeQuotationMailSettingsModal()">
+  <div class="quotation-upload-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Admin Control</div>
+        <div class="add-modal-title">Mail Settings</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationMailSettingsModal()">X</button>
+    </div>
+    <div class="quotation-modal-body">
+      <div class="quotation-form-grid two">
+        <div class="quotation-field">
+          <label for="quotationMailClientId">Client ID</label>
+          <input id="quotationMailClientId" class="invoice-input" type="text" placeholder="Enter Microsoft Entra app client ID"/>
+        </div>
+        <div class="quotation-field">
+          <label for="quotationMailTenantId">Tenant ID</label>
+          <input id="quotationMailTenantId" class="invoice-input" type="text" placeholder="Enter Microsoft Entra tenant ID"/>
+        </div>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationMailRedirectUri">Redirect URI</label>
+        <input id="quotationMailRedirectUri" class="invoice-input" type="text" placeholder="https://your-site.example/path"/>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationMailCc">Default CC</label>
+        <input id="quotationMailCc" class="invoice-input" type="text" placeholder="comma,separated@example.com"/>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationMailSubjectTemplate">Subject Template</label>
+        <input id="quotationMailSubjectTemplate" class="invoice-input" type="text" placeholder="Quotation {{request_id}} - {{client_name}}"/>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationMailBodyTemplate">Body Template</label>
+        <textarea id="quotationMailBodyTemplate" class="invoice-textarea" placeholder="Use {{client_name}}, {{request_id}}, {{sender_name}}"></textarea>
+      </div>
+      <div class="quotation-builder-actions">
+        <button class="btn-cancel" type="button" onclick="closeQuotationMailSettingsModal()">Cancel</button>
+        <button class="btn-save" type="button" onclick="saveQuotationMailSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="quotationSendMailBackdrop" onclick="closeQuotationSendMailModal()">
+  <div class="quotation-upload-modal" onclick="event.stopPropagation()">
+    <div class="quotation-modal-hdr">
+      <div>
+        <div class="quotation-modal-eyebrow">Admin Action</div>
+        <div class="add-modal-title">Send Mail to Client</div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeQuotationSendMailModal()">X</button>
+    </div>
+    <div class="quotation-modal-body">
+      <div class="quotation-field">
+        <label for="quotationSendTo">To</label>
+        <input id="quotationSendTo" class="invoice-input" type="email" placeholder="client@example.com"/>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationSendCc">CC</label>
+        <input id="quotationSendCc" class="invoice-input" type="text" placeholder="comma,separated@example.com"/>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationSendSubject">Subject</label>
+        <input id="quotationSendSubject" class="invoice-input" type="text" placeholder="Mail subject"/>
+      </div>
+      <div class="quotation-field">
+        <label for="quotationSendBody">Body</label>
+        <textarea id="quotationSendBody" class="invoice-textarea" placeholder="Mail body"></textarea>
+      </div>
+      <div class="quotation-builder-actions">
+        <button class="btn-cancel" type="button" onclick="closeQuotationSendMailModal()">Cancel</button>
+        <button class="btn-save" type="button" onclick="sendQuotationMailToClient()">Send Mail</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://alcdn.msauth.net/browser/2.39.0/js/msal-browser.min.js"></script>
 <script src="app.js"></script>
 
 </body>
