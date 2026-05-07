@@ -2739,10 +2739,6 @@ async function sendQuotationMailToClient(requestId=''){
     showToast('Subject and body are required');
     return;
   }
-  if(typeof window.msal==='undefined' || !window.msal.PublicClientApplication){
-    showToast('Microsoft sign-in library could not be loaded');
-    return;
-  }
   const msalConfig={
     auth:{
       clientId:settings.clientId,
@@ -2752,6 +2748,7 @@ async function sendQuotationMailToClient(requestId=''){
     cache:{ cacheLocation:'localStorage' }
   };
   try{
+    await ensureMsalLibrary();
     const msalApp=new window.msal.PublicClientApplication(msalConfig);
     if(msalApp.initialize) await msalApp.initialize();
     let account=msalApp.getAllAccounts?.()[0];
